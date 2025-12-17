@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام ERP المبسط</title>
+    <!-- استدعاء Tailwind CSS للتصميم -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- استدعاء خط عربي (Cairo) -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- استدعاء أيقونات من FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* تنسيق خاص للعملات والأرقام */
+        .currency {
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+        }
+        /* إخفاء الأقسام غير النشطة */
+        .section-content {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        .section-content.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* شريط التمرير */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+    </style>
+</head>
+<body class="text-gray-800 h-screen flex overflow-hidden">
+
+    <!-- القائمة الجانبية (Sidebar) -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-lg transition-all duration-300" id="sidebar">
+        <div class="p-6 border-b border-slate-700 flex items-center justify-center">
+            <h1 class="text-2xl font-bold text-blue-400"><i class="fas fa-cube me-2"></i>نظام ERP</h1>
+        </div>
+        
+        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
+            <button onclick="showSection('dashboard')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center bg-slate-800 text-blue-300" data-target="dashboard">
+                <i class="fas fa-chart-pie w-8 text-center ml-2"></i> لوحة التحكم
+            </button>
+            <button onclick="showSection('inventory')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="inventory">
+                <i class="fas fa-boxes w-8 text-center ml-2"></i> إدارة المخزون
+            </button>
+            <button onclick="showSection('sales')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="sales">
+                <i class="fas fa-shopping-cart w-8 text-center ml-2"></i> إدارة المبيعات
+            </button>
+            <button onclick="showSection('purchases')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="purchases">
+                <i class="fas fa-truck w-8 text-center ml-2"></i> إدارة المشتريات
+            </button>
+            <button onclick="showSection('reports')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="reports">
+                <i class="fas fa-file-invoice-dollar w-8 text-center ml-2"></i> الأرباح والتقارير
+            </button>
+        </nav>
+
+        <div class="p-4 border-t border-slate-700 text-center text-xs text-slate-400">
+            نسخة تجريبية V1.0
+        </div>
+    </aside>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="flex-1 flex flex-col overflow-hidden">
+        <!-- رأس الصفحة -->
+        <header class="bg-white shadow p-4 flex justify-between items-center z-10">
+            <h2 id="page-title" class="text-xl font-bold text-gray-700">لوحة التحكم</h2>
+            <div class="flex items-center gap-4">
+                <button onclick="resetData()" class="text-red-500 text-sm hover:underline"><i class="fas fa-trash-alt"></i> تصفير البيانات</button>
+                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">
+                    A
+                </div>
+            </div>
+        </header>
+
+        <!-- منطقة العمل -->
+        <div class="flex-1 overflow-auto p-6 relative">
+            
+            <!-- 1. قسم لوحة التحكم -->
+            <section id="dashboard" class="section-content active">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- بطاقة المبيعات -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-green-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">إجمالي المبيعات</p>
+                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-total-sales">0.00</h3>
+                            </div>
+                            <div class="p-3 bg-green-100 rounded-lg text-green-600">
+                                <i class="fas fa-chart-line text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- بطاقة المشتريات -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-blue-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">إجمالي المشتريات</p>
+                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-total-purchases">0.00</h3>
+                            </div>
+                            <div class="p-3 bg-blue-100 rounded-lg text-blue-600">
+                                <i class="fas fa-shopping-bag text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- بطاقة الأرباح -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-purple-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">صافي الربح</p>
+                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-net-profit">0.00</h3>
+                            </div>
+                            <div class="p-3 bg-purple-100 rounded-lg text-purple-600">
+                                <i class="fas fa-wallet text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- بطاقة المنتجات -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-orange-500">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <p class="text-sm text-gray-500 mb-1">عدد الأصناف</p>
+                                <h3 class="text-2xl font-bold text-gray-800" id="dash-items-count">0</h3>
+                            </div>
+                            <div class="p-3 bg-orange-100 rounded-lg text-orange-600">
+                                <i class="fas fa-box-open text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- تنبيهات المخزون -->
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">⚠️ تنبيهات المخزون المنخفض</h3>
+                    <div id="low-stock-alert-container" class="space-y-2">
+                        <!-- سيتم تعبئة التنبيهات هنا -->
+                        <p class="text-gray-400 text-sm text-center">لا توجد تنبيهات حالياً.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. قسم المخزون -->
+            <section id="inventory" class="section-content">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- نموذج إضافة صنف -->
+                    <div class="lg:col-span-1">
+                        <div class="bg-white p-6 rounded-xl shadow-sm">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">إضافة صنف جديد</h3>
+                            <form id="product-form" onsubmit="addProduct(event)">
+                                <div class="mb-3">
+                                    <label class="block text-sm text-gray-600 mb-1">اسم المنتج</label>
+                                    <input type="text" id="prod-name" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm text-gray-600 mb-1">سعر الشراء (التكلفة)</label>
+                                    <input type="number" id="prod-cost" step="0.01" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="block text-sm text-gray-600 mb-1">سعر البيع</label>
+                                    <input type="number" id="prod-price" step="0.01" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                </div>
+                                <div class="mb-4">
+                                    <label class="block text-sm text-gray-600 mb-1">الرصيد الافتتاحي</label>
+                                    <input type="number" id="prod-stock" value="0" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                </div>
+                                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition shadow">
+                                    <i class="fas fa-plus"></i> حفظ الصنف
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- جدول المخزون -->
+                    <div class="lg:col-span-2">
+                        <div class="bg-white p-6 rounded-xl shadow-sm overflow-hidden">
+                            <h3 class="font-bold text-lg mb-4 text-gray-700">قائمة الأصناف</h3>
+                            <div class="overflow-x-auto">
+                                <table class="w-full text-sm text-right">
+                                    <thead class="bg-gray-50 text-gray-600">
+                                        <tr>
+                                            <th class="p-3">#</th>
+                                            <th class="p-3">اسم المنتج</th>
+                                            <th class="p-3">سعر الشراء</th>
+                                            <th class="p-3">سعر البيع</th>
+                                            <th class="p-3">الكمية</th>
+                                            <th class="p-3">قيمة المخزون</th>
+                                            <th class="p-3">إجراء</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inventory-table-body" class="divide-y divide-gray-100">
+                                        <!-- سيتم تعبئة الجدول هنا -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. قسم المبيعات -->
+            <section id="sales" class="section-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">تسجيل فاتورة بيع جديدة</h3>
+                    <form id="sales-form" onsubmit="processTransaction(event, 'sale')" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">اسم العميل</label>
+                            <input type="text" id="sale-customer" placeholder="نقدي / اسم العميل" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">المنتج</label>
+                            <select id="sale-product-select" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-white" onchange="updatePriceInput('sale')">
+                                <option value="">-- اختر منتج --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">الكمية</label>
+                            <input type="number" id="sale-qty" value="1" min="1" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                        </div>
+                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition shadow h-10">
+                            <i class="fas fa-check"></i> تأكيد البيع
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700">سجل عمليات البيع</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-green-50 text-green-800">
+                                <tr>
+                                    <th class="p-3">التاريخ</th>
+                                    <th class="p-3">العميل</th>
+                                    <th class="p-3">المنتج</th>
+                                    <th class="p-3">الكمية</th>
+                                    <th class="p-3">السعر</th>
+                                    <th class="p-3">الإجمالي</th>
+                                    <th class="p-3">الربح</th>
+                                </tr>
+                            </thead>
+                            <tbody id="sales-table-body" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. قسم المشتريات -->
+            <section id="purchases" class="section-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">تسجيل فاتورة شراء جديدة</h3>
+                    <form id="purchase-form" onsubmit="processTransaction(event, 'purchase')" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">اسم المورد</label>
+                            <input type="text" id="purchase-supplier" placeholder="اسم المورد" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">المنتج</label>
+                            <select id="purchase-product-select" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-white" onchange="updatePriceInput('purchase')">
+                                <option value="">-- اختر منتج --</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">الكمية</label>
+                            <input type="number" id="purchase-qty" value="1" min="1" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition shadow h-10">
+                            <i class="fas fa-check"></i> تأكيد الشراء
+                        </button>
+                    </form>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700">سجل عمليات الشراء</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-blue-50 text-blue-800">
+                                <tr>
+                                    <th class="p-3">التاريخ</th>
+                                    <th class="p-3">المورد</th>
+                                    <th class="p-3">المنتج</th>
+                                    <th class="p-3">الكمية</th>
+                                    <th class="p-3">التكلفة</th>
+                                    <th class="p-3">الإجمالي</th>
+                                </tr>
+                            </thead>
+                            <tbody id="purchases-table-body" class="divide-y divide-gray-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. قسم التقارير -->
+            <section id="reports" class="section-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700">التقرير المالي التفصيلي</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h4 class="text-gray-500 text-sm mb-2">إجمالي الإيرادات</h4>
+                            <p class="text-2xl font-bold text-green-600 currency" id="report-revenue">0.00</p>
+                        </div>
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h4 class="text-gray-500 text-sm mb-2">تكلفة البضاعة المباعة (COGS)</h4>
+                            <p class="text-2xl font-bold text-red-500 currency" id="report-cogs">0.00</p>
+                        </div>
+                        <div class="p-4 border rounded-lg bg-gray-50">
+                            <h4 class="text-gray-500 text-sm mb-2">صافي الربح الفعلي</h4>
+                            <p class="text-2xl font-bold text-purple-600 currency" id="report-profit">0.00</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700">أداء المنتجات (الأكثر مبيعاً)</h3>
+                    <div id="top-products-container" class="space-y-3">
+                        <!-- سيتم تعبئة المنتجات هنا -->
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        // --- 1. إدارة البيانات وحالة النظام ---
+        let appData = {
+            products: [],
+            sales: [],
+            purchases: []
+        };
+
+        // تحميل البيانات من LocalStorage عند البدء
+        function loadData() {
+            const storedData = localStorage.getItem('erp_data');
+            if (storedData) {
+                appData = JSON.parse(storedData);
+            } else {
+                // بيانات افتراضية للتجربة
+                appData.products = [
+                    { id: 1, name: 'لابتوب ديل', cost: 1500, price: 2000, stock: 10 },
+                    { id: 2, name: 'ماوس لاسلكي', cost: 20, price: 35, stock: 50 },
+                    { id: 3, name: 'طابعة اتش بي', cost: 400, price: 600, stock: 4 }
+                ];
+                saveData();
+            }
+            updateUI();
+        }
+
+        function saveData() {
+            localStorage.setItem('erp_data', JSON.stringify(appData));
+            updateUI();
+        }
+
+        function resetData() {
+            if(confirm('هل أنت متأكد من حذف جميع البيانات؟')) {
+                localStorage.removeItem('erp_data');
+                location.reload();
+            }
+        }
+
+        // --- 2. إدارة المخزون ---
+        function addProduct(e) {
+            e.preventDefault();
+            const name = document.getElementById('prod-name').value;
+            const cost = parseFloat(document.getElementById('prod-cost').value);
+            const price = parseFloat(document.getElementById('prod-price').value);
+            const stock = parseInt(document.getElementById('prod-stock').value);
+
+            const newProduct = {
+                id: Date.now(),
+                name,
+                cost,
+                price,
+                stock
+            };
+
+            appData.products.push(newProduct);
+            document.getElementById('product-form').reset();
+            saveData();
+            alert('تمت إضافة المنتج بنجاح');
+        }
+
+        function deleteProduct(id) {
+            if(confirm('هل تريد حذف هذا المنتج؟')) {
+                appData.products = appData.products.filter(p => p.id !== id);
+                saveData();
+            }
+        }
+
+        // --- 3. إدارة العمليات (بيع/شراء) ---
+        function processTransaction(e, type) {
+            e.preventDefault();
+            const prefix = type === 'sale' ? 'sale' : 'purchase';
+            
+            const productId = parseInt(document.getElementById(`${prefix}-product-select`).value);
+            const qty = parseInt(document.getElementById(`${prefix}-qty`).value);
+            const partyName = document.getElementById(`${prefix}-${type === 'sale' ? 'customer' : 'supplier'}`).value || (type === 'sale' ? 'نقدي' : 'مورد عام');
+
+            if (!productId) {
+                alert('الرجاء اختيار منتج');
+                return;
+            }
+
+            const productIndex = appData.products.findIndex(p => p.id === productId);
+            const product = appData.products[productIndex];
+
+            if (type === 'sale') {
+                if (product.stock < qty) {
+                    alert('عفواً، الكمية المتوفرة في المخزون غير كافية!');
+                    return;
+                }
+                // خصم من المخزون
+                product.stock -= qty;
+                
+                // تسجيل العملية
+                const sale = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    productId,
+                    productName: product.name,
+                    customer: partyName,
+                    qty,
+                    price: product.price,
+                    cost: product.cost, // لحساب الربح لاحقاً
+                    total: product.price * qty,
+                    profit: (product.price - product.cost) * qty
+                };
+                appData.sales.unshift(sale); // إضافة في البداية
+
+            } else { // Purchase
+                // زيادة المخزون
+                product.stock += qty;
+                
+                // تحديث التكلفة (متوسط مرجح يمكن إضافته هنا، للتبسيط سنبقي التكلفة الحالية)
+                // تسجيل العملية
+                const purchase = {
+                    id: Date.now(),
+                    date: new Date().toISOString(),
+                    productId,
+                    productName: product.name,
+                    supplier: partyName,
+                    qty,
+                    cost: product.cost, // نستخدم التكلفة الحالية للمنتج
+                    total: product.cost * qty
+                };
+                appData.purchases.unshift(purchase);
+            }
+
+            document.getElementById(`${prefix}-form`).reset();
+            saveData();
+            alert(type === 'sale' ? 'تمت عملية البيع بنجاح' : 'تمت عملية الشراء بنجاح');
+        }
+
+        // --- 4. تحديث الواجهة (UI Rendering) ---
+        function updateUI() {
+            renderInventoryTable();
+            renderSelectOptions();
+            renderSalesTable();
+            renderPurchasesTable();
+            renderDashboardAndReports();
+        }
+
+        function renderInventoryTable() {
+            const tbody = document.getElementById('inventory-table-body');
+            tbody.innerHTML = '';
+            
+            appData.products.forEach((p, index) => {
+                const stockValue = p.stock * p.cost;
+                const row = `
+                    <tr class="hover:bg-gray-50 transition">
+                        <td class="p-3 text-gray-500">${index + 1}</td>
+                        <td class="p-3 font-medium">${p.name}</td>
+                        <td class="p-3 text-gray-600">${p.cost}</td>
+                        <td class="p-3 text-green-600">${p.price}</td>
+                        <td class="p-3 font-bold ${p.stock < 5 ? 'text-red-500' : 'text-blue-600'}">${p.stock}</td>
+                        <td class="p-3 text-gray-600">${stockValue.toFixed(2)}</td>
+                        <td class="p-3">
+                            <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+                tbody.innerHTML += row;
+            });
+        }
+
+        function renderSelectOptions() {
+            const options = '<option value="">-- اختر منتج --</option>' + 
+                appData.products.map(p => `<option value="${p.id}">${p.name} (متوفر: ${p.stock})</option>`).join('');
+            
+            document.getElementById('sale-product-select').innerHTML = options;
+            document.getElementById('purchase-product-select').innerHTML = options;
+        }
+
+        function renderSalesTable() {
+            const tbody = document.getElementById('sales-table-body');
+            tbody.innerHTML = appData.sales.map(s => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 text-gray-500 text-xs">${new Date(s.date).toLocaleDateString('ar-EG')}</td>
+                    <td class="p-3">${s.customer}</td>
+                    <td class="p-3">${s.productName}</td>
+                    <td class="p-3">${s.qty}</td>
+                    <td class="p-3">${s.price}</td>
+                    <td class="p-3 font-bold">${s.total.toFixed(2)}</td>
+                    <td class="p-3 text-green-600 font-bold">+${s.profit.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderPurchasesTable() {
+            const tbody = document.getElementById('purchases-table-body');
+            tbody.innerHTML = appData.purchases.map(p => `
+                <tr class="hover:bg-gray-50">
+                    <td class="p-3 text-gray-500 text-xs">${new Date(p.date).toLocaleDateString('ar-EG')}</td>
+                    <td class="p-3">${p.supplier}</td>
+                    <td class="p-3">${p.productName}</td>
+                    <td class="p-3">${p.qty}</td>
+                    <td class="p-3">${p.cost}</td>
+                    <td class="p-3 font-bold text-red-400">-${p.total.toFixed(2)}</td>
+                </tr>
+            `).join('');
+        }
+
+        function renderDashboardAndReports() {
+            // الحسابات
+            const totalSales = appData.sales.reduce((sum, s) => sum + s.total, 0);
+            const totalPurchases = appData.purchases.reduce((sum, p) => sum + p.total, 0);
+            
+            // حساب صافي الربح (مجموع أرباح عمليات البيع المسجلة)
+            // هذا أدق من طرح المبيعات من المشتريات لأن المشتريات قد تكون مخزنة ولم تبع بعد
+            const netProfit = appData.sales.reduce((sum, s) => sum + s.profit, 0); 
+            
+            const itemsCount = appData.products.length;
+            const cogs = appData.sales.reduce((sum, s) => sum + (s.cost * s.qty), 0); // تكلفة البضاعة المباعة
+
+            // تحديث DOM
+            document.getElementById('dash-total-sales').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('dash-total-purchases').textContent = totalPurchases.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('dash-net-profit').textContent = netProfit.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('dash-items-count').textContent = itemsCount;
+
+            // تحديث قسم التقارير
+            document.getElementById('report-revenue').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('report-cogs').textContent = cogs.toLocaleString('en-US', { minimumFractionDigits: 2 });
+            document.getElementById('report-profit').textContent = netProfit.toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+            // تنبيهات المخزون
+            const lowStockItems = appData.products.filter(p => p.stock <= 5);
+            const alertContainer = document.getElementById('low-stock-alert-container');
+            if (lowStockItems.length > 0) {
+                alertContainer.innerHTML = lowStockItems.map(p => `
+                    <div class="flex items-center justify-between bg-red-50 p-3 rounded border border-red-100 text-red-700">
+                        <span><i class="fas fa-exclamation-triangle ml-2"></i> المنتج <strong>${p.name}</strong> وصل للحد الأدنى (${p.stock})</span>
+                        <button onclick="showSection('purchases')" class="text-xs bg-red-200 px-2 py-1 rounded hover:bg-red-300">شراء الآن</button>
+                    </div>
+                `).join('');
+            } else {
+                alertContainer.innerHTML = '<p class="text-gray-400 text-sm text-center">المخزون في حالة جيدة.</p>';
+            }
+
+            // الأكثر مبيعاً (تقرير بسيط)
+            // تجميع المبيعات حسب المنتج
+            const productSales = {};
+            appData.sales.forEach(s => {
+                if(!productSales[s.productName]) productSales[s.productName] = 0;
+                productSales[s.productName] += s.qty;
+            });
+            // تحويل وترتيب
+            const sortedProducts = Object.entries(productSales)
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 3); // أفضل 3
+            
+            const topProdContainer = document.getElementById('top-products-container');
+            if(sortedProducts.length > 0) {
+                topProdContainer.innerHTML = sortedProducts.map(([name, qty]) => `
+                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
+                        <span class="font-bold text-gray-700">${name}</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">بيع ${qty} قطعة</span>
+                    </div>
+                `).join('');
+            } else {
+                topProdContainer.innerHTML = '<p class="text-gray-400 text-center">لا توجد مبيعات كافية لعرض التحليل.</p>';
+            }
+        }
+
+        // --- 5. التنقل (Navigation) ---
+        function showSection(sectionId) {
+            // إخفاء الكل
+            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
+            // إظهار المطلوب
+            document.getElementById(sectionId).classList.add('active');
+            
+            // تحديث العنوان
+            const titles = {
+                'dashboard': 'لوحة التحكم',
+                'inventory': 'إدارة المخزون',
+                'sales': 'إدارة المبيعات',
+                'purchases': 'إدارة المشتريات',
+                'reports': 'التقارير المالية'
+            };
+            document.getElementById('page-title').textContent = titles[sectionId];
+
+            // تحديث الزر النشط
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                if(btn.dataset.target === sectionId) {
+                    btn.classList.add('bg-slate-800', 'text-blue-300');
+                } else {
+                    btn.classList.remove('bg-slate-800', 'text-blue-300');
+                }
+            });
+        }
+
+        // تهيئة النظام
+        window.onload = loadData;
+
+    </script>
+</body>
+</html>
