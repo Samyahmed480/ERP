@@ -3,92 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام ERP المبسط</title>
-    <!-- استدعاء Tailwind CSS للتصميم -->
+    <title>نظام ERP المتكامل (محاسبي وضريبي)</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- استدعاء خط عربي (Cairo) -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- استدعاء أيقونات من FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f3f4f6;
-        }
-        /* تنسيق خاص للعملات والأرقام */
-        .currency {
-            font-family: 'Courier New', Courier, monospace;
-            font-weight: bold;
-        }
-        /* إخفاء الأقسام غير النشطة */
-        .section-content {
-            display: none;
-            animation: fadeIn 0.3s ease-in-out;
-        }
-        .section-content.active {
-            display: block;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        /* شريط التمرير */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1; 
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #cbd5e1; 
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #94a3b8; 
-        }
+        body { font-family: 'Cairo', sans-serif; background-color: #f3f4f6; }
+        .currency { font-family: 'Courier New', Courier, monospace; font-weight: bold; }
+        .section-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes pulse-purple { 0% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(147, 51, 234, 0); } 100% { box-shadow: 0 0 0 0 rgba(147, 51, 234, 0); } }
+        .ai-btn:hover { animation: pulse-purple 2s infinite; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        /* Table Styles */
+        th { white-space: nowrap; }
     </style>
 </head>
 <body class="text-gray-800 h-screen flex overflow-hidden">
 
-    <!-- القائمة الجانبية (Sidebar) -->
-    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-lg transition-all duration-300" id="sidebar">
-        <div class="p-6 border-b border-slate-700 flex items-center justify-center">
+    <!-- القائمة الجانبية -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col shadow-lg transition-all duration-300 z-20" id="sidebar">
+        <div class="p-6 border-b border-slate-700 flex items-center justify-center flex-col">
             <h1 class="text-2xl font-bold text-blue-400"><i class="fas fa-cube me-2"></i>نظام ERP</h1>
+            <span class="text-xs text-purple-400 block mt-1">المحاسبي المتكامل ✨</span>
         </div>
         
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
             <button onclick="showSection('dashboard')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center bg-slate-800 text-blue-300" data-target="dashboard">
-                <i class="fas fa-chart-pie w-8 text-center ml-2"></i> لوحة التحكم
+                <i class="fas fa-chart-pie w-6 text-center ml-2"></i> لوحة القيادة
             </button>
             <button onclick="showSection('inventory')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="inventory">
-                <i class="fas fa-boxes w-8 text-center ml-2"></i> إدارة المخزون
+                <i class="fas fa-boxes w-6 text-center ml-2"></i> المخزون والأصناف
             </button>
             <button onclick="showSection('sales')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="sales">
-                <i class="fas fa-shopping-cart w-8 text-center ml-2"></i> إدارة المبيعات
+                <i class="fas fa-shopping-cart w-6 text-center ml-2"></i> المبيعات والعملاء
             </button>
             <button onclick="showSection('purchases')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="purchases">
-                <i class="fas fa-truck w-8 text-center ml-2"></i> إدارة المشتريات
+                <i class="fas fa-truck w-6 text-center ml-2"></i> المشتريات والموردين
+            </button>
+            <button onclick="showSection('accounting')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="accounting">
+                <i class="fas fa-calculator w-6 text-center ml-2"></i> المحاسبة والضرائب
             </button>
             <button onclick="showSection('reports')" class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-700 transition flex items-center" data-target="reports">
-                <i class="fas fa-file-invoice-dollar w-8 text-center ml-2"></i> الأرباح والتقارير
+                <i class="fas fa-file-invoice-dollar w-6 text-center ml-2"></i> التقارير الختامية
             </button>
         </nav>
 
         <div class="p-4 border-t border-slate-700 text-center text-xs text-slate-400">
-            نسخة تجريبية V1.0
+            نسخة V3.0 (محاسبة + ضرائب)
         </div>
     </aside>
 
     <!-- المحتوى الرئيسي -->
-    <main class="flex-1 flex flex-col overflow-hidden">
+    <main class="flex-1 flex flex-col overflow-hidden bg-gray-50">
         <!-- رأس الصفحة -->
-        <header class="bg-white shadow p-4 flex justify-between items-center z-10">
-            <h2 id="page-title" class="text-xl font-bold text-gray-700">لوحة التحكم</h2>
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center z-10 border-b">
+            <h2 id="page-title" class="text-xl font-bold text-gray-700">لوحة القيادة</h2>
             <div class="flex items-center gap-4">
-                <button onclick="resetData()" class="text-red-500 text-sm hover:underline"><i class="fas fa-trash-alt"></i> تصفير البيانات</button>
-                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold border border-blue-200">
-                    A
+                <div class="bg-green-50 text-green-700 px-3 py-1 rounded-full text-sm border border-green-200">
+                    <i class="fas fa-wallet me-1"></i> رصيد الخزينة: <span id="header-cash" class="font-bold currency">0.00</span>
+                </div>
+                <button onclick="resetData()" class="text-red-500 text-sm hover:underline"><i class="fas fa-trash-alt"></i> تصفير</button>
+                <div class="w-10 h-10 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold shadow-md cursor-help" title="المستشار الذكي">
+                    AI
                 </div>
             </div>
         </header>
@@ -96,242 +78,321 @@
         <!-- منطقة العمل -->
         <div class="flex-1 overflow-auto p-6 relative">
             
-            <!-- 1. قسم لوحة التحكم -->
+            <!-- 1. لوحة القيادة -->
             <section id="dashboard" class="section-content active">
+                <!-- AI Banner -->
+                <div class="bg-gradient-to-r from-indigo-700 to-purple-800 rounded-xl shadow-lg p-6 mb-8 text-white relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-full bg-white opacity-5 transform -skew-x-12"></div>
+                    <div class="relative z-10 flex justify-between items-center flex-wrap gap-4">
+                        <div>
+                            <h3 class="text-2xl font-bold mb-1"><i class="fas fa-robot me-2"></i> المستشار المالي الذكي</h3>
+                            <p class="text-indigo-100 text-sm opacity-90">تحليل فوري للمركز المالي، الضرائب، واقتراحات لزيادة السيولة.</p>
+                        </div>
+                        <button onclick="generateBusinessAnalysis()" class="ai-btn bg-white/10 backdrop-blur-md border border-white/30 text-white px-6 py-2 rounded-full font-bold hover:bg-white/20 transition flex items-center gap-2">
+                            <i class="fas fa-magic"></i> تحليل الوضع المالي
+                        </button>
+                    </div>
+                    <div id="ai-analysis-result" class="mt-4 hidden bg-black/20 backdrop-blur-sm p-4 rounded-lg text-sm leading-relaxed border border-white/10 text-indigo-50"></div>
+                </div>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <!-- بطاقة المبيعات -->
                     <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-green-500">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm text-gray-500 mb-1">إجمالي المبيعات</p>
-                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-total-sales">0.00</h3>
-                            </div>
-                            <div class="p-3 bg-green-100 rounded-lg text-green-600">
-                                <i class="fas fa-chart-line text-xl"></i>
-                            </div>
-                        </div>
+                        <p class="text-sm text-gray-500 mb-1">صافي المبيعات (بدون ضريبة)</p>
+                        <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-net-sales">0.00</h3>
                     </div>
-                    <!-- بطاقة المشتريات -->
                     <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-blue-500">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm text-gray-500 mb-1">إجمالي المشتريات</p>
-                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-total-purchases">0.00</h3>
-                            </div>
-                            <div class="p-3 bg-blue-100 rounded-lg text-blue-600">
-                                <i class="fas fa-shopping-bag text-xl"></i>
-                            </div>
-                        </div>
+                        <p class="text-sm text-gray-500 mb-1">صافي المشتريات (بدون ضريبة)</p>
+                        <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-net-purchases">0.00</h3>
                     </div>
-                    <!-- بطاقة الأرباح -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-red-500">
+                        <p class="text-sm text-gray-500 mb-1">ضريبة مستحقة للدفع (VAT)</p>
+                        <h3 class="text-2xl font-bold text-red-600 currency" id="dash-vat-payable">0.00</h3>
+                    </div>
                     <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-purple-500">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm text-gray-500 mb-1">صافي الربح</p>
-                                <h3 class="text-2xl font-bold text-gray-800 currency" id="dash-net-profit">0.00</h3>
-                            </div>
-                            <div class="p-3 bg-purple-100 rounded-lg text-purple-600">
-                                <i class="fas fa-wallet text-xl"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- بطاقة المنتجات -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-r-4 border-orange-500">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-sm text-gray-500 mb-1">عدد الأصناف</p>
-                                <h3 class="text-2xl font-bold text-gray-800" id="dash-items-count">0</h3>
-                            </div>
-                            <div class="p-3 bg-orange-100 rounded-lg text-orange-600">
-                                <i class="fas fa-box-open text-xl"></i>
-                            </div>
-                        </div>
+                        <p class="text-sm text-gray-500 mb-1">صافي الربح التشغيلي</p>
+                        <h3 class="text-2xl font-bold text-purple-600 currency" id="dash-net-profit">0.00</h3>
                     </div>
                 </div>
 
-                <!-- تنبيهات المخزون -->
-                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">⚠️ تنبيهات المخزون المنخفض</h3>
-                    <div id="low-stock-alert-container" class="space-y-2">
-                        <!-- سيتم تعبئة التنبيهات هنا -->
-                        <p class="text-gray-400 text-sm text-center">لا توجد تنبيهات حالياً.</p>
+                <!-- نظرة سريعة على الحسابات -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="font-bold text-gray-700 mb-4 border-b pb-2">📦 حالة المخزون</h3>
+                        <div id="stock-alerts" class="space-y-2"></div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-6">
+                        <h3 class="font-bold text-gray-700 mb-4 border-b pb-2">💰 ملخص السيولة والذمم</h3>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded mb-2">
+                            <span>النقدية في الخزينة</span>
+                            <span class="font-bold text-green-600" id="acc-cash">0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded mb-2">
+                            <span>لنا عند العملاء (مدينون)</span>
+                            <span class="font-bold text-blue-600" id="acc-receivable">0.00</span>
+                        </div>
+                        <div class="flex justify-between items-center p-2 bg-gray-50 rounded">
+                            <span>علينا للموردين (دائنون)</span>
+                            <span class="font-bold text-red-600" id="acc-payable">0.00</span>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            <!-- 2. قسم المخزون -->
+            <!-- 2. المخزون -->
             <section id="inventory" class="section-content">
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                    <!-- نموذج إضافة صنف -->
                     <div class="lg:col-span-1">
                         <div class="bg-white p-6 rounded-xl shadow-sm">
                             <h3 class="font-bold text-lg mb-4 text-gray-700">إضافة صنف جديد</h3>
                             <form id="product-form" onsubmit="addProduct(event)">
                                 <div class="mb-3">
-                                    <label class="block text-sm text-gray-600 mb-1">اسم المنتج</label>
-                                    <input type="text" id="prod-name" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                    <label class="text-xs text-gray-500">اسم المنتج</label>
+                                    <div class="flex gap-1">
+                                        <input type="text" id="prod-name" required class="w-full p-2 border rounded text-sm" placeholder="مثال: آيفون 15">
+                                        <button type="button" onclick="generateProductDescription()" class="bg-purple-100 text-purple-600 px-2 rounded text-xs"><i class="fas fa-magic"></i></button>
+                                    </div>
+                                    <textarea id="prod-desc" rows="2" class="w-full p-2 border rounded mt-1 text-xs bg-gray-50" placeholder="وصف المنتج..."></textarea>
                                 </div>
-                                <div class="mb-3">
-                                    <label class="block text-sm text-gray-600 mb-1">سعر الشراء (التكلفة)</label>
-                                    <input type="number" id="prod-cost" step="0.01" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
-                                </div>
-                                <div class="mb-3">
-                                    <label class="block text-sm text-gray-600 mb-1">سعر البيع</label>
-                                    <input type="number" id="prod-price" step="0.01" required class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                <div class="grid grid-cols-2 gap-2 mb-3">
+                                    <div>
+                                        <label class="text-xs text-gray-500">سعر التكلفة (شامل الضريبة)</label>
+                                        <input type="number" id="prod-cost" step="0.01" required class="w-full p-2 border rounded text-sm">
+                                    </div>
+                                    <div>
+                                        <label class="text-xs text-gray-500">سعر البيع (شامل الضريبة)</label>
+                                        <input type="number" id="prod-price" step="0.01" required class="w-full p-2 border rounded text-sm">
+                                    </div>
                                 </div>
                                 <div class="mb-4">
-                                    <label class="block text-sm text-gray-600 mb-1">الرصيد الافتتاحي</label>
-                                    <input type="number" id="prod-stock" value="0" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
+                                    <label class="text-xs text-gray-500">الرصيد الافتتاحي</label>
+                                    <input type="number" id="prod-stock" value="0" class="w-full p-2 border rounded text-sm">
                                 </div>
-                                <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition shadow">
-                                    <i class="fas fa-plus"></i> حفظ الصنف
-                                </button>
+                                <button type="submit" class="w-full bg-indigo-600 text-white py-2 rounded text-sm hover:bg-indigo-700">حفظ الصنف</button>
                             </form>
                         </div>
                     </div>
-
-                    <!-- جدول المخزون -->
                     <div class="lg:col-span-2">
-                        <div class="bg-white p-6 rounded-xl shadow-sm overflow-hidden">
-                            <h3 class="font-bold text-lg mb-4 text-gray-700">قائمة الأصناف</h3>
-                            <div class="overflow-x-auto">
-                                <table class="w-full text-sm text-right">
-                                    <thead class="bg-gray-50 text-gray-600">
-                                        <tr>
-                                            <th class="p-3">#</th>
-                                            <th class="p-3">اسم المنتج</th>
-                                            <th class="p-3">سعر الشراء</th>
-                                            <th class="p-3">سعر البيع</th>
-                                            <th class="p-3">الكمية</th>
-                                            <th class="p-3">قيمة المخزون</th>
-                                            <th class="p-3">إجراء</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="inventory-table-body" class="divide-y divide-gray-100">
-                                        <!-- سيتم تعبئة الجدول هنا -->
-                                    </tbody>
-                                </table>
+                        <div class="bg-white p-6 rounded-xl shadow-sm overflow-x-auto">
+                            <table class="w-full text-sm text-right">
+                                <thead class="bg-gray-100 text-gray-600">
+                                    <tr>
+                                        <th class="p-3">اسم المنتج</th>
+                                        <th class="p-3">التكلفة</th>
+                                        <th class="p-3">سعر البيع</th>
+                                        <th class="p-3">الكمية</th>
+                                        <th class="p-3">قيمة المخزون</th>
+                                        <th class="p-3">حذف</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="inventory-body" class="divide-y"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. المبيعات -->
+            <section id="sales" class="section-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h3 class="font-bold text-gray-700 border-b pb-2 mb-4">📝 فاتورة مبيعات جديدة (شاملة الضريبة)</h3>
+                    <form onsubmit="processTransaction(event, 'sale')" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end bg-green-50 p-4 rounded-lg border border-green-100">
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">العميل</label>
+                            <input type="text" id="sale-customer" placeholder="اسم العميل" class="w-full p-2 border rounded text-sm">
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">المنتج</label>
+                            <select id="sale-product" class="w-full p-2 border rounded text-sm bg-white" onchange="updatePrice('sale')"></select>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">الكمية</label>
+                            <input type="number" id="sale-qty" value="1" min="1" class="w-full p-2 border rounded text-sm">
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">نوع الدفع</label>
+                            <select id="sale-payment" class="w-full p-2 border rounded text-sm bg-white">
+                                <option value="cash">نقدي (كاش)</option>
+                                <option value="credit">آجل (ذمم)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded text-sm hover:bg-green-700 h-9">إصدار الفاتورة</button>
+                    </form>
+                    <div class="mt-2 text-xs text-gray-500 flex gap-4">
+                        <span>* الضريبة المعتمدة: 15%</span>
+                        <span>* يتم إنشاء قيد محاسبي تلقائياً</span>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-xl shadow-sm overflow-x-auto">
+                    <h3 class="font-bold text-gray-700 mb-4">سجل فواتير المبيعات</h3>
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-green-50 text-green-800">
+                            <tr>
+                                <th class="p-3">م</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">العميل</th>
+                                <th class="p-3">المنتج</th>
+                                <th class="p-3">الإجمالي (شامل)</th>
+                                <th class="p-3">الضريبة (15%)</th>
+                                <th class="p-3">الدفع</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-body" class="divide-y"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 4. المشتريات -->
+            <section id="purchases" class="section-content">
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
+                    <h3 class="font-bold text-gray-700 border-b pb-2 mb-4">🚚 فاتورة مشتريات جديدة (شاملة الضريبة)</h3>
+                    <form onsubmit="processTransaction(event, 'purchase')" class="grid grid-cols-1 md:grid-cols-5 gap-4 items-end bg-blue-50 p-4 rounded-lg border border-blue-100">
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">المورد</label>
+                            <input type="text" id="purchase-supplier" placeholder="اسم المورد" class="w-full p-2 border rounded text-sm">
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">المنتج</label>
+                            <select id="purchase-product" class="w-full p-2 border rounded text-sm bg-white" onchange="updatePrice('purchase')"></select>
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">الكمية</label>
+                            <input type="number" id="purchase-qty" value="1" min="1" class="w-full p-2 border rounded text-sm">
+                        </div>
+                        <div class="md:col-span-1">
+                            <label class="text-xs text-gray-500 block mb-1">نوع الدفع</label>
+                            <select id="purchase-payment" class="w-full p-2 border rounded text-sm bg-white">
+                                <option value="cash">نقدي (من الخزينة)</option>
+                                <option value="credit">آجل (ذمم موردين)</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded text-sm hover:bg-blue-700 h-9">تسجيل المشتريات</button>
+                    </form>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm overflow-x-auto">
+                    <h3 class="font-bold text-gray-700 mb-4">سجل فواتير المشتريات</h3>
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-blue-50 text-blue-800">
+                            <tr>
+                                <th class="p-3">م</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">المورد</th>
+                                <th class="p-3">المنتج</th>
+                                <th class="p-3">الإجمالي (شامل)</th>
+                                <th class="p-3">الضريبة (15%)</th>
+                                <th class="p-3">الدفع</th>
+                            </tr>
+                        </thead>
+                        <tbody id="purchases-body" class="divide-y"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 5. المحاسبة والضرائب -->
+            <section id="accounting" class="section-content">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                    <!-- الإقرار الضريبي المبسط -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-red-500">
+                        <h3 class="font-bold text-lg mb-4 text-gray-700 flex justify-between">
+                            <span>📄 الإقرار الضريبي (VAT Report)</span>
+                            <span class="text-xs bg-gray-200 px-2 py-1 rounded">نسبة 15%</span>
+                        </h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between p-3 bg-gray-50 rounded">
+                                <span>ضريبة المبيعات (Output VAT)</span>
+                                <span class="font-bold text-gray-700 currency" id="tax-output">0.00</span>
+                            </div>
+                            <div class="flex justify-between p-3 bg-gray-50 rounded">
+                                <span>ضريبة المشتريات (Input VAT)</span>
+                                <span class="font-bold text-gray-700 currency" id="tax-input">0.00</span>
+                            </div>
+                            <div class="flex justify-between p-3 bg-red-50 rounded border border-red-100">
+                                <span class="font-bold text-red-700">صافي الضريبة المستحقة</span>
+                                <span class="font-bold text-red-700 currency" id="tax-net">0.00</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- الأرصدة الحالية -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border-t-4 border-indigo-500">
+                        <h3 class="font-bold text-lg mb-4 text-gray-700">🏦 الموقف المالي (Financial Position)</h3>
+                        <div class="space-y-3">
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">النقدية وما في حكمها</span>
+                                <span class="font-bold text-green-600 currency" id="fin-cash">0.00</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">المدينون (العملاء)</span>
+                                <span class="font-bold text-blue-600 currency" id="fin-ar">0.00</span>
+                            </div>
+                            <div class="flex justify-between border-b pb-2">
+                                <span class="text-gray-600">المخزون (بسعر التكلفة)</span>
+                                <span class="font-bold text-orange-600 currency" id="fin-inv">0.00</span>
+                            </div>
+                            <div class="flex justify-between pt-2">
+                                <span class="text-gray-600">الدائنون (الموردين)</span>
+                                <span class="font-bold text-red-600 currency" id="fin-ap">0.00</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </section>
 
-            <!-- 3. قسم المبيعات -->
-            <section id="sales" class="section-content">
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">تسجيل فاتورة بيع جديدة</h3>
-                    <form id="sales-form" onsubmit="processTransaction(event, 'sale')" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">اسم العميل</label>
-                            <input type="text" id="sale-customer" placeholder="نقدي / اسم العميل" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">المنتج</label>
-                            <select id="sale-product-select" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-white" onchange="updatePriceInput('sale')">
-                                <option value="">-- اختر منتج --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">الكمية</label>
-                            <input type="number" id="sale-qty" value="1" min="1" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
-                        </div>
-                        <button type="submit" class="bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700 transition shadow h-10">
-                            <i class="fas fa-check"></i> تأكيد البيع
-                        </button>
-                    </form>
-                </div>
-
+                <!-- دفتر القيود اليومية -->
                 <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700">سجل عمليات البيع</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-right">
-                            <thead class="bg-green-50 text-green-800">
+                    <h3 class="font-bold text-lg mb-4 text-gray-700">📓 دفتر اليومية العامة (Journal Entries)</h3>
+                    <div class="overflow-x-auto max-h-96 overflow-y-auto">
+                        <table class="w-full text-sm text-right border-collapse">
+                            <thead class="bg-gray-800 text-white sticky top-0">
                                 <tr>
                                     <th class="p-3">التاريخ</th>
-                                    <th class="p-3">العميل</th>
-                                    <th class="p-3">المنتج</th>
-                                    <th class="p-3">الكمية</th>
-                                    <th class="p-3">السعر</th>
-                                    <th class="p-3">الإجمالي</th>
-                                    <th class="p-3">الربح</th>
+                                    <th class="p-3">البيان (الوصف)</th>
+                                    <th class="p-3">الحساب</th>
+                                    <th class="p-3 text-left">مدين (Debit)</th>
+                                    <th class="p-3 text-left">دائن (Credit)</th>
                                 </tr>
                             </thead>
-                            <tbody id="sales-table-body" class="divide-y divide-gray-100"></tbody>
+                            <tbody id="journal-body" class="divide-y divide-gray-200"></tbody>
                         </table>
                     </div>
                 </div>
             </section>
 
-            <!-- 4. قسم المشتريات -->
-            <section id="purchases" class="section-content">
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700 border-b pb-2">تسجيل فاتورة شراء جديدة</h3>
-                    <form id="purchase-form" onsubmit="processTransaction(event, 'purchase')" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">اسم المورد</label>
-                            <input type="text" id="purchase-supplier" placeholder="اسم المورد" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">المنتج</label>
-                            <select id="purchase-product-select" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500 bg-white" onchange="updatePriceInput('purchase')">
-                                <option value="">-- اختر منتج --</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm text-gray-600 mb-1">الكمية</label>
-                            <input type="number" id="purchase-qty" value="1" min="1" class="w-full p-2 border rounded focus:outline-none focus:border-blue-500">
-                        </div>
-                        <button type="submit" class="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition shadow h-10">
-                            <i class="fas fa-check"></i> تأكيد الشراء
-                        </button>
-                    </form>
-                </div>
-
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700">سجل عمليات الشراء</h3>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-sm text-right">
-                            <thead class="bg-blue-50 text-blue-800">
-                                <tr>
-                                    <th class="p-3">التاريخ</th>
-                                    <th class="p-3">المورد</th>
-                                    <th class="p-3">المنتج</th>
-                                    <th class="p-3">الكمية</th>
-                                    <th class="p-3">التكلفة</th>
-                                    <th class="p-3">الإجمالي</th>
-                                </tr>
-                            </thead>
-                            <tbody id="purchases-table-body" class="divide-y divide-gray-100"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 5. قسم التقارير -->
+            <!-- 6. التقارير الختامية -->
             <section id="reports" class="section-content">
-                <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700">التقرير المالي التفصيلي</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
-                        <div class="p-4 border rounded-lg bg-gray-50">
-                            <h4 class="text-gray-500 text-sm mb-2">إجمالي الإيرادات</h4>
-                            <p class="text-2xl font-bold text-green-600 currency" id="report-revenue">0.00</p>
-                        </div>
-                        <div class="p-4 border rounded-lg bg-gray-50">
-                            <h4 class="text-gray-500 text-sm mb-2">تكلفة البضاعة المباعة (COGS)</h4>
-                            <p class="text-2xl font-bold text-red-500 currency" id="report-cogs">0.00</p>
-                        </div>
-                        <div class="p-4 border rounded-lg bg-gray-50">
-                            <h4 class="text-gray-500 text-sm mb-2">صافي الربح الفعلي</h4>
-                            <p class="text-2xl font-bold text-purple-600 currency" id="report-profit">0.00</p>
-                        </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm mb-6 max-w-4xl mx-auto border border-gray-200">
+                    <div class="text-center mb-6 border-b pb-4">
+                        <h2 class="text-2xl font-bold text-gray-800">قائمة الدخل (Income Statement)</h2>
+                        <p class="text-sm text-gray-500">عن الفترة الحالية</p>
                     </div>
-                </div>
+                    
+                    <div class="space-y-4 text-sm md:text-base">
+                        <div class="flex justify-between">
+                            <span class="font-bold text-gray-700">إجمالي المبيعات (Revenue)</span>
+                            <span class="font-bold text-gray-800" id="inc-revenue">0.00</span>
+                        </div>
+                        <div class="flex justify-between text-red-500">
+                            <span>(-) تكلفة البضاعة المباعة (COGS)</span>
+                            <span id="inc-cogs">0.00</span>
+                        </div>
+                        <div class="border-t border-gray-300 my-2"></div>
+                        <div class="flex justify-between text-lg bg-gray-50 p-2 rounded">
+                            <span class="font-bold text-indigo-700">مجمل الربح (Gross Profit)</span>
+                            <span class="font-bold text-indigo-700" id="inc-gross">0.00</span>
+                        </div>
+                        
+                        <div class="mt-4">
+                            <p class="text-gray-500 text-xs mb-2">مصروفات أخرى</p>
+                            <div class="flex justify-between text-gray-600 pl-4">
+                                <span>مصروفات تشغيلية (تجريبي)</span>
+                                <span>0.00</span>
+                            </div>
+                        </div>
 
-                <div class="bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-lg mb-4 text-gray-700">أداء المنتجات (الأكثر مبيعاً)</h3>
-                    <div id="top-products-container" class="space-y-3">
-                        <!-- سيتم تعبئة المنتجات هنا -->
+                        <div class="border-t-2 border-gray-800 my-4"></div>
+                        <div class="flex justify-between text-xl font-bold p-3 bg-green-100 rounded text-green-800">
+                            <span>صافي الربح (Net Profit)</span>
+                            <span id="inc-net">0.00</span>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -340,43 +401,120 @@
     </main>
 
     <script>
-        // --- 1. إدارة البيانات وحالة النظام ---
+        // --- إعدادات النظام ---
+        const apiKey = ""; // سيتم توفيرها من البيئة
+        const VAT_RATE = 0.15; // نسبة الضريبة 15%
+
+        // --- هيكل البيانات ---
         let appData = {
             products: [],
             sales: [],
-            purchases: []
+            purchases: [],
+            journal: [], // دفتر اليومية
+            accounts: {
+                cash: 0,        // نقدية
+                ar: 0,          // عملاء (مدينون)
+                ap: 0,          // موردين (دائنون)
+                vat_payable: 0, // ضرائب مستحقة
+                sales_rev: 0,   // إيرادات مبيعات
+                cogs: 0,        // تكلفة بضاعة مباعة
+                inventory: 0    // قيمة المخزون
+            }
         };
 
-        // تحميل البيانات من LocalStorage عند البدء
+        // --- Gemini AI Functions ---
+        async function callGeminiAPI(prompt) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = { contents: [{ parts: [{ text: prompt }] }] };
+            try {
+                const response = await fetch(url, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(payload)});
+                const data = await response.json();
+                return data.candidates[0].content.parts[0].text;
+            } catch (error) { console.error(error); return "تعذر الاتصال بالخادم."; }
+        }
+
+        async function generateProductDescription() {
+            const name = document.getElementById('prod-name').value;
+            if(!name) return alert('اكتب اسم المنتج أولاً');
+            document.getElementById('prod-desc').value = "جاري التوليد...";
+            const desc = await callGeminiAPI(`اكتب وصفا تسويقيا قصيرا جدا (سطر واحد) لمنتج: ${name}`);
+            document.getElementById('prod-desc').value = desc.trim();
+        }
+
+        async function generateBusinessAnalysis() {
+            const box = document.getElementById('ai-analysis-result');
+            box.classList.remove('hidden');
+            box.innerHTML = '<i class="fas fa-spinner fa-spin"></i> جاري تحليل البيانات المالية...';
+            
+            const prompt = `بصفتك مستشاراً مالياً، حلل هذه البيانات لشركة صغيرة:
+            - النقدية: ${appData.accounts.cash}
+            - الذمم المدينة (عند العملاء): ${appData.accounts.ar}
+            - الذمم الدائنة (للموردين): ${appData.accounts.ap}
+            - صافي الضريبة المستحقة: ${appData.accounts.vat_payable}
+            - صافي الربح: ${appData.accounts.sales_rev - appData.accounts.cogs}
+            
+            قدم 3 نصائح مركزة جداً للحفاظ على السيولة وتقليل الضرائب بشكل قانوني.`;
+            
+            const result = await callGeminiAPI(prompt);
+            box.innerHTML = `<strong>تقرير المستشار المالي:</strong><br>${result.replace(/\n/g, '<br>')}`;
+        }
+
+        // --- إدارة البيانات ---
         function loadData() {
-            const storedData = localStorage.getItem('erp_data');
-            if (storedData) {
-                appData = JSON.parse(storedData);
+            const stored = localStorage.getItem('erp_v3_data');
+            if(stored) {
+                appData = JSON.parse(stored);
             } else {
-                // بيانات افتراضية للتجربة
+                // بيانات أولية
                 appData.products = [
-                    { id: 1, name: 'لابتوب ديل', cost: 1500, price: 2000, stock: 10 },
-                    { id: 2, name: 'ماوس لاسلكي', cost: 20, price: 35, stock: 50 },
-                    { id: 3, name: 'طابعة اتش بي', cost: 400, price: 600, stock: 4 }
+                    { id: 1, name: 'لابتوب ديل', cost: 2000, price: 2500, stock: 5 }
                 ];
+                // إعادة حساب الأرصدة الافتتاحية للمخزون
+                appData.accounts.inventory = 10000; 
                 saveData();
             }
             updateUI();
         }
 
         function saveData() {
-            localStorage.setItem('erp_data', JSON.stringify(appData));
+            localStorage.setItem('erp_v3_data', JSON.stringify(appData));
             updateUI();
         }
 
         function resetData() {
-            if(confirm('هل أنت متأكد من حذف جميع البيانات؟')) {
-                localStorage.removeItem('erp_data');
+            if(confirm('تنبيه: سيتم حذف جميع البيانات المالية والمحاسبية!')) {
+                localStorage.removeItem('erp_v3_data');
                 location.reload();
             }
         }
 
-        // --- 2. إدارة المخزون ---
+        // --- المحرك المحاسبي (Accounting Engine) ---
+        function addJournalEntry(date, desc, entries) {
+            // entries = [{ account: 'cash', debit: 100, credit: 0 }, ...]
+            const entryId = Date.now();
+            
+            entries.forEach(line => {
+                // تحديث أرصدة الحسابات الرئيسية
+                if(appData.accounts[line.account] !== undefined) {
+                    // طبيعة الحسابات:
+                    // أصول (cash, ar, inventory): تزيد بالمدين (Debit) وتنقص بالدائن (Credit)
+                    // التزامات (ap, vat_payable): تزيد بالدائن وتنقص بالمدين
+                    // إيرادات (sales_rev): تزيد بالدائن
+                    // مصروفات (cogs): تزيد بالمدين
+                    
+                    const isAsset = ['cash', 'ar', 'inventory', 'cogs'].includes(line.account);
+                    if(isAsset) {
+                        appData.accounts[line.account] += (line.debit - line.credit);
+                    } else {
+                        appData.accounts[line.account] += (line.credit - line.debit);
+                    }
+                }
+            });
+
+            appData.journal.unshift({ id: entryId, date, desc, lines: entries });
+        }
+
+        // --- العمليات ---
         function addProduct(e) {
             e.preventDefault();
             const name = document.getElementById('prod-name').value;
@@ -384,252 +522,224 @@
             const price = parseFloat(document.getElementById('prod-price').value);
             const stock = parseInt(document.getElementById('prod-stock').value);
 
-            const newProduct = {
-                id: Date.now(),
-                name,
-                cost,
-                price,
-                stock
-            };
-
-            appData.products.push(newProduct);
+            const prod = { id: Date.now(), name, cost, price, stock };
+            appData.products.push(prod);
+            
+            // قيد مخزون افتتاحي (Inventory Adjustment)
+            if(stock > 0) {
+                const value = stock * cost;
+                addJournalEntry(new Date().toISOString(), `رصيد افتتاحي: ${name}`, [
+                    { account: 'inventory', debit: value, credit: 0 },
+                    { account: 'equity_opening', debit: 0, credit: value } // حساب وسيط
+                ]);
+            }
+            
             document.getElementById('product-form').reset();
             saveData();
-            alert('تمت إضافة المنتج بنجاح');
+            alert('تمت إضافة الصنف وتحديث قيمة المخزون');
         }
 
-        function deleteProduct(id) {
-            if(confirm('هل تريد حذف هذا المنتج؟')) {
-                appData.products = appData.products.filter(p => p.id !== id);
-                saveData();
-            }
-        }
-
-        // --- 3. إدارة العمليات (بيع/شراء) ---
         function processTransaction(e, type) {
             e.preventDefault();
             const prefix = type === 'sale' ? 'sale' : 'purchase';
-            
-            const productId = parseInt(document.getElementById(`${prefix}-product-select`).value);
+            const prodId = parseInt(document.getElementById(`${prefix}-product`).value);
             const qty = parseInt(document.getElementById(`${prefix}-qty`).value);
-            const partyName = document.getElementById(`${prefix}-${type === 'sale' ? 'customer' : 'supplier'}`).value || (type === 'sale' ? 'نقدي' : 'مورد عام');
+            const party = document.getElementById(`${prefix}-${type === 'sale' ? 'customer' : 'supplier'}`).value;
+            const paymentType = document.getElementById(`${prefix}-payment`).value;
 
-            if (!productId) {
-                alert('الرجاء اختيار منتج');
-                return;
-            }
+            const product = appData.products.find(p => p.id === prodId);
+            if(!product) return;
 
-            const productIndex = appData.products.findIndex(p => p.id === productId);
-            const product = appData.products[productIndex];
+            const date = new Date().toISOString();
 
             if (type === 'sale') {
-                if (product.stock < qty) {
-                    alert('عفواً، الكمية المتوفرة في المخزون غير كافية!');
-                    return;
-                }
-                // خصم من المخزون
-                product.stock -= qty;
+                if(product.stock < qty) return alert('الكمية غير متوفرة!');
                 
-                // تسجيل العملية
-                const sale = {
-                    id: Date.now(),
-                    date: new Date().toISOString(),
-                    productId,
-                    productName: product.name,
-                    customer: partyName,
-                    qty,
-                    price: product.price,
-                    cost: product.cost, // لحساب الربح لاحقاً
-                    total: product.price * qty,
-                    profit: (product.price - product.cost) * qty
-                };
-                appData.sales.unshift(sale); // إضافة في البداية
+                // حسابات البيع
+                const unitPrice = product.price; // السعر شامل الضريبة
+                const totalIncVat = unitPrice * qty;
+                const baseAmount = totalIncVat / (1 + VAT_RATE);
+                const vatAmount = totalIncVat - baseAmount;
+                const costAmount = product.cost * qty;
+
+                // 1. تحديث المخزون
+                product.stock -= qty;
+
+                // 2. تسجيل الفاتورة
+                appData.sales.unshift({
+                    id: Date.now(), date, party, prodName: product.name,
+                    qty, total: totalIncVat, vat: vatAmount, paymentType
+                });
+
+                // 3. القيود المحاسبية (بيع)
+                // من ح/ النقدية أو العملاء
+                // إلى ح/ المبيعات
+                // إلى ح/ ضريبة القيمة المضافة
+                const debitAccount = paymentType === 'cash' ? 'cash' : 'ar';
+                addJournalEntry(date, `فاتورة بيع #${appData.sales.length} - ${party}`, [
+                    { account: debitAccount, debit: totalIncVat, credit: 0 },
+                    { account: 'sales_rev', debit: 0, credit: baseAmount },
+                    { account: 'vat_payable', debit: 0, credit: vatAmount }
+                ]);
+
+                // 4. قيد التكلفة (Cost of Goods Sold)
+                // من ح/ تكلفة البضاعة
+                // إلى ح/ المخزون
+                addJournalEntry(date, `تكلفة بضاعة مباعة - ${product.name}`, [
+                    { account: 'cogs', debit: costAmount, credit: 0 },
+                    { account: 'inventory', debit: 0, credit: costAmount }
+                ]);
 
             } else { // Purchase
-                // زيادة المخزون
+                // حسابات الشراء
+                const unitCost = product.cost; // التكلفة شاملة الضريبة (نفترض ذلك للتبسيط)
+                const totalIncVat = unitCost * qty;
+                const baseAmount = totalIncVat / (1 + VAT_RATE);
+                const vatAmount = totalIncVat - baseAmount;
+
+                // 1. تحديث المخزون
                 product.stock += qty;
+
+                // 2. تسجيل الفاتورة
+                appData.purchases.unshift({
+                    id: Date.now(), date, party, prodName: product.name,
+                    qty, total: totalIncVat, vat: vatAmount, paymentType
+                });
+
+                // 3. القيود المحاسبية (شراء)
+                // من ح/ المخزون (بالصافي)
+                // من ح/ ضريبة المدخلات (تخصم من الالتزام الضريبي) -> نعالجها كمدين في vat_payable
+                // إلى ح/ النقدية أو الموردين
+                const creditAccount = paymentType === 'cash' ? 'cash' : 'ap';
                 
-                // تحديث التكلفة (متوسط مرجح يمكن إضافته هنا، للتبسيط سنبقي التكلفة الحالية)
-                // تسجيل العملية
-                const purchase = {
-                    id: Date.now(),
-                    date: new Date().toISOString(),
-                    productId,
-                    productName: product.name,
-                    supplier: partyName,
-                    qty,
-                    cost: product.cost, // نستخدم التكلفة الحالية للمنتج
-                    total: product.cost * qty
-                };
-                appData.purchases.unshift(purchase);
+                // ملاحظة: هنا سنضع المخزون بسعر التكلفة الصافي، والضريبة تسترد
+                // لكن للتبسيط في هذا التطبيق، سنعتبر المخزون يسجل بالقيمة الصافية
+                addJournalEntry(date, `فاتورة شراء - ${party}`, [
+                    { account: 'inventory', debit: baseAmount, credit: 0 },
+                    { account: 'vat_payable', debit: vatAmount, credit: 0 }, // مدين يعني يقلل الضريبة المستحقة
+                    { account: creditAccount, debit: 0, credit: totalIncVat }
+                ]);
             }
 
-            document.getElementById(`${prefix}-form`).reset();
+            document.getElementById(type === 'sale' ? 'sales-form' : 'purchase-form').reset(); // Reset doesn't work directly on div forms like this usually, simplified here
             saveData();
-            alert(type === 'sale' ? 'تمت عملية البيع بنجاح' : 'تمت عملية الشراء بنجاح');
+            alert('تمت العملية وتسجيل القيود بنجاح');
         }
 
-        // --- 4. تحديث الواجهة (UI Rendering) ---
+        // --- تحديث الواجهة ---
         function updateUI() {
-            renderInventoryTable();
-            renderSelectOptions();
-            renderSalesTable();
-            renderPurchasesTable();
-            renderDashboardAndReports();
+            // تحديث القوائم المنسدلة
+            const opts = '<option value="">اختر...</option>' + appData.products.map(p => `<option value="${p.id}">${p.name} (متوفر: ${p.stock})</option>`).join('');
+            document.getElementById('sale-product').innerHTML = opts;
+            document.getElementById('purchase-product').innerHTML = opts;
+
+            // الجداول
+            renderTable('inventory-body', appData.products, (p) => `
+                <td class="p-3 font-bold">${p.name}</td>
+                <td class="p-3 text-gray-500">${p.cost}</td>
+                <td class="p-3 text-green-600">${p.price}</td>
+                <td class="p-3 font-bold">${p.stock}</td>
+                <td class="p-3">${(p.stock * p.cost).toFixed(2)}</td>
+                <td class="p-3"><button class="text-red-500" onclick="alert('غير مفعل في النسخة التجريبية')">x</button></td>
+            `);
+
+            renderTable('sales-body', appData.sales, (s, i) => `
+                <td class="p-3">${i+1}</td>
+                <td class="p-3 text-xs text-gray-500">${new Date(s.date).toLocaleDateString()}</td>
+                <td class="p-3">${s.party}</td>
+                <td class="p-3">${s.prodName}</td>
+                <td class="p-3 font-bold">${s.total.toFixed(2)}</td>
+                <td class="p-3 text-red-500 text-xs">${s.vat.toFixed(2)}</td>
+                <td class="p-3 badge"><span class="px-2 py-1 rounded text-xs ${s.paymentType=='cash'?'bg-green-100 text-green-700':'bg-yellow-100 text-yellow-700'}">${s.paymentType=='cash'?'نقدي':'آجل'}</span></td>
+            `);
+
+            renderTable('purchases-body', appData.purchases, (p, i) => `
+                <td class="p-3">${i+1}</td>
+                <td class="p-3 text-xs text-gray-500">${new Date(p.date).toLocaleDateString()}</td>
+                <td class="p-3">${p.party}</td>
+                <td class="p-3">${p.prodName}</td>
+                <td class="p-3 font-bold">${p.total.toFixed(2)}</td>
+                <td class="p-3 text-blue-500 text-xs">${p.vat.toFixed(2)}</td>
+                <td class="p-3"><span class="px-2 py-1 rounded text-xs ${p.paymentType=='cash'?'bg-red-100 text-red-700':'bg-yellow-100 text-yellow-700'}">${p.paymentType=='cash'?'نقدي':'آجل'}</span></td>
+            `);
+
+            // دفتر اليومية
+            const journalBody = document.getElementById('journal-body');
+            journalBody.innerHTML = appData.journal.map(entry => {
+                let rows = '';
+                entry.lines.forEach((line, idx) => {
+                    const accNames = {
+                        'cash': 'الصندوق/الخزينة', 'ar': 'العملاء (ذمم مدينة)', 'ap': 'الموردين (ذمم دائنة)',
+                        'sales_rev': 'المبيعات', 'cogs': 'تكلفة البضاعة', 'inventory': 'المخزون',
+                        'vat_payable': 'ضريبة القيمة المضافة', 'equity_opening': 'رأس المال الافتتاحي'
+                    };
+                    rows += `
+                        <tr class="text-xs ${idx === 0 ? 'border-t border-gray-300' : ''} hover:bg-gray-50">
+                            ${idx === 0 ? `<td class="p-2 align-top text-gray-500" rowspan="${entry.lines.length}">${new Date(entry.date).toLocaleDateString()}</td>` : ''}
+                            ${idx === 0 ? `<td class="p-2 align-top font-bold text-gray-700" rowspan="${entry.lines.length}">${entry.desc}</td>` : ''}
+                            <td class="p-2 text-gray-600">${accNames[line.account] || line.account}</td>
+                            <td class="p-2 text-left ${line.debit > 0 ? 'text-gray-800' : 'text-gray-300'}">${line.debit > 0 ? line.debit.toFixed(2) : '-'}</td>
+                            <td class="p-2 text-left ${line.credit > 0 ? 'text-gray-800' : 'text-gray-300'}">${line.credit > 0 ? line.credit.toFixed(2) : '-'}</td>
+                        </tr>
+                    `;
+                });
+                return rows;
+            }).join('');
+
+            // تحديث الأرقام والبطاقات
+            updateDashboardNumbers();
         }
 
-        function renderInventoryTable() {
-            const tbody = document.getElementById('inventory-table-body');
-            tbody.innerHTML = '';
+        function renderTable(id, data, rowMapper) {
+            document.getElementById(id).innerHTML = data.map(rowMapper).join('');
+        }
+
+        function updateDashboardNumbers() {
+            // Header Cash
+            document.getElementById('header-cash').textContent = appData.accounts.cash.toFixed(2);
+
+            // Dashboard Cards
+            document.getElementById('dash-net-sales').textContent = appData.accounts.sales_rev.toFixed(2);
+            // Purchases calculation roughly (Inventory Inflow)
+            const purchaseTotal = appData.purchases.reduce((acc, p) => acc + (p.total - p.vat), 0);
+            document.getElementById('dash-net-purchases').textContent = purchaseTotal.toFixed(2);
             
-            appData.products.forEach((p, index) => {
-                const stockValue = p.stock * p.cost;
-                const row = `
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="p-3 text-gray-500">${index + 1}</td>
-                        <td class="p-3 font-medium">${p.name}</td>
-                        <td class="p-3 text-gray-600">${p.cost}</td>
-                        <td class="p-3 text-green-600">${p.price}</td>
-                        <td class="p-3 font-bold ${p.stock < 5 ? 'text-red-500' : 'text-blue-600'}">${p.stock}</td>
-                        <td class="p-3 text-gray-600">${stockValue.toFixed(2)}</td>
-                        <td class="p-3">
-                            <button onclick="deleteProduct(${p.id})" class="text-red-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
-                        </td>
-                    </tr>
-                `;
-                tbody.innerHTML += row;
+            document.getElementById('dash-vat-payable').textContent = appData.accounts.vat_payable.toFixed(2);
+            document.getElementById('dash-net-profit').textContent = (appData.accounts.sales_rev - appData.accounts.cogs).toFixed(2);
+
+            // Accounting Section
+            document.getElementById('tax-output').textContent = appData.sales.reduce((a, b) => a + b.vat, 0).toFixed(2);
+            document.getElementById('tax-input').textContent = appData.purchases.reduce((a, b) => a + b.vat, 0).toFixed(2);
+            document.getElementById('tax-net').textContent = appData.accounts.vat_payable.toFixed(2);
+
+            document.getElementById('fin-cash').textContent = appData.accounts.cash.toFixed(2);
+            document.getElementById('fin-ar').textContent = appData.accounts.ar.toFixed(2);
+            document.getElementById('fin-inv').textContent = appData.accounts.inventory.toFixed(2);
+            document.getElementById('fin-ap').textContent = appData.accounts.ap.toFixed(2);
+
+            // Income Statement
+            document.getElementById('inc-revenue').textContent = appData.accounts.sales_rev.toFixed(2);
+            document.getElementById('inc-cogs').textContent = appData.accounts.cogs.toFixed(2);
+            document.getElementById('inc-gross').textContent = (appData.accounts.sales_rev - appData.accounts.cogs).toFixed(2);
+            document.getElementById('inc-net').textContent = (appData.accounts.sales_rev - appData.accounts.cogs).toFixed(2);
+        }
+
+        function showSection(id) {
+            document.querySelectorAll('.section-content').forEach(d => d.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            // Highlight sidebar
+            document.querySelectorAll('.nav-btn').forEach(b => {
+                if(b.dataset.target === id) b.classList.add('bg-slate-800', 'text-blue-300');
+                else b.classList.remove('bg-slate-800', 'text-blue-300');
             });
-        }
-
-        function renderSelectOptions() {
-            const options = '<option value="">-- اختر منتج --</option>' + 
-                appData.products.map(p => `<option value="${p.id}">${p.name} (متوفر: ${p.stock})</option>`).join('');
             
-            document.getElementById('sale-product-select').innerHTML = options;
-            document.getElementById('purchase-product-select').innerHTML = options;
+            const titles = { 'dashboard': 'لوحة القيادة', 'inventory': 'المخزون', 'sales': 'المبيعات', 'purchases': 'المشتريات', 'accounting': 'المحاسبة والضرائب', 'reports': 'التقارير' };
+            document.getElementById('page-title').textContent = titles[id];
         }
 
-        function renderSalesTable() {
-            const tbody = document.getElementById('sales-table-body');
-            tbody.innerHTML = appData.sales.map(s => `
-                <tr class="hover:bg-gray-50">
-                    <td class="p-3 text-gray-500 text-xs">${new Date(s.date).toLocaleDateString('ar-EG')}</td>
-                    <td class="p-3">${s.customer}</td>
-                    <td class="p-3">${s.productName}</td>
-                    <td class="p-3">${s.qty}</td>
-                    <td class="p-3">${s.price}</td>
-                    <td class="p-3 font-bold">${s.total.toFixed(2)}</td>
-                    <td class="p-3 text-green-600 font-bold">+${s.profit.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        function renderPurchasesTable() {
-            const tbody = document.getElementById('purchases-table-body');
-            tbody.innerHTML = appData.purchases.map(p => `
-                <tr class="hover:bg-gray-50">
-                    <td class="p-3 text-gray-500 text-xs">${new Date(p.date).toLocaleDateString('ar-EG')}</td>
-                    <td class="p-3">${p.supplier}</td>
-                    <td class="p-3">${p.productName}</td>
-                    <td class="p-3">${p.qty}</td>
-                    <td class="p-3">${p.cost}</td>
-                    <td class="p-3 font-bold text-red-400">-${p.total.toFixed(2)}</td>
-                </tr>
-            `).join('');
-        }
-
-        function renderDashboardAndReports() {
-            // الحسابات
-            const totalSales = appData.sales.reduce((sum, s) => sum + s.total, 0);
-            const totalPurchases = appData.purchases.reduce((sum, p) => sum + p.total, 0);
-            
-            // حساب صافي الربح (مجموع أرباح عمليات البيع المسجلة)
-            // هذا أدق من طرح المبيعات من المشتريات لأن المشتريات قد تكون مخزنة ولم تبع بعد
-            const netProfit = appData.sales.reduce((sum, s) => sum + s.profit, 0); 
-            
-            const itemsCount = appData.products.length;
-            const cogs = appData.sales.reduce((sum, s) => sum + (s.cost * s.qty), 0); // تكلفة البضاعة المباعة
-
-            // تحديث DOM
-            document.getElementById('dash-total-sales').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('dash-total-purchases').textContent = totalPurchases.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('dash-net-profit').textContent = netProfit.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('dash-items-count').textContent = itemsCount;
-
-            // تحديث قسم التقارير
-            document.getElementById('report-revenue').textContent = totalSales.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('report-cogs').textContent = cogs.toLocaleString('en-US', { minimumFractionDigits: 2 });
-            document.getElementById('report-profit').textContent = netProfit.toLocaleString('en-US', { minimumFractionDigits: 2 });
-
-            // تنبيهات المخزون
-            const lowStockItems = appData.products.filter(p => p.stock <= 5);
-            const alertContainer = document.getElementById('low-stock-alert-container');
-            if (lowStockItems.length > 0) {
-                alertContainer.innerHTML = lowStockItems.map(p => `
-                    <div class="flex items-center justify-between bg-red-50 p-3 rounded border border-red-100 text-red-700">
-                        <span><i class="fas fa-exclamation-triangle ml-2"></i> المنتج <strong>${p.name}</strong> وصل للحد الأدنى (${p.stock})</span>
-                        <button onclick="showSection('purchases')" class="text-xs bg-red-200 px-2 py-1 rounded hover:bg-red-300">شراء الآن</button>
-                    </div>
-                `).join('');
-            } else {
-                alertContainer.innerHTML = '<p class="text-gray-400 text-sm text-center">المخزون في حالة جيدة.</p>';
-            }
-
-            // الأكثر مبيعاً (تقرير بسيط)
-            // تجميع المبيعات حسب المنتج
-            const productSales = {};
-            appData.sales.forEach(s => {
-                if(!productSales[s.productName]) productSales[s.productName] = 0;
-                productSales[s.productName] += s.qty;
-            });
-            // تحويل وترتيب
-            const sortedProducts = Object.entries(productSales)
-                .sort((a, b) => b[1] - a[1])
-                .slice(0, 3); // أفضل 3
-            
-            const topProdContainer = document.getElementById('top-products-container');
-            if(sortedProducts.length > 0) {
-                topProdContainer.innerHTML = sortedProducts.map(([name, qty]) => `
-                    <div class="flex justify-between items-center p-3 bg-gray-50 rounded">
-                        <span class="font-bold text-gray-700">${name}</span>
-                        <span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">بيع ${qty} قطعة</span>
-                    </div>
-                `).join('');
-            } else {
-                topProdContainer.innerHTML = '<p class="text-gray-400 text-center">لا توجد مبيعات كافية لعرض التحليل.</p>';
-            }
-        }
-
-        // --- 5. التنقل (Navigation) ---
-        function showSection(sectionId) {
-            // إخفاء الكل
-            document.querySelectorAll('.section-content').forEach(el => el.classList.remove('active'));
-            // إظهار المطلوب
-            document.getElementById(sectionId).classList.add('active');
-            
-            // تحديث العنوان
-            const titles = {
-                'dashboard': 'لوحة التحكم',
-                'inventory': 'إدارة المخزون',
-                'sales': 'إدارة المبيعات',
-                'purchases': 'إدارة المشتريات',
-                'reports': 'التقارير المالية'
-            };
-            document.getElementById('page-title').textContent = titles[sectionId];
-
-            // تحديث الزر النشط
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                if(btn.dataset.target === sectionId) {
-                    btn.classList.add('bg-slate-800', 'text-blue-300');
-                } else {
-                    btn.classList.remove('bg-slate-800', 'text-blue-300');
-                }
-            });
-        }
-
-        // تهيئة النظام
+        // --- تهيئة النظام ---
         window.onload = loadData;
-
     </script>
 </body>
 </html>
