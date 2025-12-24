@@ -8,6 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
         body { font-family: 'Cairo', sans-serif; background-color: #f1f5f9; -webkit-tap-highlight-color: transparent; }
         .currency { font-family: 'Courier New', Courier, monospace; font-weight: bold; }
@@ -54,6 +58,23 @@
 </head>
 <body class="text-slate-800 h-screen flex overflow-hidden bg-slate-50">
 
+    <!-- Login Modal -->
+    <div id="login-modal" class="fixed inset-0 bg-slate-900 z-[100] flex items-center justify-center">
+        <div class="bg-white p-8 rounded-xl shadow-2xl w-96">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-white text-2xl"><i class="fas fa-user-shield"></i></div>
+                <h2 class="text-2xl font-bold text-slate-800">تسجيل الدخول</h2>
+                <p class="text-slate-500 text-sm mt-1">نظام ERP المتكامل</p>
+            </div>
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">اسم المستخدم</label><input type="text" id="login-user" class="w-full p-3 border rounded-lg focus:border-blue-500 outline-none" placeholder="admin"></div>
+                <div><label class="block text-sm font-bold text-slate-700 mb-1">كلمة المرور</label><input type="password" id="login-pass" class="w-full p-3 border rounded-lg focus:border-blue-500 outline-none" placeholder="123"></div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg">دخول</button>
+                <p id="login-error" class="text-red-500 text-xs text-center hidden"><i class="fas fa-exclamation-circle"></i> بيانات الدخول غير صحيحة</p>
+            </form>
+        </div>
+    </div>
+
     <div id="toast-container"></div>
     <div id="print-area" class="hidden p-8"></div>
     <div id="sidebar-overlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/50 z-30 hidden md:hidden transition-opacity opacity-0"></div>
@@ -76,8 +97,9 @@
     <!-- القائمة الجانبية -->
     <aside id="sidebar" class="fixed inset-y-0 right-0 z-40 w-72 bg-slate-900 text-white flex flex-col shadow-2xl transform translate-x-full md:translate-x-0 md:static md:w-64 transition-transform duration-300 no-print">
         <div class="p-6 border-b border-slate-700 flex flex-col items-center bg-slate-950">
-            <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-3 shadow-lg">
-                <i class="fas fa-cubes text-white"></i>
+            <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl mb-3 shadow-lg overflow-hidden relative">
+                <i class="fas fa-cubes text-white" id="default-logo-icon"></i>
+                <img id="sidebar-logo-img" src="" class="w-full h-full object-cover hidden absolute inset-0">
             </div>
             <h1 class="text-lg font-bold text-white tracking-wide">نظام ERP المتكامل</h1>
             <span class="text-[10px] text-slate-400 mt-1 bg-slate-800 px-2 py-0.5 rounded-full">V10.0 Pro</span>
@@ -242,6 +264,7 @@
                         <div><label class="text-xs font-bold text-slate-600 mb-1 block">رقم الهاتف</label><input type="text" id="set-phone" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none"></div>
                         <div class="md:col-span-2"><label class="text-xs font-bold text-slate-600 mb-1 block">العنوان</label><input type="text" id="set-address" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none"></div>
                         <div><label class="text-xs font-bold text-slate-600 mb-1 block">الرقم الضريبي</label><input type="text" id="set-vat-no" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none"></div>
+                        <div><label class="text-xs font-bold text-slate-600 mb-1 block">رابط شعار الشركة (URL)</label><input type="text" id="set-logo-url" placeholder="https://example.com/logo.png" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none" dir="ltr"></div>
                         <div class="grid grid-cols-2 gap-4">
                             <div><label class="text-xs font-bold text-slate-600 mb-1 block">الضريبة %</label><input type="number" id="set-vat-rate" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none"></div>
                             <div><label class="text-xs font-bold text-slate-600 mb-1 block">العملة</label><input type="text" id="set-currency" class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white focus:border-blue-500 transition outline-none"></div>
@@ -473,10 +496,23 @@
     </main>
 
     <script>
+        // --- 0. Firebase Config & Login ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6if5oe1FBqJlp-glu2AmRaGKODRo14ck",
+            authDomain: "erm1-92e4f.firebaseapp.com",
+            projectId: "erm1-92e4f",
+            storageBucket: "erm1-92e4f.firebasestorage.app",
+            messagingSenderId: "868668789906",
+            appId: "1:868668789906:web:a56f9a9c441c66c008024b",
+            measurementId: "G-JJ2MHMPX22"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const dbFirestore = firebase.firestore();
+
         // --- 1. Data Structure ---
         let db = {
             settings: { 
-                companyName: 'شركتي', 
+                companyName: 'شركتي', logo: '',
                 vatRate: 15, 
                 currency: 'SAR',
                 phone: '', address: '', vatNumber: '' 
@@ -513,27 +549,52 @@
         let currentInvoiceToPrint = null;
 
         // --- 2. Initialization ---
-        function init() {
-            const saved = localStorage.getItem('erp_pro_v10');
-            if(saved) {
-                db = JSON.parse(saved);
-                if(!db.users) db.users = [{id: 1, name: 'Admin', role: 'admin'}];
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-user').value;
+            const p = document.getElementById('login-pass').value;
+            if(u === 'admin' && p === '123') {
+                document.getElementById('login-modal').classList.add('hidden');
+                init();
             } else {
-                addJournalEntry(new Date().toISOString().split('T')[0], 'قيد افتتاحي: رأس المال', [
-                    {code: '1101', dr: 50000, cr: 0},
-                    {code: '3101', dr: 0, cr: 50000}
-                ]);
+                document.getElementById('login-error').classList.remove('hidden');
+            }
+        }
+
+        async function init() {
+            showToast('جاري تحميل البيانات من السيرفر...', 'info');
+            try {
+                const doc = await dbFirestore.collection('app_data').doc('main_db').get();
+                if (doc.exists) {
+                    db = doc.data();
+                    // Ensure structure integrity if fields are missing
+                    if(!db.users) db.users = [{id: 1, name: 'Admin', role: 'admin'}];
+                    if(!db.settings.logo) db.settings.logo = '';
+                    showToast('تم تحميل البيانات بنجاح');
+                } else {
+                    // Initialize default data if new
+                    addJournalEntry(new Date().toISOString().split('T')[0], 'قيد افتتاحي: رأس المال', [
+                        {code: '1101', dr: 50000, cr: 0},
+                        {code: '3101', dr: 0, cr: 50000}
+                    ]);
+                    save(); // Save initial state to Firebase
+                }
+            } catch (error) {
+                console.error("Error loading data:", error);
+                showToast('خطأ في الاتصال بقاعدة البيانات', 'error');
+                // Fallback to local if needed, or just stay empty
             }
             
             // Set Default Dates for Reports (This Month)
             const today = new Date();
             const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
-            document.getElementById('rpt-start-date').valueAsDate = firstDay;
-            document.getElementById('rpt-end-date').valueAsDate = today;
+            if(document.getElementById('rpt-start-date')) document.getElementById('rpt-start-date').valueAsDate = firstDay;
+            if(document.getElementById('rpt-end-date')) document.getElementById('rpt-end-date').valueAsDate = today;
 
             loadSettingsToForm();
             populateSelects();
             renderUsersTable();
+            updateLogoView();
             renderAll();
             
             document.getElementById('journal-lines').innerHTML = '';
@@ -542,8 +603,10 @@
             document.getElementById('header-date').innerText = new Date().toLocaleDateString('ar-EG');
         }
 
-        function save() {
-            localStorage.setItem('erp_pro_v10', JSON.stringify(db));
+        async function save() {
+            // Save to Firestore
+            // localStorage.setItem('erp_pro_v10', JSON.stringify(db)); // Backup local
+            await dbFirestore.collection('app_data').doc('main_db').set(db).catch(e => console.error(e));
             renderAll();
         }
 
@@ -698,6 +761,7 @@
                 <div class="text-center mb-4">
                     <h2 class="font-bold text-xl text-slate-800">${db.settings.companyName}</h2>
                     <p class="text-sm text-slate-500">فاتورة #${inv.id}</p>
+                    ${db.settings.logo ? `<img src="${db.settings.logo}" class="h-16 mx-auto my-2">` : ''}
                     <p class="text-xs text-slate-400">${inv.date}</p>
                 </div>
                 <div class="mb-4 text-sm">
@@ -839,6 +903,7 @@
             const printArea = document.getElementById('print-area');
             printArea.innerHTML = `
                 <div class="text-center mb-6">
+                    ${db.settings.logo ? `<img src="${db.settings.logo}" style="height: 80px; margin: 0 auto 10px auto; display: block;">` : ''}
                     <h1 class="text-2xl font-bold">${db.settings.companyName}</h1>
                     <p class="text-sm">${db.settings.address} - ${db.settings.phone}</p>
                     <p class="text-sm">الرقم الضريبي: ${db.settings.vatNumber}</p>
@@ -910,12 +975,41 @@
             if(lines.length<2 || !desc) return showToast('بيانات ناقصة', 'error');
             if(addJournalEntry(date, desc, lines)) { showToast('تم الترحيل'); document.getElementById('journal-lines').innerHTML=''; addJournalLineRow(); addJournalLineRow(); document.getElementById('manual-desc').value=''; calcJTotals(); }
         }
-        function saveSettings(e) { e.preventDefault(); db.settings.companyName=document.getElementById('set-name').value; db.settings.vatRate=parseFloat(document.getElementById('set-vat-rate').value); db.settings.currency=document.getElementById('set-currency').value; db.settings.phone=document.getElementById('set-phone').value; db.settings.address=document.getElementById('set-address').value; db.settings.vatNumber=document.getElementById('set-vat-no').value; save(); loadSettingsToForm(); showToast('تم الحفظ'); }
-        function loadSettingsToForm() { document.getElementById('set-name').value=db.settings.companyName; document.getElementById('set-vat-rate').value=db.settings.vatRate; document.getElementById('set-currency').value=db.settings.currency; document.getElementById('set-phone').value=db.settings.phone; document.getElementById('set-address').value=db.settings.address; document.getElementById('set-vat-no').value=db.settings.vatNumber; document.getElementById('header-company-name').innerText=db.settings.companyName; document.querySelectorAll('.currency').forEach(el=>el.setAttribute('data-curr', db.settings.currency)); document.getElementById('cart-vat-rate').innerText=db.settings.vatRate; }
+        
+        function saveSettings(e) { 
+            e.preventDefault(); 
+            db.settings.companyName=document.getElementById('set-name').value; 
+            db.settings.vatRate=parseFloat(document.getElementById('set-vat-rate').value); 
+            db.settings.currency=document.getElementById('set-currency').value; 
+            db.settings.phone=document.getElementById('set-phone').value; 
+            db.settings.address=document.getElementById('set-address').value; 
+            db.settings.vatNumber=document.getElementById('set-vat-no').value; 
+            db.settings.logo = document.getElementById('set-logo-url').value;
+            
+            save(); 
+            loadSettingsToForm(); 
+            updateLogoView();
+            showToast('تم الحفظ');
+        }
+
+        function loadSettingsToForm() { document.getElementById('set-name').value=db.settings.companyName; document.getElementById('set-vat-rate').value=db.settings.vatRate; document.getElementById('set-currency').value=db.settings.currency; document.getElementById('set-phone').value=db.settings.phone; document.getElementById('set-address').value=db.settings.address; document.getElementById('set-vat-no').value=db.settings.vatNumber; document.getElementById('set-logo-url').value=db.settings.logo||''; document.getElementById('header-company-name').innerText=db.settings.companyName; document.querySelectorAll('.currency').forEach(el=>el.setAttribute('data-curr', db.settings.currency)); document.getElementById('cart-vat-rate').innerText=db.settings.vatRate; }
         function exportData() { const a=document.createElement('a'); a.href="data:text/json;charset=utf-8,"+encodeURIComponent(JSON.stringify(db)); a.download="erp_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
         function importData(inp) { const f=inp.files[0]; if(!f)return; const r=new FileReader(); r.onload=e=>{try{db=JSON.parse(e.target.result);save();location.reload()}catch(x){alert('خطأ')}}; r.readAsText(f); }
         function resetData() { if(confirm('تأكيد التصفير؟')) { localStorage.removeItem('erp_pro_v10'); location.reload(); } }
         function addCustomer() { const n=document.getElementById('new-cust-name').value; if(n){db.customers.push({id:Date.now(),name:n});save();populateSelects();document.getElementById('new-cust-name').value='';} }
+
+        function updateLogoView() {
+            const logoImg = document.getElementById('sidebar-logo-img');
+            const defIcon = document.getElementById('default-logo-icon');
+            if(db.settings.logo) {
+                logoImg.src = db.settings.logo;
+                logoImg.classList.remove('hidden');
+                defIcon.classList.add('hidden');
+            } else {
+                logoImg.classList.add('hidden');
+                defIcon.classList.remove('hidden');
+            }
+        }
 
         // --- 10. Rendering ---
         function renderAll() {
@@ -1025,7 +1119,7 @@
             if(window.innerWidth < 768) toggleSidebar();
         }
 
-        window.onload = init;
+        // window.onload = init; // Removed, waiting for login
     </script>
 </body>
 </html>
