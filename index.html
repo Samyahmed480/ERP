@@ -335,15 +335,15 @@
                     <button onclick="showCustAdd()"
                         class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إضافة
                         عميل جديد</button>
-                    <button onclick="showToast('قريباً...')"
+                    <button onclick="showSection('cust-appointments')"
                         class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">المواعيد</button>
-                    <button onclick="showToast('قريباً...')"
+                    <button onclick="showSection('cust-contacts')"
                         class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">قائمة
                         الاتصال</button>
-                    <button onclick="showToast('قريباً...')"
+                    <button onclick="showSection('cust-crm')"
                         class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إدارة
                         علاقات العملاء</button>
-                    <button onclick="showToast('قريباً...')"
+                    <button onclick="showSection('cust-settings')"
                         class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إعدادات
                         العميل</button>
                 </div>
@@ -352,6 +352,11 @@
                 class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
                 data-target="inventory">
                 <i class="fas fa-boxes w-8 text-center text-lg"></i> إدارة المخزون
+            </button>
+            <button onclick="showSection('salaries')"
+                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
+                data-target="salaries">
+                <i class="fas fa-money-check-alt w-8 text-center text-lg"></i> الرواتب والأجور
             </button>
             <button onclick="showSection('journal')"
                 class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
@@ -1115,58 +1120,484 @@
                         </form>
                     </div>
 
-                    <!-- List Area -->
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex-1">
-                        <div class="flex justify-between items-center mb-4">
-                            <h3 class="font-bold text-lg text-slate-800">سجل العملاء</h3>
-                            <input type="text" placeholder="بحث..."
-                                class="p-2 border rounded text-sm w-48 focus:border-blue-500 outline-none"
-                                onkeyup="filterCustomers(this.value)">
+                    <!-- Advanced List Area -->
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col">
+                        <!-- Filters Toolbar -->
+                        <div
+                            class="p-4 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-slate-50 rounded-t-xl">
+                            <div class="flex items-center gap-3 flex-1">
+                                <div class="relative flex-1 max-w-md">
+                                    <i class="fas fa-search absolute right-3 top-3 text-slate-400"></i>
+                                    <input type="text" placeholder="بحث باسم العميل، الرقم، أو الكود..."
+                                        class="w-full pr-10 pl-4 py-2 border rounded-lg text-sm focus:border-blue-500 outline-none focus:ring-2 focus:ring-blue-100 transition"
+                                        onkeyup="filterCustomers(this.value)">
+                                </div>
+                                <select
+                                    class="p-2 border rounded-lg text-sm text-slate-600 outline-none bg-white hover:border-blue-400 focus:border-blue-500 cursor-pointer">
+                                    <option value="">كل الحالات</option>
+                                    <option value="active">نشط</option>
+                                    <option value="inactive">غير نشط</option>
+                                </select>
+                                <select
+                                    class="p-2 border rounded-lg text-sm text-slate-600 outline-none bg-white hover:border-blue-400 focus:border-blue-500 cursor-pointer">
+                                    <option value="">كل الأنواع</option>
+                                    <option value="individual">أفراد</option>
+                                    <option value="company">شركات</option>
+                                </select>
+                            </div>
+                            <div class="flex gap-2">
+                                <button
+                                    class="p-2 text-slate-500 hover:bg-white hover:text-blue-600 rounded-lg border border-transparent hover:border-slate-200 transition"
+                                    title="تحديث">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                                <button
+                                    class="p-2 text-slate-500 hover:bg-white hover:text-green-600 rounded-lg border border-transparent hover:border-slate-200 transition"
+                                    title="تصدير إكسل">
+                                    <i class="fas fa-file-excel"></i>
+                                </button>
+                            </div>
                         </div>
-                        <div class="overflow-x-auto h-[300px]">
+
+                        <!-- Table -->
+                        <div class="overflow-x-auto flex-1">
                             <table class="w-full text-sm text-right">
-                                <thead class="bg-slate-50 text-slate-700 sticky top-0 shadow-sm">
+                                <thead class="bg-white text-slate-500 font-bold border-b sticky top-0">
                                     <tr>
-                                        <th class="p-3">الكود</th>
-                                        <th class="p-3">الاسم</th>
-                                        <th class="p-3">الهاتف</th>
-                                        <th class="p-3">الرصيد</th>
-                                        <th class="p-3">إجراءات</th>
+                                        <th class="p-4 w-16 text-center">#</th>
+                                        <th class="p-4">العميل</th>
+                                        <th class="p-4">بيانات التواصل</th>
+                                        <th class="p-4">الرصيد</th>
+                                        <th class="p-4 text-center">الحالة</th>
+                                        <th class="p-4 text-center">إجراءات</th>
                                     </tr>
                                 </thead>
-                                <tbody id="customers-list" class="divide-y divide-slate-100"></tbody>
+                                <tbody id="customers-list" class="divide-y divide-slate-50 hover:divide-slate-100">
+                                </tbody>
                             </table>
+                        </div>
+
+                        <!-- Pagination (Static for now) -->
+                        <div
+                            class="p-4 border-t border-slate-100 text-xs text-slate-400 flex justify-between items-center">
+                            <span>عرض 1-10 من 54 عميل</span>
+                            <div class="flex gap-1">
+                                <button class="px-2 py-1 border rounded hover:bg-slate-50 disabled:opacity-50"
+                                    disabled>السابق</button>
+                                <button class="px-2 py-1 border rounded bg-blue-50 text-blue-600 font-bold">1</button>
+                                <button class="px-2 py-1 border rounded hover:bg-slate-50">2</button>
+                                <button class="px-2 py-1 border rounded hover:bg-slate-50">3</button>
+                                <button class="px-2 py-1 border rounded hover:bg-slate-50">التالي</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </section>
 
             <!-- 11. Salaries (New) -->
-            <section id="salaries" class="section-content">
-                <div class="max-w-2xl mx-auto bg-white p-6 rounded-xl shadow-sm">
-                    <h3 class="font-bold text-lg text-slate-800 mb-6 border-b pb-2">صرف الرواتب والأجور</h3>
-                    <div class="grid grid-cols-1 gap-4">
-                        <div><label class="block text-sm font-bold text-slate-700 mb-1">اسم الموظف</label><input
-                                type="text" id="sal-emp-name" class="w-full p-3 border rounded-lg outline-none"
-                                placeholder="اكتب اسم الموظف"></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label class="block text-sm font-bold text-slate-700 mb-1">المبلغ</label><input
-                                    type="number" id="sal-amount" class="w-full p-3 border rounded-lg outline-none">
-                            </div>
-                            <div>
-                                <label class="block text-sm font-bold text-slate-700 mb-1">طريقة الصرف</label>
-                                <select id="sal-method" class="w-full p-3 border rounded-lg outline-none bg-white">
-                                    <option value="1101">نقدي (الخزينة)</option>
-                                    <option value="1102">بنك </option>
-                                </select>
-                            </div>
+
+            <!-- 8. Client Settings Section -->
+
+            <!-- 9. Appointments Section -->
+            <div id="cust-appointments" class="section-content p-6 hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                    <!-- Header -->
+                    <div class="flex justify-between items-center p-6 border-b">
+                        <h2 class="text-2xl font-bold text-slate-800">المواعيد</h2>
+                        <button onclick="showSection('add-appointment')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> موعد جديد
+                        </button>
+                    </div>
+
+                    <!-- Filters -->
+                    <div class="p-4 bg-slate-50 border-b flex gap-4">
+                        <input type="text" placeholder="بحث..."
+                            class="p-2 border rounded text-sm w-64 bg-white outline-none focus:border-blue-500">
+                        <select class="p-2 border rounded text-sm bg-white outline-none focus:border-blue-500">
+                            <option>كل الحالات</option>
+                            <option>تم جدولته</option>
+                            <option>منتهي</option>
+                            <option>ملغي</option>
+                        </select>
+                        <button class="bg-white border px-4 py-2 rounded hover:bg-slate-100 text-sm">بحث متقدم</button>
+                    </div>
+
+                    <!-- Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-100 text-slate-600 font-bold">
+                                <tr>
+                                    <th class="p-4">#</th>
+                                    <th class="p-4">العنوان</th>
+                                    <th class="p-4">العميل</th>
+                                    <th class="p-4">التاريخ والوقت</th>
+                                    <th class="p-4">المدة</th>
+                                    <th class="p-4">الموظف</th>
+                                    <th class="p-4">الحالة</th>
+                                    <th class="p-4">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100">
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4">101</td>
+                                    <td class="p-4 font-bold text-slate-700">متابعة مشروع</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-purple-100 text-purple-600 flex items-center justify-center font-bold text-xs">
+                                                A</div>
+                                            <span>أحمد محمد</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">2023-10-25 10:00 ص</td>
+                                    <td class="p-4">30 دقيقة</td>
+                                    <td class="p-4">محمد علي</td>
+                                    <td class="p-4"><span
+                                            class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">تم
+                                            جدولته</span></td>
+                                    <td class="p-4 text-slate-400">
+                                        <button class="hover:text-blue-600"><i class="fas fa-edit"></i></button>
+                                        <button class="hover:text-red-600 mr-2"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4">102</td>
+                                    <td class="p-4 font-bold text-slate-700">تركيب نظام</td>
+                                    <td class="p-4">
+                                        <div class="flex items-center gap-2">
+                                            <div
+                                                class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">
+                                                S</div>
+                                            <span>شركة السلام</span>
+                                        </div>
+                                    </td>
+                                    <td class="p-4">2023-10-26 02:00 م</td>
+                                    <td class="p-4">60 دقيقة</td>
+                                    <td class="p-4">خالد وليد</td>
+                                    <td class="p-4"><span
+                                            class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-xs font-bold">قيد
+                                            الانتظار</span></td>
+                                    <td class="p-4 text-slate-400">
+                                        <button class="hover:text-blue-600"><i class="fas fa-edit"></i></button>
+                                        <button class="hover:text-red-600 mr-2"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Empty State (Hidden) -->
+                        <div class="hidden flex flex-col items-center justify-center p-12 text-slate-400">
+                            <i class="far fa-calendar-times text-6xl mb-4 text-slate-200"></i>
+                            <p>لا توجد مواعيد مطابقة</p>
                         </div>
-                        <button onclick="paySalary()"
-                            class="bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-700 shadow mt-2">تسجيل
-                            صرف الراتب</button>
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="p-4 border-t bg-slate-50 flex justify-between items-center text-xs text-slate-500">
+                        <span>عرض 1 - 2 من 2</span>
+                        <div class="flex gap-1">
+                            <button class="px-2 py-1 border rounded bg-white hover:bg-slate-100 disabled:opacity-50"
+                                disabled>السابق</button>
+                            <button class="px-2 py-1 border rounded bg-white hover:bg-slate-100 disabled:opacity-50"
+                                disabled>التالي</button>
+                        </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <!-- 10. Client Contacts Section -->
+            <div id="cust-contacts" class="section-content p-6 hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+                    <div class="flex justify-between items-center p-6 border-b">
+                        <h2 class="text-2xl font-bold text-slate-800">قائمة الاتصال</h2>
+                        <button onclick="showSection('add-contact')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> جهة اتصال جديدة
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto p-6">
+                        <table class="w-full text-sm text-right border rounded-lg overflow-hidden">
+                            <thead class="bg-slate-50 text-slate-600 font-bold">
+                                <tr>
+                                    <th class="p-4 border-b">الاسم</th>
+                                    <th class="p-4 border-b">البريد الإلكتروني</th>
+                                    <th class="p-4 border-b">الهاتف</th>
+                                    <th class="p-4 border-b">المسمى الوظيفي</th>
+                                    <th class="p-4 border-b">تابع للعميل</th>
+                                    <th class="p-4 border-b">إجراءات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-4 border-b font-bold">سعيد محمود</td>
+                                    <td class="p-4 border-b text-slate-500">saeed@example.com</td>
+                                    <td class="p-4 border-b ltr">0501234567</td>
+                                    <td class="p-4 border-b">مدير مشتريات</td>
+                                    <td class="p-4 border-b">شركة السلام</td>
+                                    <td class="p-4 border-b text-slate-400">
+                                        <button class="hover:text-blue-600"><i class="fas fa-edit"></i></button>
+                                        <button class="hover:text-red-600 mr-2"><i
+                                                class="fas fa-trash-alt"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cust-settings" class="section-content p-6 hidden">
+                <div class="flex flex-col md:flex-row gap-6 h-full">
+                    <!-- Settings Sidebar -->
+                    <div class="w-full md:w-1/4 bg-white rounded-xl shadow-sm border p-4 h-fit">
+                        <h3 class="font-bold text-lg mb-4 text-slate-700 border-b pb-2">إعدادات العملاء</h3>
+                        <div class="flex flex-col gap-2">
+                            <button onclick="showSettingsTab('cust-conf')"
+                                class="settings-tab-btn active w-full text-right p-3 rounded-lg hover:bg-slate-50 text-slate-600 font-medium border-r-4 border-blue-500 bg-blue-50 transition">
+                                <i class="fas fa-sliders-h ml-2"></i> تهيئة ملف العميل
+                            </button>
+                            <button onclick="showSettingsTab('cust-msg')"
+                                class="settings-tab-btn w-full text-right p-3 rounded-lg hover:bg-slate-50 text-slate-600 font-medium border-r-4 border-transparent transition">
+                                <i class="fas fa-share-alt ml-2"></i> المراسلة والمشاركة
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Settings Content -->
+                    <div class="flex-1 bg-white rounded-xl shadow-sm border p-8">
+                        <!-- Tab: Configuration -->
+                        <div id="cust-conf" class="settings-tab-content">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl font-bold text-slate-800">تهيئة ملف العميل</h2>
+                                <p class="text-slate-500">تحكم في بيانات ملف العميل وآلية ظهورها داخل النظام</p>
+                            </div>
+
+                            <!-- Content Populated by JS -->
+                            <div id="cust-conf-content"></div>
+                        </div>
+
+                        <!-- Tab: Messaging -->
+                        <div id="cust-msg" class="settings-tab-content hidden">
+                            <div class="text-center mb-8">
+                                <h2 class="text-2xl font-bold text-slate-800">المراسلة والمشاركة</h2>
+                                <p class="text-slate-500">مشاركة بيانات العملاء وتذكيرات المواعيد عبر تطبيقات المراسلة
+                                </p>
+                            </div>
+                            <div id="cust-msg-content"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 11. Salaries Section -->
+            <div id="salaries" class="section-content p-6 hidden">
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border p-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">صرف الرواتب والأجور</h2>
+                    <form onsubmit="saveSalary(event)">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-2">اسم الموظف</label>
+                                <input type="text" id="salary-emp-name"
+                                    class="w-full p-3 border rounded-lg focus:border-blue-500 outline-none transition"
+                                    placeholder="اكتب اسم الموظف" required>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">طريقة الصرف</label>
+                                    <select id="salary-method"
+                                        class="w-full p-3 border rounded-lg focus:border-blue-500 outline-none transition bg-white">
+                                        <option value="cash">نقدي (الخزينة)</option>
+                                        <option value="bank">تحويل بنكي</option>
+                                        <option value="check">شيك</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-2">المبلغ</label>
+                                    <div class="relative">
+                                        <input type="number" id="salary-amount"
+                                            class="w-full p-3 border rounded-lg focus:border-blue-500 outline-none transition"
+                                            step="0.01" required>
+                                        <span
+                                            class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm currency">ر.س</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="pt-4">
+                                <button type="submit"
+                                    class="w-full bg-emerald-600 text-white py-3 rounded-lg font-bold hover:bg-emerald-700 transition shadow-lg flex justify-center items-center gap-2">
+                                    <i class="fas fa-money-bill-wave"></i> تسجيل صرف الراتب
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Recent Salaries List (Optional but good for "appear in all pages" context) -->
+                <div class="max-w-2xl mx-auto mt-8 bg-white rounded-xl shadow-sm border p-6">
+                    <h3 class="font-bold text-slate-700 mb-4">آخر عمليات الصرف</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600">
+                                <tr>
+                                    <th class="p-3">الموظف</th>
+                                    <th class="p-3">المبلغ</th>
+                                    <th class="p-3">التاريخ</th>
+                                </tr>
+                            </thead>
+                            <tbody id="salaries-list" class="divide-y divide-slate-100"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!-- 10.6 Add Appointment Form -->
+            <div id="add-appointment" class="section-content p-6 hidden">
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border p-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">حجز موعد جديد</h2>
+                    <form onsubmit="saveAppointment(event)">
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">عنوان الموعد</label>
+                                <input type="text" id="apt-title"
+                                    class="w-full p-2 border rounded focus:border-blue-500 outline-none"
+                                    placeholder="مثال: مناقشة المشروع الجديد" required>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">العميل</label>
+                                    <select id="apt-client"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                        <option value="">اختر العميل...</option>
+                                        <option value="1">شركة السلام</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">الموظف المسؤول</label>
+                                    <select id="apt-emp"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                        <option value="admin">Admin</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">التاريخ</label>
+                                    <input type="date" id="apt-date"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">الوقت</label>
+                                    <input type="time" id="apt-time"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none" required>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">المدة (دقيقة)</label>
+                                    <input type="number"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none" value="30">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">الحالة</label>
+                                    <select class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                        <option value="scheduled">تم جدولته</option>
+                                        <option value="completed">منتهي</option>
+                                        <option value="cancelled">ملغي</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">الموقع / الرابط</label>
+                                <input type="text" class="w-full p-2 border rounded focus:border-blue-500 outline-none"
+                                    placeholder="رابط اجتماع Zoom أو العنوان">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">ملاحظات</label>
+                                <textarea class="w-full p-2 border rounded focus:border-blue-500 outline-none"
+                                    rows="3"></textarea>
+                            </div>
+                            <div class="pt-4 flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition">حفظ
+                                    الموعد</button>
+                                <button type="button" onclick="showSection('cust-appointments')"
+                                    class="bg-slate-100 text-slate-600 px-6 py-2 rounded-lg font-bold hover:bg-slate-200 transition">إلغاء</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- 10.7 Add Contact Form -->
+            <div id="add-contact" class="section-content p-6 hidden">
+                <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-sm border p-8">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-6 border-b pb-4">إضافة جهة اتصال جديدة</h2>
+                    <form
+                        onsubmit="event.preventDefault(); showToast('تم حفظ جهة الاتصال بنجاح'); showSection('cust-contacts');">
+                        <div class="space-y-4">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">الاسم الأول</label>
+                                    <input type="text"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none" required>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">اسم العائلة</label>
+                                    <input type="text"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-bold text-slate-700 mb-1">تابع للعميل (الشركة)</label>
+                                <select class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                    <option>اختر العميل...</option>
+                                    <option>شركة السلام</option>
+                                    <option>مؤسسة النور</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">المسمى الوظيفي</label>
+                                    <input type="text"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">القسم / الإدارة</label>
+                                    <input type="text"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">رقم الهاتف</label>
+                                    <input type="tel"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none text-left"
+                                        dir="ltr">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-bold text-slate-700 mb-1">البريد الإلكتروني</label>
+                                    <input type="email"
+                                        class="w-full p-2 border rounded focus:border-blue-500 outline-none text-left"
+                                        dir="ltr">
+                                </div>
+                            </div>
+                            <div class="pt-4 flex gap-2">
+                                <button type="submit"
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 transition">حفظ
+                                    جهة الاتصال</button>
+                                <button type="button" onclick="showSection('cust-contacts')"
+                                    class="bg-slate-100 text-slate-600 px-6 py-2 rounded-lg font-bold hover:bg-slate-200 transition">إلغاء</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
 
             <!-- 6. Accounts Tree -->
             <section id="accounts_tree" class="section-content">
@@ -2006,7 +2437,21 @@
             showToast('تم الحفظ');
         }
 
-        function loadSettingsToForm() { document.getElementById('set-name').value = db.settings.companyName; document.getElementById('set-vat-rate').value = db.settings.vatRate; document.getElementById('set-currency').value = db.settings.currency; document.getElementById('set-phone').value = db.settings.phone; document.getElementById('set-address').value = db.settings.address; document.getElementById('set-vat-no').value = db.settings.vatNumber; document.getElementById('set-logo-url').value = db.settings.logo || ''; document.getElementById('header-company-name').innerText = db.settings.companyName; document.querySelectorAll('.currency').forEach(el => el.setAttribute('data-curr', db.settings.currency)); document.getElementById('cart-vat-rate').innerText = db.settings.vatRate; }
+        function loadSettingsToForm() {
+            const s = db.settings;
+            document.getElementById('set-name').value = s.companyName;
+            document.getElementById('set-vat-rate').value = s.vatRate;
+            document.getElementById('set-currency').value = s.currency;
+            document.getElementById('set-phone').value = s.phone;
+            document.getElementById('set-address').value = s.address;
+            document.getElementById('set-vat-no').value = s.vatNumber;
+            document.getElementById('set-logo-url').value = s.logo || '';
+            document.getElementById('header-company-name').innerText = s.companyName;
+
+            // Fix Global Currency
+            document.querySelectorAll('.currency').forEach(el => el.innerText = s.currency);
+            document.getElementById('cart-vat-rate').innerText = s.vatRate;
+        }
         function exportData() { const a = document.createElement('a'); a.href = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db)); a.download = "erp_backup.json"; document.body.appendChild(a); a.click(); a.remove(); }
         function importData(inp) { const f = inp.files[0]; if (!f) return; const r = new FileReader(); r.onload = e => { try { db = JSON.parse(e.target.result); save(); location.reload() } catch (x) { alert('خطأ') } }; r.readAsText(f); }
         function resetData() { if (confirm('تأكيد التصفير؟')) { localStorage.removeItem('erp_pro_v10'); location.reload(); } }
@@ -2053,20 +2498,63 @@
         }
 
         function renderCustomersTable() {
-            document.getElementById('customers-list').innerHTML = db.customers.map(c => `
-                <tr class="hover:bg-slate-50 transition border-b">
-                    <td class="p-3 font-mono text-blue-600 font-bold text-xs">${c.code || '-'}</td>
-                    <td class="p-3 font-bold">
-                        <div>${c.name}</div>
-                        <div class="text-xs text-slate-400 font-normal">${c.vat ? 'VAT: ' + c.vat : ''}</div>
+            const list = document.getElementById('customers-list');
+            if (!list) return;
+
+            list.innerHTML = db.customers.map((c, index) => {
+                const initial = c.name.charAt(0).toUpperCase();
+                const balance = c.balance || 0;
+                // Determine balance color
+                const balanceClass = balance > 0 ? 'text-red-600 bg-red-50' : (balance < 0 ? 'text-emerald-600 bg-emerald-50' : 'text-slate-500 bg-slate-50');
+                // Status badge (mock logic for now, or assume active)
+                const statusBadge = `
+                    <span class="inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-700">
+                        <span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> نشط
+                    </span>`;
+
+                return `
+                <tr class="group hover:bg-blue-50/50 transition duration-150 border-b last:border-0 border-slate-50">
+                    <td class="p-4 text-center text-slate-400 text-xs">${index + 1}</td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-lg shadow-sm border border-blue-200 uppercase">
+                                ${initial}
+                            </div>
+                            <div>
+                                <div class="font-bold text-slate-800 text-sm group-hover:text-blue-700 transition">${c.name}</div>
+                                <div class="text-[10px] bg-slate-100 px-1.5 py-0.5 rounded text-slate-500 inline-block mt-1 font-mono">${c.code || 'NO-CODE'}</div>
+                            </div>
+                        </div>
                     </td>
-                    <td class="p-3 text-xs text-slate-500">${c.phone || c.mobile || '-'}</td>
-                    <td class="p-3 font-bold ${c.balance > 0 ? 'text-red-500' : 'text-emerald-500'}">${(c.balance || 0).toFixed(2)}</td>
-                    <td class="p-3 flex gap-2">
-                        <button onclick="editCustomer(${c.id})" class="text-blue-500 hover:bg-blue-50 p-1 rounded"><i class="fas fa-edit"></i></button>
+                    <td class="p-4">
+                        <div class="flex flex-col gap-1 text-xs">
+                            <div class="flex items-center gap-2 text-slate-600">
+                                <i class="fas fa-phone w-4 text-slate-400"></i> <span class="ltr">${c.phone || c.mobile || '-'}</span>
+                            </div>
+                            ${c.email ? `<div class="flex items-center gap-2 text-slate-500"><i class="fas fa-envelope w-4 text-slate-400"></i> ${c.email}</div>` : ''}
+                        </div>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${balanceClass}">
+                            ${balance.toFixed(2)} ${db.settings.currency || 'ر.س'}
+                        </span>
+                    </td>
+                    <td class="p-4 text-center">
+                        ${statusBadge}
+                    </td>
+                    <td class="p-4 text-center">
+                        <div class="flex items-center justify-center gap-2 opacity-100 sm:opacity-60 group-hover:opacity-100 transition">
+                            <button onclick="editCustomer(${c.id})" class="p-2 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white hover:text-blue-600 hover:shadow-md transition text-slate-400" title="تعديل">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <!-- Future: Statement & Delete -->
+                            <button onclick="showToast('عفواً، خاصية كشف الحساب غير مفعلة')" class="p-2 w-8 h-8 flex items-center justify-center rounded-lg hover:bg-white hover:text-purple-600 hover:shadow-md transition text-slate-400" title="كشف حساب">
+                                <i class="fas fa-file-invoice-dollar"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
-            `).join('');
+            `}).join('');
         }
 
         function editCustomer(id) {
@@ -2139,7 +2627,94 @@
             }
         }
 
-        // --- 10. Rendering ---
+        // --- 10.6 Appointments & Contacts Logic ---
+        function saveAppointment(e) {
+            if (e) e.preventDefault();
+            // Initialize if missing
+            if (!db.appointments) db.appointments = [];
+
+            // Simple grab of values for now (expand later or use IDs)
+            const title = document.getElementById('apt-title').value;
+            const date = document.getElementById('apt-date').value;
+            const time = document.getElementById('apt-time').value;
+            const client = document.getElementById('apt-client').value;
+
+            db.appointments.push({
+                id: Date.now(),
+                title, date, time, client,
+                status: 'scheduled'
+            });
+
+            showToast('تم حفظ الموعد بنجاح');
+            showSection('cust-appointments');
+            // Re-render appointments list (todo: implement renderAppointments)
+            renderAppointments(); // Call this even if empty to handle future
+            save(); // Persist
+        }
+
+        function saveContact(e) {
+            if (e) e.preventDefault();
+            if (!db.contacts) db.contacts = [];
+
+            const name1 = document.querySelector('#add-contact input[placeholder="الاسم الأول"]')?.value || document.querySelector('#add-contact input').value; // fallbacks
+            // ... assuming simple flow
+
+            db.contacts.push({
+                id: Date.now(),
+                name: name1,
+                email: 'test@example.com' // simplified
+            });
+
+            showToast('تم حفظ جهة الاتصال');
+            showSection('cust-contacts');
+        }
+
+        function renderAppointments() {
+            // Placeholder: Populate #cust-appointments table if it has an ID
+            // For now just console log or no-op
+        }
+
+        function saveSalary(e) {
+            e.preventDefault();
+            if (!db.salaries) db.salaries = [];
+
+            const emp = document.getElementById('salary-emp-name').value;
+            const method = document.getElementById('salary-method').value;
+            const amount = parseFloat(document.getElementById('salary-amount').value);
+
+            if (!emp || !amount) return showToast('يرجى تعبئة كافة الحقول', 'error');
+
+            const entry = {
+                id: Date.now(),
+                emp, method, amount,
+                date: new Date().toLocaleDateString('en-CA')
+            };
+
+            db.salaries.push(entry);
+
+            // Add expense transaction automatically (optional but good for ERP)
+            // db.journal.push(...) 
+
+            save();
+            renderSalariesList();
+            showToast('تم تسجيل صرف الراتب بنجاح');
+            e.target.reset();
+        }
+
+        function renderSalariesList() {
+            const list = document.getElementById('salaries-list');
+            if (!list || !db.salaries) return;
+
+            const curr = db.settings.currency || 'ر.س';
+
+            list.innerHTML = db.salaries.slice().reverse().slice(0, 5).map(s => `
+                <tr>
+                    <td class="p-3 font-bold text-slate-800">${s.emp}</td>
+                    <td class="p-3 font-bold text-red-600">${s.amount.toFixed(2)} ${curr}</td>
+                    <td class="p-3 text-slate-500 text-xs">${s.date}</td>
+                </tr>
+            `).join('');
+        }
         function renderAll() {
             // Balances
             const getBal = code => getAccountBalance(code);
@@ -2539,6 +3114,170 @@
         initInvoiceForm();
 
         // window.onload = init; // Removed, waiting for login
+        // --- Helpers for HTML Generation ---
+        function renderToggleItem(key, title, desc) {
+            // Init client settings if missing
+            if (!db.clientSettings) db.clientSettings = {};
+            const isChecked = db.clientSettings[key] === true;
+
+            return `
+        <div class="flex items-center justify-between py-4 border-b last:border-0 border-slate-100">
+            <div>
+                <h4 class="font-bold text-slate-700 text-sm">${title}</h4>
+                <p class="text-xs text-slate-400 mt-1">${desc}</p>
+            </div>
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" onchange="saveClientSettings('${key}', this.checked)" class="sr-only peer" ${isChecked ? 'checked' : ''}>
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+            </label>
+        </div>
+        `;
+        }
+
+        function saveClientSettings(key, value) {
+            if (!db.clientSettings) db.clientSettings = {};
+            db.clientSettings[key] = value;
+            save();
+            showToast('تم حفظ الإعدادات');
+        }
+
+        function showSettingsTab(id) {
+            document.querySelectorAll('.settings-tab-content').forEach(e => e.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+
+            document.querySelectorAll('.settings-tab-btn').forEach(b => {
+                b.classList.remove('active', 'bg-blue-50', 'border-blue-500');
+                b.classList.add('border-transparent');
+            });
+            const btn = document.querySelector(`button[onclick="showSettingsTab('${id}')"]`);
+            if (btn) {
+                btn.classList.add('active', 'bg-blue-50', 'border-blue-500');
+                btn.classList.remove('border-transparent');
+            }
+        }
+
+        function initSettingsPage() {
+            const confContent = document.getElementById('cust-conf-content');
+            if (confContent) { // Always re-render to reflect state if we want real-time updates, or check emptiness
+                confContent.innerHTML = `
+                    <!-- Customer Type -->
+                    <div class="mb-8 border rounded-lg p-6">
+                        <h3 class="font-bold text-slate-700 mb-4">نوع العميل</h3>
+                        <div class="space-y-4">
+                            <label class="flex items-start gap-3 cursor-pointer p-4 border rounded-lg hover:bg-slate-50 transition">
+                                <input type="radio" name="cust-type-conf" class="mt-1">
+                                <div>
+                                    <span class="font-bold block text-slate-800">فردي فقط</span>
+                                    <span class="text-xs text-slate-500">إضافة ملف عميل يمثل نفسه كشخص فقط ولا يمثل كياناً اعتبارياً...</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start gap-3 cursor-pointer p-4 border rounded-lg hover:bg-slate-50 transition">
+                                <input type="radio" name="cust-type-conf" class="mt-1">
+                                <div>
+                                    <span class="font-bold block text-slate-800">تجاري فقط</span>
+                                    <span class="text-xs text-slate-500">إضافة ملف شركة أو مؤسسة أو كيان تجاري يشمل بيانات إضافية...</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start gap-3 cursor-pointer p-4 border rounded-lg bg-blue-50 border-blue-200 transition">
+                                <input type="radio" name="cust-type-conf" class="mt-1" checked>
+                                <div>
+                                    <span class="font-bold block text-blue-800">فردي وتجاري معاً</span>
+                                    <span class="text-xs text-blue-600">عند إضافة عميل جديد يمكنك اختيار نوع العميل سواء كان فردي أو تجاري</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Serial Number -->
+                    <div class="mb-8 flex items-center justify-between border rounded-lg p-4 bg-slate-50">
+                        <span class="font-bold text-slate-700">الرقم التسلسلي للعميل التالي</span>
+                        <div class="flex items-center gap-2 bg-white border rounded p-1">
+                            <button class="p-2 text-slate-500 hover:text-slate-700"><i class="fas fa-cog"></i> إعدادات الترقيم</button>
+                            <input type="text" value="000002" class="w-24 text-center font-mono outline-none" disabled>
+                        </div>
+                    </div>
+
+                    <!-- Toggles Section Helper -->
+                    <div class="space-y-6">
+                        <!-- Global Data -->
+                        <div class="border rounded-lg p-6">
+                            <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">البيانات المالية</h3>
+                            ${renderToggleItem('open_balance', 'الرصيد الافتتاحي', 'إمكانية إضافة رصيد في حساب العميل عند إضافته لأول مرة')}
+                            ${renderToggleItem('credit_limit', 'الحد الائتماني', 'قم بتعيين حد ائتماني يمنع إنشاء فواتير جديدة قبل سداد المديونيات')}
+                            ${renderToggleItem('credit_period', 'المدة الائتمانية', 'عدد أقصى فترة مسموح بها لتسوية فواتير العميل')}
+                        </div>
+
+                        <!-- Identity Data -->
+                        <div class="border rounded-lg p-6">
+                            <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">بيانات الهوية</h3>
+                            ${renderToggleItem('photo', 'صورة', 'إمكانية رفع شعار الشركة أو صورة شخصية للعميل')}
+                            ${renderToggleItem('national_id', 'رقم الهوية الوطنية', 'يستخدم لتسجيل رقم الهوية للعميل، متاح للأفراد والشركات')}
+                            ${renderToggleItem('dob', 'تاريخ الميلاد', 'قم بتسجيل تاريخ ميلاد العميل وغرضه، يظهر بغض النظر عن نوع الملف')}
+                            ${renderToggleItem('gender', 'النوع', 'لتحديد نوع العميل سواء كان ذكراً أو أنثى')}
+                            ${renderToggleItem('barcode', 'باركود', 'يميز كل عميل بباركود مميز خاص به يمكن استخدامه في مختلف العمليات')}
+                        </div>
+                         <!-- Contact Data -->
+                         <div class="border rounded-lg p-6">
+                            <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">بيانات التواصل والعناوين</h3>
+                            ${renderToggleItem('url', 'الرابط', 'حقل مخصص لإدخال الروابط مثل حسابات التواصل الاجتماعي')}
+                            ${renderToggleItem('multi_address', 'عناوين متعددة', 'يتيح لك إضافة عناوين متعددة للعميل بدل العنوان الأساسي')}
+                            ${renderToggleItem('map_loc', 'الموقع على الخريطة', 'ضع موقع العميل على الخريطة')}
+                        </div>
+                    </div>
+
+                    <!-- Custom Fields Banner -->
+                    <div class="mt-8 border border-blue-200 bg-blue-50 rounded-lg p-4 flex items-center justify-between">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-600 shadow-sm">
+                                <i class="fas fa-magic"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-slate-800 text-sm">هل ترغب في إضافة حقول مخصصة لبيانات العملاء؟</h4>
+                                <p class="text-xs text-slate-500 mt-1">أضف حقولاً مخصصة لتنظيم البيانات الإضافية وعرضها في ملف العميل والقوائم والتقارير.</p>
+                            </div>
+                        </div>
+                        <button onclick="showToast('سيتم نقلك لإعدادات الحقول المخصصة')" class="text-slate-400 hover:text-blue-600 transition">
+                            <i class="fas fa-external-link-alt"></i>
+                        </button>
+                    </div>
+            `;
+            }
+
+            const msgContent = document.getElementById('cust-msg-content');
+            if (msgContent) {
+                msgContent.innerHTML = `
+                <div class="border rounded-lg p-6 mb-6">
+                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المسودة الافتراضية</h3>
+                    <div class="flex items-center gap-4 mb-4">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="msg-type" checked class="text-blue-600">
+                            <span class="text-sm font-bold text-slate-700">رسالة نصية SMS</span>
+                        </label>
+                         <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="msg-type" class="text-blue-600">
+                            <span class="text-sm font-bold text-slate-700">واتساب</span>
+                        </label>
+                    </div>
+
+                    ${renderToggleItem('msg_auto_send', 'إرسال تلقائي', 'تفعيل الإرسال التلقائي للرسائل عند إنشاء فاتورة أو موعد')}
+                    ${renderToggleItem('msg_inv_details', 'إرسال تفاصيل الفاتورة', 'إرفاق رابط الفاتورة وتفاصيل المبلغ في الرسالة')}
+                </div>
+
+                <div class="border rounded-lg p-6">
+                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المشاركة</h3>
+                    ${renderToggleItem('share_data_apps', 'إرسال بيانات العملاء عبر تطبيقات المراسلة', 'مشاركة بيانات ملف العميل مثل الاسم ورقم الهاتف عبر واتساب وغيره')}
+                    ${renderToggleItem('share_appt_details', 'إرسال تفاصيل المواعيد عبر تطبيقات المراسلة', 'إرسال تذكيرات المواعيد وتفاصيل الوقت والموقع للعميل')}
+                </div>
+            `;
+            }
+        }
+
+        // Initial Load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCustomersTable();
+            initInvoiceForm();
+            initSettingsPage();
+        });
     </script>
 </body>
 
