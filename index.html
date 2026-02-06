@@ -223,6 +223,18 @@
                 display: none !important;
             }
         }
+
+        /* FORCE LAYOUT FIX */
+        .section-content.active {
+            display: block !important;
+            margin-top: 0 !important;
+            padding-top: 0 !important;
+        }
+
+        #main-content-wrapper>.section-content.active {
+            min-height: 100%;
+            /* Ensure it takes full height if valid */
+        }
     </style>
 </head>
 
@@ -297,26 +309,80 @@
                 data-target="dashboard">
                 <i class="fas fa-chart-pie w-8 text-center text-lg"></i> لوحة القيادة
             </button>
-            <button onclick="showSection('sales')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="sales">
-                <i class="fas fa-cash-register w-8 text-center text-lg"></i> نقطة بيع (POS)
-            </button>
+            <!-- POS Submenu -->
+            <div>
+                <button onclick="toggleSubmenu('pos-submenu')"
+                    class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center justify-between text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-cash-register w-8 text-center text-lg"></i>
+                        <span>نقاط البيع</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200" id="pos-submenu-arrow"></i>
+                </button>
+                <div id="pos-submenu" class="hidden flex-col gap-1 pr-6 mt-1 border-r-2 border-slate-700 mr-4">
+                    <button onclick="showSection('sales')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">بدأ
+                        البيع</button>
+                    <button onclick="showSection('pos-sessions')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">الجلسات</button>
+                    <button onclick="showSection('pos-reports')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">تقرير
+                        نقاط البيع</button>
+                    <button onclick="showSection('pos-settings')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إعدادات
+                        نقاط البيع</button>
+                </div>
+            </div>
+
             <button onclick="showSection('sales_invoice')"
                 class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
                 data-target="sales_invoice">
                 <i class="fas fa-file-invoice-dollar w-8 text-center text-lg"></i> فاتورة مبيعات
             </button>
-            <button onclick="showSection('purchases')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="purchases">
-                <i class="fas fa-shopping-cart w-8 text-center text-lg"></i> المشتريات
-            </button>
-            <button onclick="showSection('suppliers')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="suppliers">
-                <i class="fas fa-truck w-8 text-center text-lg"></i> الموردين
-            </button>
+
+            <!-- Purchases Submenu -->
+            <div>
+                <button onclick="toggleSubmenu('pur-submenu')"
+                    class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center justify-between text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-shopping-cart w-8 text-center text-lg"></i>
+                        <span>المشتريات</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200" id="pur-submenu-arrow"></i>
+                </button>
+                <div id="pur-submenu" class="hidden flex-col gap-1 pr-6 mt-1 border-r-2 border-slate-700 mr-4">
+                    <button onclick="showSection('pur-requests')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">طلبات
+                        الشراء</button>
+                    <button onclick="showSection('pur-rfq')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">طلبات
+                        عروض الأسعار</button>
+                    <button onclick="showSection('pur-quotes')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">عروض
+                        أسعار المشتريات</button>
+                    <button onclick="showSection('pur-orders')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">أوامر
+                        الشراء</button>
+                    <button onclick="showSection('purchases')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">فواتير
+                        الشراء</button>
+                    <button onclick="showSection('pur-returns')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">مرتجعات
+                        المشتريات</button>
+                    <button onclick="showSection('pur-debit-notes')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">الاشعارات
+                        المدينة</button>
+                    <button onclick="showSection('suppliers')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إدارة
+                        الموردين</button>
+                    <button onclick="showSection('pur-payments')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">مدفوعات
+                        الموردين</button>
+                    <button onclick="showSection('pur-settings')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إعدادات
+                        المشتريات</button>
+                </div>
+            </div>
             <!-- Customers with Submenu -->
             <div>
                 <button onclick="toggleSubmenu('cust-submenu')"
@@ -447,7 +513,7 @@
             </div>
         </header>
 
-        <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 relative">
+        <div id="main-content-wrapper" class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 relative">
 
             <!-- 1. Dashboard -->
             <section id="dashboard" class="section-content active">
@@ -756,8 +822,8 @@
         </section>
 
         <!-- 4. Sales & POS -->
-        <section id="sales" class="section-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+        <section id="sales" class="section-content hidden">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-fit">
                 <!-- الفاتورة -->
                 <div class="lg:col-span-2 bg-white p-5 rounded-xl shadow-sm flex flex-col">
                     <div class="flex justify-between items-center mb-4">
@@ -874,7 +940,7 @@
 
         <!-- 9. Purchases (New) -->
         <section id="purchases" class="section-content">
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 h-fit">
                 <div class="lg:col-span-2 bg-white p-5 rounded-xl shadow-sm flex flex-col">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-lg text-slate-800">فاتورة مشتريات</h3>
@@ -948,7 +1014,7 @@
 
         <!-- 12. Detailed Sales Invoice (New) -->
         <section id="sales_invoice" class="section-content">
-            <div class="bg-white rounded-xl shadow-sm min-h-[600px] flex flex-col">
+            <div class="bg-white rounded-xl shadow-sm h-fit flex flex-col">
                 <!-- Top Actions -->
                 <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
                     <div class="flex gap-2">
@@ -1109,7 +1175,7 @@
         </section>
 
         <!-- 10. Suppliers (New) -->
-        <section id="suppliers" class="section-content">
+        <section id="suppliers" class="section-content hidden">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <div class="lg:col-span-1 bg-white p-6 rounded-xl shadow-sm h-fit">
                     <h3 class="font-bold text-lg text-slate-800 mb-4">إضافة مورد</h3>
@@ -1150,8 +1216,8 @@
         </section>
 
         <!-- 10.5 Customers (New - Webmax Style) -->
-        <section id="customers" class="section-content">
-            <div class="flex flex-col gap-4">
+        <section id="customers" class="section-content hidden">
+            <div class="flex flex-col gap-4 h-fit">
                 <!-- Form Area -->
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -1260,7 +1326,7 @@
                 </div>
 
                 <!-- Advanced List Area -->
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex-1 flex flex-col">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 flex flex-col h-fit min-h-[300px]">
                     <!-- Filters Toolbar -->
                     <div
                         class="p-4 border-b border-slate-100 flex flex-wrap gap-4 justify-between items-center bg-slate-50 rounded-t-xl">
@@ -1332,13 +1398,12 @@
             </div>
         </section>
 
-        <!-- 11. Salaries (New) -->
 
-        <!-- 8. Client Settings Section -->
 
         <!-- 9. Appointments Section -->
-        <div id="cust-appointments" class="section-content p-6 hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
+        <!-- 9. Appointments Section -->
+        <div id="cust-appointments" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit">
                 <!-- Header -->
                 <div class="flex justify-between items-center p-6 border-b">
                     <h2 class="text-2xl font-bold text-slate-800">المواعيد</h2>
@@ -1445,9 +1510,10 @@
         </div>
 
         <!-- 10. Client Contacts Section -->
-        <div id="cust-contacts" class="section-content p-6 hidden">
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200">
-                <div class="flex justify-between items-center mb-6 border-b pb-4">
+        <!-- 10. Client Contacts Section -->
+        <div id="cust-contacts" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit">
+                <div class="flex justify-between items-center mb-6 border-b pb-4 px-6 pt-6">
                     <h2 class="text-2xl font-bold text-slate-800">المستودعات</h2>
                     <button onclick="showModal('warehouse-modal')"
                         class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2">
@@ -1940,7 +2006,7 @@
 
         <!-- 11. Warehouses -->
         <section id="inv-warehouses" class="section-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col min-h-[500px]">
+            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col h-fit">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-lg text-slate-800">إدارة المستودعات</h3>
                     <button onclick="document.getElementById('warehouse-modal').classList.add('active')"
@@ -1990,7 +2056,7 @@
 
         <!-- 12. Price Lists -->
         <section id="inv-prices" class="section-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col min-h-[500px]">
+            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col h-fit">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-lg text-slate-800">قوائم الأسعار</h3>
                     <button onclick="document.getElementById('pricelist-modal').classList.add('active')"
@@ -2031,7 +2097,7 @@
 
         <!-- 13. Stock Permissions -->
         <section id="inv-permissions" class="section-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col min-h-[500px]">
+            <div class="bg-white p-6 rounded-xl shadow-sm border flex flex-col h-fit">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-lg text-slate-800">الأذونات المخزنية</h3>
                     <div class="flex gap-2">
@@ -2111,7 +2177,7 @@
 
         <!-- 14. Stock Taking -->
         <section id="inv-stocktaking" class="section-content hidden">
-            <div class="bg-white p-6 rounded-xl shadow-sm border h-full flex flex-col">
+            <div class="bg-white p-6 rounded-xl shadow-sm border h-fit flex flex-col">
                 <div class="flex justify-between items-center mb-6">
                     <h3 class="font-bold text-lg text-slate-800">الجرد المخزني</h3>
                     <button onclick="startStockTaking()"
@@ -2164,7 +2230,7 @@
         </section>
 
         <!-- 8. Reports -->
-        <section id="reports" class="section-content">
+        <section id="reports" class="section-content hidden">
             <div class="max-w-6xl mx-auto">
                 <!-- Filters -->
                 <div
@@ -2185,7 +2251,8 @@
                 </div>
 
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 col-span-1 md:col-span-2 mb-6">
-                    <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">ملخص العمليات</h3>
+                    <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">ملخص
+                        العمليات</h3>
                     <div class="grid grid-cols-3 gap-4 text-center text-sm">
                         <div class="bg-blue-50 p-3 rounded"><strong>إجمالي المبيعات</strong>
                             <div id="rpt-sales-total" class="text-lg text-blue-700 mt-1">0.00</div>
@@ -2201,13 +2268,14 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">قائمة الدخل</h3>
+                        <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">
+                            قائمة الدخل</h3>
                         <div class="space-y-3 text-sm">
                             <div class="flex justify-between font-bold text-blue-700 bg-blue-50 p-2 rounded">
                                 <span>إيرادات النشاط</span><span id="is-rev">0.00</span>
                             </div>
-                            <div class="flex justify-between text-red-500 px-2"><span>(-) تكلفة النشاط</span><span
-                                    id="is-cogs">0.00</span></div>
+                            <div class="flex justify-between text-red-500 px-2"><span>(-) تكلفة
+                                    النشاط</span><span id="is-cogs">0.00</span></div>
                             <div class="flex justify-between font-bold border-t pt-2 px-2"><span>مجمل
                                     الربح</span><span id="is-gross">0.00</span></div>
                             <div class="flex justify-between text-red-500 px-2"><span>(-) المصروفات
@@ -2220,7 +2288,8 @@
                     </div>
 
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 h-[500px] flex flex-col">
-                        <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">ميزان المراجعة
+                        <h3 class="font-bold text-center border-b pb-3 mb-4 text-slate-800 text-lg">
+                            ميزان المراجعة
                             (تراكمي)</h3>
                         <div class="overflow-y-auto flex-1">
                             <table class="w-full text-xs text-right">
@@ -3433,6 +3502,64 @@
             const modal = document.getElementById(id);
             if (modal) modal.classList.remove('active');
         }
+        function showSection(id) {
+            // Hide all sections first
+            document.querySelectorAll('.section-content').forEach(e => {
+                e.classList.remove('active');
+                e.classList.add('hidden'); // Ensure Tailwind hidden is applied
+            });
+
+            // Handle orphans or non-section elements in main wrapper
+            const wrapper = document.getElementById('main-content-wrapper');
+            if (wrapper) {
+                Array.from(wrapper.children).forEach(child => {
+                    if (child.id !== id && !child.classList.contains('section-content')) {
+                        child.style.display = 'none'; // Force hide orphans
+                    }
+                });
+            }
+
+            // Show target
+            const target = document.getElementById(id);
+            if (target) {
+                target.classList.add('active');
+                target.classList.remove('hidden');
+                // Ensure no margin issues
+                target.style.marginTop = '0px';
+            }
+
+            // Submenu logic
+            if (id === 'inventory' || id.startsWith('inv-')) {
+                const sub = document.getElementById('inv-submenu');
+                const arrow = document.getElementById('inv-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
+            if (id === 'customers' || id.startsWith('cust-')) {
+                const sub = document.getElementById('cust-submenu');
+                const arrow = document.getElementById('cust-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
+            if (id === 'sales' || id.startsWith('pos-')) {
+                const sub = document.getElementById('pos-submenu');
+                const arrow = document.getElementById('pos-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
+            if (id === 'purchases' || id === 'suppliers' || id.startsWith('pur-')) {
+                const sub = document.getElementById('pur-submenu');
+                const arrow = document.getElementById('pur-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
+
+            // Inits
+            if (id === 'inv-permissions') renderPermissions();
+            if (id === 'inv-warehouses') renderWarehouses();
+            if (id === 'inv-prices') renderPriceLists();
+            if (id === 'custom-layout') renderCustomLayout(); // Future proofing
+        }
         function showModal(id) {
             document.getElementById(id).classList.add('active');
             if (id === 'inv-cat-modal') renderCategories();
@@ -3449,7 +3576,7 @@
             const curr = db.settings.currency || 'ر.س';
 
             list.innerHTML = db.salaries.slice().reverse().slice(0, 5).map(s => `
-                <tr>
+            <tr>
                     <td class="p-3 font-bold text-slate-800">${s.emp}</td>
                     <td class="p-3 font-bold text-red-600">${s.amount.toFixed(2)} ${curr}</td>
                     <td class="p-3 text-slate-500 text-xs">${s.date}</td>
@@ -3469,19 +3596,19 @@
             document.getElementById('dash-journal-list').innerHTML = db.journal.slice().reverse().slice(0, 5).map(e => `<tr><td class="p-2">#${e.id}</td><td class="p-2">${e.date}</td><td class="p-2">${e.desc}</td><td class="p-2 font-bold">${(e.lines[0].dr || e.lines[0].cr).toFixed(2)}</td></tr>`).join('');
 
             document.getElementById('inventory-list').innerHTML = db.products.map(p => `
-                <tr class="hover:bg-slate-50 border-b">
+            <tr class="hover:bg-slate-50 border-b">
                     <td class="p-3 font-bold">${p.name}</td><td class="p-3 text-emerald-600">${p.price}</td><td class="p-3 text-slate-500">${p.cost}</td><td class="p-3 font-bold">${p.stock}</td>
                     <td class="p-3 flex gap-2"><button onclick="editProduct(${p.id})" class="text-blue-500"><i class="fas fa-edit"></i></button><button onclick="deleteProduct(${p.id})" class="text-red-500"><i class="fas fa-trash"></i></button></td>
                 </tr>`).join('');
 
             document.getElementById('recent-invoices').innerHTML = db.sales.slice().reverse().slice(0, 10).map(inv => `
-                <div class="p-2 bg-slate-50 rounded border text-xs cursor-pointer hover:bg-blue-50" onclick="viewInvoice(${inv.id})">
+            <div class="p-2 bg-slate-50 rounded border text-xs cursor-pointer hover:bg-blue-50" onclick="viewInvoice(${inv.id})">
                     <div class="flex justify-between font-bold"><span>#${inv.id}</span><span>${inv.total.toFixed(2)}</span></div>
                     <div class="text-slate-500">${inv.customer}</div>
                 </div>`).join('');
 
             document.getElementById('recent-purchases').innerHTML = db.purchases.slice().reverse().slice(0, 10).map(p => `
-                <div class="p-2 bg-slate-50 rounded border text-xs mb-2">
+            <div class="p-2 bg-slate-50 rounded border text-xs mb-2">
                     <div class="flex justify-between font-bold"><span>${p.supplier}</span><span>${p.total.toFixed(2)}</span></div>
                     <div class="text-slate-400 text-[10px]">${p.date}</div>
                 </div>`).join('');
@@ -3548,7 +3675,7 @@
                 if (['asset', 'expense'].includes(a.type)) { if (a.balance > 0) dr = a.balance; else cr = -a.balance; }
                 else { if (a.balance > 0) cr = a.balance; else dr = -a.balance; }
                 tbDr += dr; tbCr += cr;
-                return `<tr><td class="p-2 border-b">${a.name}</td><td class="p-2 border-b text-emerald-600">${dr ? dr.toFixed(2) : '-'}</td><td class="p-2 border-b text-red-600">${cr ? cr.toFixed(2) : '-'}</td></tr>`;
+                return `< tr ><td class="p-2 border-b">${a.name}</td><td class="p-2 border-b text-emerald-600">${dr ? dr.toFixed(2) : '-'}</td><td class="p-2 border-b text-red-600">${cr ? cr.toFixed(2) : '-'}</td></tr > `;
             }).join('');
             document.getElementById('tb-total-dr').innerText = tbDr.toFixed(2);
             document.getElementById('tb-total-cr').innerText = tbCr.toFixed(2);
@@ -3556,7 +3683,7 @@
 
         // --- Helpers ---
         function showToast(msg, type = 'success') {
-            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type == 'success' ? 'check' : 'times'}-circle"></i> ${msg}`;
+            const t = document.createElement('div'); t.className = `toast ${type} `; t.innerHTML = ` < i class="fas fa-${type == 'success' ? 'check' : 'times'}-circle" ></i > ${msg} `;
             document.getElementById('toast-container').appendChild(t);
             setTimeout(() => t.classList.add('show'), 10); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300) }, 3000);
         }
@@ -3588,7 +3715,7 @@
 
             // Populate Warehouses
             const whSelect = document.getElementById('st-warehouse');
-            whSelect.innerHTML = (db.warehouses || []).map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+            whSelect.innerHTML = (db.warehouses || []).map(w => `< option value = "${w.id}" > ${w.name}</option > `).join('');
 
             // Load Items for first warehouse
             stLoadItems();
@@ -3599,7 +3726,7 @@
         function stLoadItems() {
             const list = document.getElementById('st-items-list');
             list.innerHTML = (db.products || []).map(p => `
-                <tr>
+            < tr >
                     <td class="p-3 text-slate-800 font-medium">${p.name} <span class="text-slate-400 text-xs block">${p.barcode || '-'}</span></td>
                     <td class="p-3 text-slate-500 font-mono text-center">${p.stock || p.qty || 0}</td>
                     <td class="p-3">
@@ -3610,8 +3737,8 @@
                                class="w-full p-1 border rounded text-center outline-none focus:border-blue-500 st-count-input" placeholder="0">
                     </td>
                     <td class="p-3 text-center font-bold text-slate-300 st-diff-cell">-</td>
-                </tr>
-             `).join('');
+                </tr >
+            `).join('');
             document.getElementById('st-total-diff').innerText = '0';
         }
 
@@ -3622,8 +3749,8 @@
             const diff = actual - sys;
 
             const diffCell = row.querySelector('.st-diff-cell');
-            diffCell.innerText = diff > 0 ? `+${diff}` : diff;
-            diffCell.className = `p-3 text-center font-bold st-diff-cell ${diff === 0 ? 'text-emerald-500' : 'text-red-500'}`;
+            diffCell.innerText = diff > 0 ? `+ ${diff} ` : diff;
+            diffCell.className = `p - 3 text - center font - bold st - diff - cell ${diff === 0 ? 'text-emerald-500' : 'text-red-500'} `;
 
             // Calc Total Diff for summary
             let totalDiff = 0;
@@ -3697,7 +3824,7 @@
             document.getElementById('st-empty')?.classList.add('hidden');
 
             list.innerHTML = db.stocktaking.slice().reverse().map(s => `
-                 <tr class="hover:bg-slate-50">
+            < tr class="hover:bg-slate-50" >
                     <td class="p-4 border-b font-mono font-bold text-slate-700">#ST-${s.id.toString().substr(-6)}</td>
                     <td class="p-4 border-b text-slate-500">المستودع الرئيسي</td>
                     <td class="p-4 border-b text-slate-500">${s.date}</td>
@@ -3711,8 +3838,8 @@
                     <td class="p-4 border-b text-slate-400">
                         <button class="hover:text-blue-600 ml-2"><i class="fas fa-eye"></i></button>
                     </td>
-                </tr>
-             `).join('');
+                </tr >
+            `).join('');
         }
 
         // --- Render Helper ---
@@ -3769,10 +3896,10 @@
 
             // Populate Datalist
             const datalist = document.getElementById('datalist-products');
-            datalist.innerHTML = db.products.map(p => `<option value="${p.name}" data-id="${p.id}" data-price="${p.price}">`).join('');
+            datalist.innerHTML = db.products.map(p => `< option value = "${p.name}" data - id="${p.id}" data - price="${p.price}" > `).join('');
 
             tbody.innerHTML = invoiceRows.map((r, i) => `
-                <tr class="group hover:bg-slate-50 transition border-b">
+            < tr class="group hover:bg-slate-50 transition border-b" >
                     <td class="p-2 text-center text-slate-400 text-xs">${i + 1}</td>
                     <td class="p-2">
                         <input type="text" list="datalist-products" 
@@ -3789,8 +3916,8 @@
                     <td class="p-2 text-center">
                         <button onclick="removeInvoiceRow('${r.id}')" class="text-red-400 hover:text-red-600 transition opacity-0 group-hover:opacity-100"><i class="fas fa-trash-alt"></i></button>
                     </td>
-                </tr>
-             `).join('');
+                </tr >
+            `).join('');
 
             calcInvTotals();
         }
@@ -3816,7 +3943,7 @@
                 row[field] = parseFloat(value) || 0;
             }
 
-            document.getElementById(`row-total-${id}`).innerText = calcRowTotal(row).toFixed(2);
+            document.getElementById(`row - total - ${id} `).innerText = calcRowTotal(row).toFixed(2);
             calcInvTotals();
         }
 
@@ -3971,7 +4098,7 @@
             lines.push({ code: '5101', dr: totalCost, cr: 0 });
             lines.push({ code: '1104', dr: 0, cr: totalCost });
 
-            addJournalEntry(date, `فاتورة مبيعات #${invId} - ${customer.name}`, lines);
+            addJournalEntry(date, `فاتورة مبيعات #${invId} - ${customer.name} `, lines);
 
             // Update Stock
             items.forEach(i => {
@@ -4014,7 +4141,7 @@
             const isChecked = db.clientSettings[key] === true;
 
             return `
-        <div class="flex items-center justify-between py-4 border-b last:border-0 border-slate-100">
+            < div class="flex items-center justify-between py-4 border-b last:border-0 border-slate-100" >
             <div>
                 <h4 class="font-bold text-slate-700 text-sm">${title}</h4>
                 <p class="text-xs text-slate-400 mt-1">${desc}</p>
@@ -4023,8 +4150,8 @@
                 <input type="checkbox" onchange="saveClientSettings('${key}', this.checked)" class="sr-only peer" ${isChecked ? 'checked' : ''}>
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
             </label>
-        </div>
-        `;
+        </div >
+            `;
         }
 
         function saveClientSettings(key, value) {
@@ -4042,7 +4169,7 @@
                 b.classList.remove('active', 'bg-blue-50', 'border-blue-500');
                 b.classList.add('border-transparent');
             });
-            const btn = document.querySelector(`button[onclick="showSettingsTab('${id}')"]`);
+            const btn = document.querySelector(`button[onclick = "showSettingsTab('${id}')"]`);
             if (btn) {
                 btn.classList.add('active', 'bg-blue-50', 'border-blue-500');
                 btn.classList.remove('border-transparent');
@@ -4053,7 +4180,7 @@
             const confContent = document.getElementById('cust-conf-content');
             if (confContent) { // Always re-render to reflect state if we want real-time updates, or check emptiness
                 confContent.innerHTML = `
-                    <!-- Customer Type -->
+            < !--Customer Type-- >
                     <div class="mb-8 border rounded-lg p-6">
                         <h3 class="font-bold text-slate-700 mb-4">نوع العميل</h3>
                         <div class="space-y-4">
@@ -4081,7 +4208,7 @@
                         </div>
                     </div>
 
-                    <!-- Serial Number -->
+                    <!--Serial Number-- >
                     <div class="mb-8 flex items-center justify-between border rounded-lg p-4 bg-slate-50">
                         <span class="font-bold text-slate-700">الرقم التسلسلي للعميل التالي</span>
                         <div class="flex items-center gap-2 bg-white border rounded p-1">
@@ -4090,7 +4217,7 @@
                         </div>
                     </div>
 
-                    <!-- Toggles Section Helper -->
+                    <!--Toggles Section Helper-- >
                     <div class="space-y-6">
                         <!-- Global Data -->
                         <div class="border rounded-lg p-6">
@@ -4118,28 +4245,28 @@
                         </div>
                     </div>
 
-                    <!-- Custom Fields Banner -->
-                    <div class="mt-8 border border-blue-200 bg-blue-50 rounded-lg p-4 flex items-center justify-between">
-                        <div class="flex items-center gap-4">
-                            <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-600 shadow-sm">
-                                <i class="fas fa-magic"></i>
-                            </div>
-                            <div>
-                                <h4 class="font-bold text-slate-800 text-sm">هل ترغب في إضافة حقول مخصصة لبيانات العملاء؟</h4>
-                                <p class="text-xs text-slate-500 mt-1">أضف حقولاً مخصصة لتنظيم البيانات الإضافية وعرضها في ملف العميل والقوائم والتقارير.</p>
-                            </div>
-                        </div>
-                        <button onclick="showToast('سيتم نقلك لإعدادات الحقول المخصصة')" class="text-slate-400 hover:text-blue-600 transition">
-                            <i class="fas fa-external-link-alt"></i>
-                        </button>
+                    <!--Custom Fields Banner-- >
+            <div class="mt-8 border border-blue-200 bg-blue-50 rounded-lg p-4 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-600 shadow-sm">
+                        <i class="fas fa-magic"></i>
                     </div>
-            `;
+                    <div>
+                        <h4 class="font-bold text-slate-800 text-sm">هل ترغب في إضافة حقول مخصصة لبيانات العملاء؟</h4>
+                        <p class="text-xs text-slate-500 mt-1">أضف حقولاً مخصصة لتنظيم البيانات الإضافية وعرضها في ملف العميل والقوائم والتقارير.</p>
+                    </div>
+                </div>
+                <button onclick="showToast('سيتم نقلك لإعدادات الحقول المخصصة')" class="text-slate-400 hover:text-blue-600 transition">
+                    <i class="fas fa-external-link-alt"></i>
+                </button>
+            </div>
+        `;
             }
 
             const msgContent = document.getElementById('cust-msg-content');
             if (msgContent) {
                 msgContent.innerHTML = `
-                <div class="border rounded-lg p-6 mb-6">
+            < div class="border rounded-lg p-6 mb-6" >
                     <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المسودة الافتراضية</h3>
                     <div class="flex items-center gap-4 mb-4">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -4154,14 +4281,14 @@
 
                     ${renderToggleItem('msg_auto_send', 'إرسال تلقائي', 'تفعيل الإرسال التلقائي للرسائل عند إنشاء فاتورة أو موعد')}
                     ${renderToggleItem('msg_inv_details', 'إرسال تفاصيل الفاتورة', 'إرفاق رابط الفاتورة وتفاصيل المبلغ في الرسالة')}
-                </div>
+                </div >
 
-                <div class="border rounded-lg p-6">
-                    <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المشاركة</h3>
-                    ${renderToggleItem('share_data_apps', 'إرسال بيانات العملاء عبر تطبيقات المراسلة', 'مشاركة بيانات ملف العميل مثل الاسم ورقم الهاتف عبر واتساب وغيره')}
-                    ${renderToggleItem('share_appt_details', 'إرسال تفاصيل المواعيد عبر تطبيقات المراسلة', 'إرسال تذكيرات المواعيد وتفاصيل الوقت والموقع للعميل')}
-                </div>
-            `;
+            <div class="border rounded-lg p-6">
+                <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المشاركة</h3>
+                ${renderToggleItem('share_data_apps', 'إرسال بيانات العملاء عبر تطبيقات المراسلة', 'مشاركة بيانات ملف العميل مثل الاسم ورقم الهاتف عبر واتساب وغيره')}
+                ${renderToggleItem('share_appt_details', 'إرسال تفاصيل المواعيد عبر تطبيقات المراسلة', 'إرسال تذكيرات المواعيد وتفاصيل الوقت والموقع للعميل')}
+            </div>
+        `;
             }
         }
 
@@ -4174,7 +4301,7 @@
             if (!db.warehouses) db.warehouses = [{ id: 1, name: 'المستودع الرئيسي', location: 'الرياض', keeper: 'مدير المستودع' }];
 
             list.innerHTML = db.warehouses.map(w => `
-                <tr class="hover:bg-slate-50 border-b">
+            < tr class="hover:bg-slate-50 border-b" >
                     <td class="p-3 font-bold">${w.name}</td>
                     <td class="p-3 text-slate-500">${w.location || '-'}</td>
                     <td class="p-3 text-slate-500">${w.keeper || '-'}</td>
@@ -4183,14 +4310,14 @@
                          <button class="text-blue-500 hover:bg-blue-50 p-1.5 rounded"><i class="fas fa-edit"></i></button>
                          <button class="text-red-500 hover:bg-red-50 p-1.5 rounded"><i class="fas fa-trash"></i></button>
                     </td>
-                </tr>
+                </tr >
             `).join('');
 
             // Populate Dropdowns
             const whSelects = ['perm-warehouse', 'perm-target-warehouse', 'st-warehouse'];
             whSelects.forEach(id => {
                 const sel = document.getElementById(id);
-                if (sel) sel.innerHTML = db.warehouses.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
+                if (sel) sel.innerHTML = db.warehouses.map(w => `< option value = "${w.id}" > ${w.name}</option > `).join('');
             });
         }
         function saveWarehouse(e) {
@@ -4214,12 +4341,12 @@
             if (!db.priceLists) db.priceLists = [];
 
             if (db.priceLists.length === 0) {
-                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10">لا توجد قوائم أسعار إضافية</div>`;
+                container.innerHTML = `< div class="col-span-full text-center text-slate-400 py-10" > لا توجد قوائم أسعار إضافية</div > `;
                 return;
             }
 
             container.innerHTML = db.priceLists.map(p => `
-                <div class="bg-slate-50 border rounded-xl p-4 flex flex-col gap-3 relative group hover:bg-white hover:shadow-md transition">
+            < div class="bg-slate-50 border rounded-xl p-4 flex flex-col gap-3 relative group hover:bg-white hover:shadow-md transition" >
                     <div class="flex justify-between items-start">
                         <div>
                             <h4 class="font-bold text-slate-800">${p.name}</h4>
@@ -4232,7 +4359,7 @@
                         <span><i class="fas fa-calendar text-slate-400"></i> ${new Date().toLocaleDateString('ar-EG')}</span>
                     </div>
                      <button class="absolute top-2 left-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash-alt"></i></button>
-                </div>
+                </div >
             `).join('');
         }
         function savePriceList(e) {
@@ -4258,7 +4385,7 @@
 
             // Populate Products
             document.getElementById('perm-prod-select').innerHTML = '<option value="">اختر صنف...</option>' +
-                db.products.map(p => `<option value="${p.id}">${p.name} (رصيد: ${p.stock})</option>`).join('');
+                db.products.map(p => `< option value = "${p.id}" > ${p.name} (رصيد: ${p.stock})</option > `).join('');
 
             currentPermItems = [];
             renderPermItems();
@@ -4274,11 +4401,11 @@
         }
         function renderPermItems() {
             document.getElementById('perm-items-list').innerHTML = currentPermItems.map((item, i) => `
-                <div class="flex justify-between items-center bg-white border p-2 rounded text-xs animate-fade-in">
+            < div class="flex justify-between items-center bg-white border p-2 rounded text-xs animate-fade-in" >
                     <span>${item.name}</span>
                     <span class="font-bold mx-2">${item.qty}</span>
                     <button onclick="currentPermItems.splice(${i},1);renderPermItems()" class="text-red-500"><i class="fas fa-times"></i></button>
-                </div>
+                </div >
             `).join('');
         }
         function savePermission(e) {
@@ -4325,13 +4452,13 @@
             list.innerHTML = db.permissions.map(p => {
                 const whName = db.warehouses?.find(w => w.id == p.whId)?.name || '-';
                 return `
-                <tr class="hover:bg-slate-50 border-b">
+            < tr class="hover:bg-slate-50 border-b" >
                     <td class="p-3 font-mono text-slate-600">#${p.id.toString().slice(-4)}</td>
                     <td class="p-3 font-bold">${typeLabels[p.type] || p.type}</td>
                     <td class="p-3">${whName}</td>
                     <td class="p-3 text-xs text-slate-500">${p.date}</td>
                     <td class="p-3"><span class="bg-slate-100 text-slate-600 px-2 py-1 rounded text-[10px] font-bold">مكتمل</span></td>
-                </tr>
+                </tr >
             `}).join('');
         }
 
@@ -4344,13 +4471,13 @@
         function renderStockTakingRows() {
             const tbody = document.getElementById('stocktaking-rows');
             tbody.innerHTML = db.products.map(p => `
-                <tr class="border-b">
+            < tr class="border-b" >
                      <td class="p-3 text-slate-500 text-xs">${p.id}</td>
                      <td class="p-3 font-bold text-right">${p.name}</td>
                      <td class="p-3 bg-slate-50">${p.stock}</td>
                      <td class="p-3 p-0"><input type="number" class="w-full h-full text-center outline-none bg-white focus:bg-blue-50 transition" value="${p.stock}" onchange="calcDiff(this, ${p.stock})"></td>
                      <td class="p-3 font-bold text-slate-400">0</td>
-                </tr>
+                </tr >
             `).join('');
             document.getElementById('st-count').innerText = db.products.length;
         }
@@ -4359,7 +4486,7 @@
             const diff = actual - theory;
             const diffCell = input.parentElement.nextElementSibling;
             diffCell.innerText = diff;
-            diffCell.className = `p-3 font-bold ${diff === 0 ? 'text-slate-400' : (diff > 0 ? 'text-emerald-600' : 'text-red-600')}`;
+            diffCell.className = `p - 3 font - bold ${diff === 0 ? 'text-slate-400' : (diff > 0 ? 'text-emerald-600' : 'text-red-600')}`;
         }
         function saveStockTaking() {
             if (confirm('هل أنت متأكد من اعتماد الفروقات وتعديل الأرصدة؟')) {
