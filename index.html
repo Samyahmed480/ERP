@@ -3675,7 +3675,7 @@
                 if (['asset', 'expense'].includes(a.type)) { if (a.balance > 0) dr = a.balance; else cr = -a.balance; }
                 else { if (a.balance > 0) cr = a.balance; else dr = -a.balance; }
                 tbDr += dr; tbCr += cr;
-                return `< tr ><td class="p-2 border-b">${a.name}</td><td class="p-2 border-b text-emerald-600">${dr ? dr.toFixed(2) : '-'}</td><td class="p-2 border-b text-red-600">${cr ? cr.toFixed(2) : '-'}</td></tr > `;
+                return `<tr><td class="p-2 border-b">${a.name}</td><td class="p-2 border-b text-emerald-600">${dr ? dr.toFixed(2) : '-'}</td><td class="p-2 border-b text-red-600">${cr ? cr.toFixed(2) : '-'}</td></tr>`;
             }).join('');
             document.getElementById('tb-total-dr').innerText = tbDr.toFixed(2);
             document.getElementById('tb-total-cr').innerText = tbCr.toFixed(2);
@@ -3683,7 +3683,7 @@
 
         // --- Helpers ---
         function showToast(msg, type = 'success') {
-            const t = document.createElement('div'); t.className = `toast ${type} `; t.innerHTML = ` < i class="fas fa-${type == 'success' ? 'check' : 'times'}-circle" ></i > ${msg} `;
+            const t = document.createElement('div'); t.className = `toast ${type}`; t.innerHTML = `<i class="fas fa-${type == 'success' ? 'check' : 'times'}-circle"></i> ${msg}`;
             document.getElementById('toast-container').appendChild(t);
             setTimeout(() => t.classList.add('show'), 10); setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300) }, 3000);
         }
@@ -3726,7 +3726,7 @@
         function stLoadItems() {
             const list = document.getElementById('st-items-list');
             list.innerHTML = (db.products || []).map(p => `
-            < tr >
+            <tr>
                     <td class="p-3 text-slate-800 font-medium">${p.name} <span class="text-slate-400 text-xs block">${p.barcode || '-'}</span></td>
                     <td class="p-3 text-slate-500 font-mono text-center">${p.stock || p.qty || 0}</td>
                     <td class="p-3">
@@ -3737,7 +3737,7 @@
                                class="w-full p-1 border rounded text-center outline-none focus:border-blue-500 st-count-input" placeholder="0">
                     </td>
                     <td class="p-3 text-center font-bold text-slate-300 st-diff-cell">-</td>
-                </tr >
+                </tr>
             `).join('');
             document.getElementById('st-total-diff').innerText = '0';
         }
@@ -3750,7 +3750,7 @@
 
             const diffCell = row.querySelector('.st-diff-cell');
             diffCell.innerText = diff > 0 ? `+ ${diff} ` : diff;
-            diffCell.className = `p - 3 text - center font - bold st - diff - cell ${diff === 0 ? 'text-emerald-500' : 'text-red-500'} `;
+            diffCell.className = `p-3 text-center font-bold st-diff-cell ${diff === 0 ? 'text-emerald-500' : 'text-red-500'} `;
 
             // Calc Total Diff for summary
             let totalDiff = 0;
@@ -3824,7 +3824,7 @@
             document.getElementById('st-empty')?.classList.add('hidden');
 
             list.innerHTML = db.stocktaking.slice().reverse().map(s => `
-            < tr class="hover:bg-slate-50" >
+            <tr class="hover:bg-slate-50">
                     <td class="p-4 border-b font-mono font-bold text-slate-700">#ST-${s.id.toString().substr(-6)}</td>
                     <td class="p-4 border-b text-slate-500">المستودع الرئيسي</td>
                     <td class="p-4 border-b text-slate-500">${s.date}</td>
@@ -3838,7 +3838,7 @@
                     <td class="p-4 border-b text-slate-400">
                         <button class="hover:text-blue-600 ml-2"><i class="fas fa-eye"></i></button>
                     </td>
-                </tr >
+                </tr>
             `).join('');
         }
 
@@ -3894,12 +3894,11 @@
         function renderInvoiceRows() {
             const tbody = document.getElementById('inv-items-body');
 
-            // Populate Datalist
             const datalist = document.getElementById('datalist-products');
-            datalist.innerHTML = db.products.map(p => `< option value = "${p.name}" data - id="${p.id}" data - price="${p.price}" > `).join('');
+            datalist.innerHTML = db.products.map(p => `<option value="${p.name}" data-id="${p.id}" data-price="${p.price}">`).join('');
 
             tbody.innerHTML = invoiceRows.map((r, i) => `
-            < tr class="group hover:bg-slate-50 transition border-b" >
+            <tr class="group hover:bg-slate-50 transition border-b">
                     <td class="p-2 text-center text-slate-400 text-xs">${i + 1}</td>
                     <td class="p-2">
                         <input type="text" list="datalist-products" 
@@ -3916,7 +3915,7 @@
                     <td class="p-2 text-center">
                         <button onclick="removeInvoiceRow('${r.id}')" class="text-red-400 hover:text-red-600 transition opacity-0 group-hover:opacity-100"><i class="fas fa-trash-alt"></i></button>
                     </td>
-                </tr >
+                </tr>
             `).join('');
 
             calcInvTotals();
@@ -4141,7 +4140,7 @@
             const isChecked = db.clientSettings[key] === true;
 
             return `
-            < div class="flex items-center justify-between py-4 border-b last:border-0 border-slate-100" >
+            <div class="flex items-center justify-between py-4 border-b last:border-0 border-slate-100">
             <div>
                 <h4 class="font-bold text-slate-700 text-sm">${title}</h4>
                 <p class="text-xs text-slate-400 mt-1">${desc}</p>
@@ -4150,7 +4149,7 @@
                 <input type="checkbox" onchange="saveClientSettings('${key}', this.checked)" class="sr-only peer" ${isChecked ? 'checked' : ''}>
                 <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
             </label>
-        </div >
+        </div>
             `;
         }
 
@@ -4180,7 +4179,7 @@
             const confContent = document.getElementById('cust-conf-content');
             if (confContent) { // Always re-render to reflect state if we want real-time updates, or check emptiness
                 confContent.innerHTML = `
-            < !--Customer Type-- >
+            <!--Customer Type-->
                     <div class="mb-8 border rounded-lg p-6">
                         <h3 class="font-bold text-slate-700 mb-4">نوع العميل</h3>
                         <div class="space-y-4">
@@ -4208,7 +4207,7 @@
                         </div>
                     </div>
 
-                    <!--Serial Number-- >
+                    <!--Serial Number-->
                     <div class="mb-8 flex items-center justify-between border rounded-lg p-4 bg-slate-50">
                         <span class="font-bold text-slate-700">الرقم التسلسلي للعميل التالي</span>
                         <div class="flex items-center gap-2 bg-white border rounded p-1">
@@ -4217,7 +4216,7 @@
                         </div>
                     </div>
 
-                    <!--Toggles Section Helper-- >
+                    <!--Toggles Section Helper-->
                     <div class="space-y-6">
                         <!-- Global Data -->
                         <div class="border rounded-lg p-6">
@@ -4245,7 +4244,7 @@
                         </div>
                     </div>
 
-                    <!--Custom Fields Banner-- >
+                    <!--Custom Fields Banner-->
             <div class="mt-8 border border-blue-200 bg-blue-50 rounded-lg p-4 flex items-center justify-between">
                 <div class="flex items-center gap-4">
                     <div class="w-10 h-10 bg-white rounded-lg flex items-center justify-center text-blue-600 shadow-sm">
@@ -4266,7 +4265,7 @@
             const msgContent = document.getElementById('cust-msg-content');
             if (msgContent) {
                 msgContent.innerHTML = `
-            < div class="border rounded-lg p-6 mb-6" >
+            <div class="border rounded-lg p-6 mb-6">
                     <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المسودة الافتراضية</h3>
                     <div class="flex items-center gap-4 mb-4">
                         <label class="flex items-center gap-2 cursor-pointer">
@@ -4281,7 +4280,7 @@
 
                     ${renderToggleItem('msg_auto_send', 'إرسال تلقائي', 'تفعيل الإرسال التلقائي للرسائل عند إنشاء فاتورة أو موعد')}
                     ${renderToggleItem('msg_inv_details', 'إرسال تفاصيل الفاتورة', 'إرفاق رابط الفاتورة وتفاصيل المبلغ في الرسالة')}
-                </div >
+                </div>
 
             <div class="border rounded-lg p-6">
                 <h3 class="font-bold text-slate-700 mb-4 border-b pb-2">المشاركة</h3>
@@ -4301,7 +4300,7 @@
             if (!db.warehouses) db.warehouses = [{ id: 1, name: 'المستودع الرئيسي', location: 'الرياض', keeper: 'مدير المستودع' }];
 
             list.innerHTML = db.warehouses.map(w => `
-            < tr class="hover:bg-slate-50 border-b" >
+            <tr class="hover:bg-slate-50 border-b">
                     <td class="p-3 font-bold">${w.name}</td>
                     <td class="p-3 text-slate-500">${w.location || '-'}</td>
                     <td class="p-3 text-slate-500">${w.keeper || '-'}</td>
@@ -4310,14 +4309,13 @@
                          <button class="text-blue-500 hover:bg-blue-50 p-1.5 rounded"><i class="fas fa-edit"></i></button>
                          <button class="text-red-500 hover:bg-red-50 p-1.5 rounded"><i class="fas fa-trash"></i></button>
                     </td>
-                </tr >
+                </tr>
             `).join('');
 
-            // Populate Dropdowns
             const whSelects = ['perm-warehouse', 'perm-target-warehouse', 'st-warehouse'];
             whSelects.forEach(id => {
                 const sel = document.getElementById(id);
-                if (sel) sel.innerHTML = db.warehouses.map(w => `< option value = "${w.id}" > ${w.name}</option > `).join('');
+                if (sel) sel.innerHTML = db.warehouses.map(w => `<option value="${w.id}">${w.name}</option>`).join('');
             });
         }
         function saveWarehouse(e) {
@@ -4341,12 +4339,12 @@
             if (!db.priceLists) db.priceLists = [];
 
             if (db.priceLists.length === 0) {
-                container.innerHTML = `< div class="col-span-full text-center text-slate-400 py-10" > لا توجد قوائم أسعار إضافية</div > `;
+                container.innerHTML = `<div class="col-span-full text-center text-slate-400 py-10">لا توجد قوائم أسعار إضافية</div>`;
                 return;
             }
 
             container.innerHTML = db.priceLists.map(p => `
-            < div class="bg-slate-50 border rounded-xl p-4 flex flex-col gap-3 relative group hover:bg-white hover:shadow-md transition" >
+            <div class="bg-slate-50 border rounded-xl p-4 flex flex-col gap-3 relative group hover:bg-white hover:shadow-md transition">
                     <div class="flex justify-between items-start">
                         <div>
                             <h4 class="font-bold text-slate-800">${p.name}</h4>
@@ -4359,7 +4357,7 @@
                         <span><i class="fas fa-calendar text-slate-400"></i> ${new Date().toLocaleDateString('ar-EG')}</span>
                     </div>
                      <button class="absolute top-2 left-2 text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash-alt"></i></button>
-                </div >
+                </div>
             `).join('');
         }
         function savePriceList(e) {
@@ -4385,7 +4383,7 @@
 
             // Populate Products
             document.getElementById('perm-prod-select').innerHTML = '<option value="">اختر صنف...</option>' +
-                db.products.map(p => `< option value = "${p.id}" > ${p.name} (رصيد: ${p.stock})</option > `).join('');
+                db.products.map(p => `<option value="${p.id}">${p.name} (رصيد: ${p.stock})</option>`).join('');
 
             currentPermItems = [];
             renderPermItems();
@@ -4401,11 +4399,11 @@
         }
         function renderPermItems() {
             document.getElementById('perm-items-list').innerHTML = currentPermItems.map((item, i) => `
-            < div class="flex justify-between items-center bg-white border p-2 rounded text-xs animate-fade-in" >
+            <div class="flex justify-between items-center bg-white border p-2 rounded text-xs animate-fade-in">
                     <span>${item.name}</span>
                     <span class="font-bold mx-2">${item.qty}</span>
                     <button onclick="currentPermItems.splice(${i},1);renderPermItems()" class="text-red-500"><i class="fas fa-times"></i></button>
-                </div >
+                </div>
             `).join('');
         }
         function savePermission(e) {
@@ -4452,13 +4450,13 @@
             list.innerHTML = db.permissions.map(p => {
                 const whName = db.warehouses?.find(w => w.id == p.whId)?.name || '-';
                 return `
-            < tr class="hover:bg-slate-50 border-b" >
+            <tr class="hover:bg-slate-50 border-b">
                     <td class="p-3 font-mono text-slate-600">#${p.id.toString().slice(-4)}</td>
                     <td class="p-3 font-bold">${typeLabels[p.type] || p.type}</td>
                     <td class="p-3">${whName}</td>
                     <td class="p-3 text-xs text-slate-500">${p.date}</td>
                     <td class="p-3"><span class="bg-slate-100 text-slate-600 px-2 py-1 rounded text-[10px] font-bold">مكتمل</span></td>
-                </tr >
+                </tr>
             `}).join('');
         }
 
@@ -4471,13 +4469,13 @@
         function renderStockTakingRows() {
             const tbody = document.getElementById('stocktaking-rows');
             tbody.innerHTML = db.products.map(p => `
-            < tr class="border-b" >
+            <tr class="border-b">
                      <td class="p-3 text-slate-500 text-xs">${p.id}</td>
                      <td class="p-3 font-bold text-right">${p.name}</td>
                      <td class="p-3 bg-slate-50">${p.stock}</td>
                      <td class="p-3 p-0"><input type="number" class="w-full h-full text-center outline-none bg-white focus:bg-blue-50 transition" value="${p.stock}" onchange="calcDiff(this, ${p.stock})"></td>
                      <td class="p-3 font-bold text-slate-400">0</td>
-                </tr >
+                </tr>
             `).join('');
             document.getElementById('st-count').innerText = db.products.length;
         }
@@ -4486,7 +4484,7 @@
             const diff = actual - theory;
             const diffCell = input.parentElement.nextElementSibling;
             diffCell.innerText = diff;
-            diffCell.className = `p - 3 font - bold ${diff === 0 ? 'text-slate-400' : (diff > 0 ? 'text-emerald-600' : 'text-red-600')}`;
+            diffCell.className = `p-3 font-bold ${diff === 0 ? 'text-slate-400' : (diff > 0 ? 'text-emerald-600' : 'text-red-600')}`;
         }
         function saveStockTaking() {
             if (confirm('هل أنت متأكد من اعتماد الفروقات وتعديل الأرصدة؟')) {
