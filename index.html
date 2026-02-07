@@ -231,10 +231,7 @@
             padding-top: 0 !important;
         }
 
-        #main-content-wrapper>.section-content.active {
-            min-height: 100%;
-            /* Ensure it takes full height if valid */
-        }
+        /* Rule removed to fix top spacing issue */
     </style>
 </head>
 
@@ -334,11 +331,47 @@
                 </div>
             </div>
 
-            <button onclick="showSection('sales_invoice')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="sales_invoice">
-                <i class="fas fa-file-invoice-dollar w-8 text-center text-lg"></i> فاتورة مبيعات
-            </button>
+            <!-- Sales Submenu -->
+            <div>
+                <button onclick="toggleSubmenu('sales-submenu')"
+                    class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center justify-between text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-file-invoice-dollar w-8 text-center text-lg"></i>
+                        <span>المبيعات</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+                        id="sales-submenu-arrow"></i>
+                </button>
+                <div id="sales-submenu" class="hidden flex-col gap-1 pr-6 mt-1 border-r-2 border-slate-700 mr-4">
+                    <button onclick="showSection('sales_invoices')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إدارة
+                        الفواتير</button>
+                    <button onclick="showSection('sales_invoice')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إنشاء
+                        فاتورة</button>
+                    <button onclick="showSection('sales_quotes')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إدارة
+                        عروض الأسعار</button>
+                    <button onclick="showSection('create_quote')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إنشاء
+                        عرض سعر</button>
+                    <button onclick="showSection('credit_notes')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إشعارات
+                        دائنة</button>
+                    <button onclick="showSection('returned_invoices')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">الفواتير
+                        المرتجعة</button>
+                    <button onclick="showSection('recurring_invoices')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">الفواتير
+                        الدورية</button>
+                    <button onclick="showSection('customer_payments')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">مدفوعات
+                        العملاء</button>
+                    <button onclick="showSection('sales_settings')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إعدادات
+                        المبيعات</button>
+                </div>
+            </div>
 
             <!-- Purchases Submenu -->
             <div>
@@ -513,7 +546,7 @@
             </div>
         </header>
 
-        <div id="main-content-wrapper" class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 relative">
+        <div id="main-content-wrapper" class="flex-1 overflow-y-auto p-2 md:p-4 bg-slate-50 relative">
 
             <!-- 1. Dashboard -->
             <section id="dashboard" class="section-content active">
