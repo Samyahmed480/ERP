@@ -229,6 +229,9 @@
             display: block !important;
             margin-top: 0 !important;
             padding-top: 0 !important;
+            min-height: 100%;
+            height: 100%;
+            /* Ensure h-full works */
         }
 
         /* Rule removed to fix top spacing issue */
@@ -520,33 +523,14 @@
 
     <!-- المحتوى -->
     <main class="flex-1 flex flex-col w-full overflow-hidden no-print relative">
-        <!-- الهيدر -->
-        <header class="hidden bg-white shadow-sm h-16 flex justify-between items-center px-4 z-20 border-b">
-            <div class="flex items-center gap-3">
-                <button onclick="toggleSidebar()"
-                    class="md:hidden text-slate-600 hover:text-blue-600 p-2 rounded-full hover:bg-slate-100 transition"><i
-                        class="fas fa-bars text-xl"></i></button>
-                <h2 id="page-title" class="text-lg font-bold text-slate-800 hidden md:block">لوحة القيادة</h2>
-            </div>
+        <!-- Mobile Sidebar Toggle -->
+        <button onclick="toggleSidebar()"
+            class="md:hidden fixed top-3 right-3 z-30 bg-white text-slate-700 p-2 rounded-lg shadow-md border hover:bg-slate-50 transition">
+            <i class="fas fa-bars text-xl"></i>
+        </button>
 
-            <div class="flex items-center gap-4">
-                <!-- اختيار المستخدم الحالي -->
-                <div class="flex items-center gap-2 bg-slate-100 px-3 py-1.5 rounded-full border border-slate-200">
-                    <i class="fas fa-user-circle text-slate-500"></i>
-                    <select id="current-user-select" onchange="switchUser(this.value)"
-                        class="bg-transparent border-none text-xs font-bold text-slate-700 outline-none cursor-pointer">
-                        <!-- Users loaded here -->
-                    </select>
-                </div>
+        <div id="main-content-wrapper" class="flex-1 overflow-y-auto p-2 md:p-4 bg-slate-50 relative pt-14 md:pt-4">
 
-                <div class="hidden md:flex flex-col items-end border-r pr-4 border-slate-200">
-                    <span class="text-xs font-bold text-slate-800" id="header-company-name">اسم الشركة</span>
-                    <span class="text-[10px] text-slate-500 font-mono" id="header-date">--/--/----</span>
-                </div>
-            </div>
-        </header>
-
-        <div id="main-content-wrapper" class="flex-1 overflow-y-auto p-2 md:p-4 bg-slate-50 relative">
 
             <!-- 1. Dashboard -->
             <section id="dashboard" class="section-content active">
@@ -1458,6 +1442,250 @@
             </div>
         </section>
 
+        <!-- 12.5 Returned Invoices (Refunds) -->
+        <section id="returned_invoices" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">المردود</h3>
+                    <div class="flex gap-2">
+                        <!-- Actions if needed -->
+                    </div>
+                </div>
+                <!-- Filters -->
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم الفاتورة</label>
+                        <div class="flex">
+                            <input type="text" class="w-full p-2 border rounded-r-lg text-sm outline-none bg-white">
+                            <button
+                                class="bg-white border border-r-0 px-3 rounded-l-lg text-slate-500 hover:bg-slate-50"><i
+                                    class="fas fa-caret-down"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي عميل</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm flex items-center gap-2">بحث
+                            متقدم <i class="fas fa-sliders-h"></i></button>
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold">بحث</button>
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">إلغاء
+                            الفلتر</button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد إيصالات ارتجاع.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.6 Recurring Invoices (Subscriptions) -->
+        <section id="recurring_invoices" class="section-content hidden">
+            <!-- Intro Box -->
+            <div
+                class="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 flex justify-between items-start relative">
+                <button onclick="this.parentElement.remove()"
+                    class="absolute top-2 left-2 text-blue-400 hover:text-blue-600"><i
+                        class="fas fa-times"></i></button>
+                <div class="text-sm text-blue-800 leading-relaxed max-w-3xl">
+                    تعرض هذه الصفحة جميع الفواتير الصادرة من نظام دفترة الخاص للفواتير الدورية و الاشتراكات الجارية.
+                    يمكنك عرض كل فاتورة عبر الإنترنت وتعديلها أو حذفها من هذه الصفحة.<br>
+                    يمكنك النقر على زر المزيد من الخيارات لتصفية قائمة الفواتير حسب الحاجة - بواسطة رقم الفاتورة،
+                    التاريخ، الحالة، تاريخ الاستحقاق، إلخ.
+                </div>
+            </div>
+
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">الاشتراكات</h3>
+                    <button
+                        class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                        <i class="fas fa-plus"></i> اشتراك جديد
+                    </button>
+                </div>
+                <!-- Filters -->
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">اسم الاشتراك</label>
+                        <input type="text" class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <div class="flex">
+                            <input type="text" value="أي عميل"
+                                class="w-full p-2 border rounded-r-lg text-sm outline-none bg-white">
+                            <button
+                                class="bg-white border border-r-0 px-3 rounded-l-lg text-slate-500 hover:bg-slate-50"><i
+                                    class="fas fa-caret-down"></i></button>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm flex items-center gap-2">بحث
+                            متقدم <i class="fas fa-sliders-h"></i></button>
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold">بحث</button>
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">إلغاء
+                            الفلتر</button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لم يتم العثور على مولد الفواتير الدورية. <a href="#" class="underline font-bold">اضغط هنا
+                                لإنشاء فواتير دورية</a></span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.7 Customer Payments -->
+        <section id="customer_payments" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-white rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">مدفوعات العملاء</h3>
+                    <div class="flex gap-2">
+                        <div class="border rounded flex overflow-hidden">
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-l"><i
+                                    class="fas fa-chevron-right text-slate-400"></i></button>
+                            <span class="px-3 py-1 bg-white text-sm flex items-center">0 - 0 من 0</span>
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-r"><i
+                                    class="fas fa-chevron-left text-slate-400"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Filters -->
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم الفاتورة</label>
+                        <input type="text" class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم عملية الدفع</label>
+                        <input type="text" class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي عميل</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1 md:col-span-3 flex justify-end gap-2 mt-2">
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm flex items-center gap-2">بحث
+                            متقدم <i class="fas fa-sliders-h"></i></button>
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold">بحث</button>
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">إلغاء
+                            الفلتر</button>
+                    </div>
+                </div>
+
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>No المدفوعات found</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.8 Sales Settings -->
+        <section id="sales_settings" class="section-content hidden">
+            <div class="flex items-center gap-3 border-b pb-4 mb-6 bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-bold text-lg text-slate-800">إعدادات المبيعات</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Cards -->
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-file-invoice text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات الفواتير</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">التحكم في إعدادات الفاتورة وإدارة الترقيم التلقائي</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-qrcode text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات الفاتورة الإلكترونية</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">تهيئة إعدادات الفاتورة الإلكترونية والضرائب</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-palette text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">تصاميم الفواتير</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">تخصيص شكل وتصميم الفواتير وعروض الأسعار</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i class="fas fa-globe text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات الفاتورة الأردنية</h3>
+                    <p class="text-[10px] text-slate-400 mt-2"></p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-percent text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات الضرائب</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">إدارة الضرائب المفروضة على المبيعات</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i class="fas fa-tools text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">حقول الفواتير الإضافية</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">إضافة حقول مخصصة للفواتير</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i class="fas fa-truck text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">خيارات الشحن والتوصيل</h3>
+                    <p class="text-[10px] text-slate-400 mt-2"></p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i class="fas fa-tag text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">العروض</h3>
+                    <p class="text-[10px] text-slate-400 mt-2"></p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-file-alt text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات عروض الأسعار</h3>
+                    <p class="text-[10px] text-slate-400 mt-2"></p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-clipboard-list text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات أوامر البيع</h3>
+                    <p class="text-[10px] text-slate-400 mt-2"></p>
+                </div>
+            </div>
+        </section>
+
         <!-- 4.1 POS Sessions -->
         <section id="pos-sessions" class="section-content hidden">
             <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
@@ -1693,6 +1921,219 @@
                         class="fas fa-download text-5xl text-blue-600 mb-4 group-hover:scale-110 transition-transform"></i>
                     <h3 class="font-bold text-lg text-slate-800 text-center">تطبيق سطح المكتب ( يعمل بانترنت او بدون)
                     </h3>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13. Purchases Module -->
+
+        <!-- 13.1 Purchase Requests -->
+        <section id="pur-requests" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">طلب الشراء</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> أضف طلب الشراء
+                        </button>
+                        <div class="border rounded flex overflow-hidden">
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-l"><i
+                                    class="fas fa-chevron-right text-slate-400"></i></button>
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-r"><i
+                                    class="fas fa-chevron-down text-slate-400"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div class="text-slate-500 font-bold">لا يوجد طلب الشراء أضيفت حتي الآن</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.2 RFQ -->
+        <section id="pur-rfq" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">طلب عرض أسعار</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> أضف طلب عرض أسعار
+                        </button>
+                        <div class="border rounded flex overflow-hidden">
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-l"><i
+                                    class="fas fa-chevron-right text-slate-400"></i></button>
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-r"><i
+                                    class="fas fa-chevron-down text-slate-400"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div class="text-slate-500 font-bold">لا يوجد طلب عرض أسعار أضيفت حتي الآن</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.3 Purchase Quotes -->
+        <section id="pur-quotes" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">عرض سعر مشتريات</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> أضف عرض سعر مشتريات
+                        </button>
+                        <div class="border rounded flex overflow-hidden">
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-l"><i
+                                    class="fas fa-chevron-right text-slate-400"></i></button>
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-r"><i
+                                    class="fas fa-chevron-down text-slate-400"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div class="text-slate-500 font-bold">لا يوجد عرض سعر مشتريات أضيفت حتي الآن</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.4 Purchase Orders -->
+        <section id="pur-orders" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">أمر شراء</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> أضف أمر شراء
+                        </button>
+                        <div class="border rounded flex overflow-hidden">
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-l"><i
+                                    class="fas fa-chevron-right text-slate-400"></i></button>
+                            <button class="px-3 py-1 bg-white hover:bg-slate-50 border-r"><i
+                                    class="fas fa-chevron-down text-slate-400"></i></button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div class="text-slate-500 font-bold">لا يوجد أمر شراء أضيفت حتي الآن</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.5 Purchase Invoices -->
+        <section id="purchases" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">فاتورة شراء</h3>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> أضف فاتورة شراء
+                        </button>
+                        <button class="bg-white border rounded p-2 hover:bg-slate-50 text-slate-500">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- Note: Screenshot shows empty state with icon for Invoices -->
+                <div
+                    class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center flex-col gap-4">
+                    <div class="flex items-center gap-2 bg-slate-100 p-4 rounded text-slate-500">
+                        <i class="fas fa-exclamation-triangle text-2xl"></i>
+                        <div class="text-right">
+                            <div class="font-bold">لم يتم إضافة أي سجلات بعد</div>
+                            <div class="text-sm text-blue-500 flex gap-2 cursor-pointer mt-1">
+                                <span>+ أضف فاتورة شراء</span>
+                                <span>الانتقال إلى الصفحة السابقة</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.6 Purchase Returns -->
+        <section id="pur-returns" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">مرتجعات المشتريات</h3>
+                    <div class="flex gap-2">
+                        <!-- Standard actions -->
+                    </div>
+                </div>
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد مرتجعات مشتريات.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.7 Debit Notes -->
+        <section id="pur-debit-notes" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">الإشعارات المدينة</h3>
+                </div>
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد إشعارات مدينة.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.8 Supplier Payments -->
+        <section id="pur-payments" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">مدفوعات الموردين</h3>
+                </div>
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد مدفوعات موردين.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 13.9 Purchase Settings -->
+        <section id="pur-settings" class="section-content hidden">
+            <div class="flex items-center gap-3 border-b pb-4 mb-6 bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-bold text-lg text-slate-800">إعدادات المشتريات</h3>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-shopping-cart text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات المشتريات</h3>
+                    <p class="text-[10px] text-slate-400 mt-2">الإعدادات العامة للمشتريات</p>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-file-invoice-dollar text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">إعدادات الفواتير</h3>
+                </div>
+                <div
+                    class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group text-center h-48">
+                    <i
+                        class="fas fa-percent text-4xl text-slate-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-sm text-slate-800">الضرائب</h3>
                 </div>
             </div>
         </section>
