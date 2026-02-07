@@ -521,7 +521,7 @@
     <!-- المحتوى -->
     <main class="flex-1 flex flex-col w-full overflow-hidden no-print relative">
         <!-- الهيدر -->
-        <header class="bg-white shadow-sm h-16 flex justify-between items-center px-4 z-20 border-b">
+        <header class="hidden bg-white shadow-sm h-16 flex justify-between items-center px-4 z-20 border-b">
             <div class="flex items-center gap-3">
                 <button onclick="toggleSidebar()"
                     class="md:hidden text-slate-600 hover:text-blue-600 p-2 rounded-full hover:bg-slate-100 transition"><i
@@ -1203,6 +1203,496 @@
                                 <span class="text-xs text-slate-500 currency">SAR</span></span>
                         </div>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.1 Sales Invoices List -->
+        <section id="sales_invoices" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <!-- Header -->
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">إدارة الفواتير</h3>
+                    <div class="flex gap-2">
+                        <button onclick="showSection('sales_invoice')"
+                            class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                            <i class="fas fa-plus"></i> فاتورة جديدة
+                        </button>
+                        <button
+                            class="bg-slate-200 text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-300 transition text-sm">
+                            <i class="fas fa-print"></i>
+                        </button>
+                        <button
+                            class="bg-slate-200 text-slate-600 px-3 py-2 rounded-lg hover:bg-slate-300 transition text-sm">
+                            <i class="fas fa-cog"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <input type="text" placeholder="أي عميل"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم الفاتورة</label>
+                        <input type="text" placeholder="بحث برقم الفاتورة"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">الحالة</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي حالة</option>
+                            <option value="paid">مدفوع</option>
+                            <option value="unpaid">غير مدفوع</option>
+                            <option value="draft">مسودة</option>
+                        </select>
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold flex-1">بحث</button>
+                        <button
+                            class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">إلغاء</button>
+                    </div>
+                </div>
+
+                <!-- Tabs/Stats -->
+                <div class="flex px-4 border-b bg-slate-50 text-sm gap-4 overflow-x-auto">
+                    <button
+                        class="py-3 border-b-2 border-blue-600 text-blue-600 font-bold whitespace-nowrap">الكل</button>
+                    <button
+                        class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap">متأخر</button>
+                    <button
+                        class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap">مستحقة
+                        الدفع</button>
+                    <button
+                        class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap">مدفوع</button>
+                    <button
+                        class="py-3 border-b-2 border-transparent text-slate-500 hover:text-slate-700 whitespace-nowrap">مسودة</button>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px]">
+                    <div class="flex flex-col items-center justify-center h-full text-slate-500 py-10"
+                        id="invoices-empty">
+                        <div
+                            class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 mb-4 border border-orange-200">
+                            <i class="fas fa-exclamation-circle text-xl"></i>
+                            <span>لم يتم العثور على الفواتير، اضغط "فاتورة جديدة" لإضافة فاتورة.</span>
+                        </div>
+                    </div>
+                    <table class="w-full text-sm text-right hidden" id="invoices-table">
+                        <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                            <tr>
+                                <th class="p-3 w-10 text-center"><input type="checkbox"></th>
+                                <th class="p-3">رقم الفاتورة</th>
+                                <th class="p-3">العميل</th>
+                                <th class="p-3">التاريخ</th>
+                                <th class="p-3">الإجمالي</th>
+                                <th class="p-3">المتبقي</th>
+                                <th class="p-3">الحالة</th>
+                                <th class="p-3">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="sales-invoices-list" class="divide-y divide-slate-100"></tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="p-3 border-t bg-slate-50 flex justify-between items-center text-xs text-slate-500">
+                    <div class="flex items-center gap-2">
+                        <span>صفحة 0 من 0</span>
+                        <div class="flex gap-1">
+                            <button
+                                class="w-6 h-6 flex items-center justify-center border rounded bg-white disabled:opacity-50"
+                                disabled><i class="fas fa-chevron-right"></i></button>
+                            <button
+                                class="w-6 h-6 flex items-center justify-center border rounded bg-white disabled:opacity-50"
+                                disabled><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                    </div>
+                    <span>0 - 0 من 0</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.2 Sales Quotes List -->
+        <section id="sales_quotes" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">إدارة عروض الأسعار</h3>
+                    <button onclick="showSection('create_quote')"
+                        class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                        <i class="fas fa-plus"></i> عرض سعر جديد
+                    </button>
+                </div>
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <input type="text" placeholder="أي عميل"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم العرض</label>
+                        <input type="text" placeholder="بحث برقم العرض"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold flex-1">بحث</button>
+                    </div>
+                </div>
+                <!-- Empty State -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد عروض أسعار. اضغط "عرض سعر جديد" للبدء.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.3 Create Quote Form -->
+        <section id="create_quote" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-emerald-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-emerald-700 shadow flex items-center gap-2 text-sm"><i
+                                class="fas fa-print"></i> حفظ وطباعة</button>
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold hover:bg-blue-700 shadow flex items-center gap-2 text-sm"><i
+                                class="fas fa-save"></i> حفظ</button>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800">عرض سعر جديد</h3>
+                </div>
+                <div class="p-6 grid grid-cols-1 md:grid-cols-3 gap-6 bg-white">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل <span
+                                class="text-red-500">*</span></label>
+                        <div class="flex gap-2">
+                            <select
+                                class="w-full p-2.5 border rounded-lg bg-slate-50 focus:bg-white outline-none transition text-sm">
+                                <option>اختر عميل...</option>
+                            </select>
+                            <button
+                                class="bg-blue-50 text-blue-600 px-3 rounded-lg border border-blue-100 hover:bg-blue-100"><i
+                                    class="fas fa-plus"></i></button>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">تاريخ العرض</label>
+                        <input type="date"
+                            class="w-full p-2.5 border rounded-lg bg-slate-50 outline-none transition text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم العرض</label>
+                        <input type="text" value="QUOTE-AUTO" disabled
+                            class="w-full p-2.5 border rounded-lg bg-slate-100 text-slate-500 cursor-not-allowed text-sm">
+                    </div>
+                </div>
+                <!-- Simple Items Table Placeholder -->
+                <div class="p-6 pt-0 border-t mt-4">
+                    <table class="w-full text-right mt-4 border rounded-lg overflow-hidden">
+                        <thead class="bg-slate-100 font-bold text-xs text-slate-600">
+                            <tr>
+                                <th class="p-3 border-y w-12">#</th>
+                                <th class="p-3 border-y">البند</th>
+                                <th class="p-3 border-y w-24">الكمية</th>
+                                <th class="p-3 border-y w-32">السعر</th>
+                                <th class="p-3 border-y w-32">المجموع</th>
+                                <th class="p-3 border-y w-12"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-sm bg-white">
+                            <tr>
+                                <td colspan="6" class="p-8 text-center text-slate-400">
+                                    <button
+                                        class="bg-white border border-dashed border-blue-400 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 font-bold text-xs flex items-center gap-2 mx-auto transition">
+                                        <i class="fas fa-plus-circle"></i> إضافة بند جديد
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12.4 Credit Notes -->
+        <section id="credit_notes" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">إشعارات دائنة</h3>
+                    <button
+                        class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                        <i class="fas fa-plus"></i> إنشاء إشعار دائن
+                    </button>
+                </div>
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">العميل</label>
+                        <input type="text" placeholder="أي عميل"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم الإشعار</label>
+                        <input type="text" placeholder="بحث برقم الإشعار"
+                            class="w-full p-2 border rounded-lg text-sm outline-none">
+                    </div>
+                    <div class="flex gap-2">
+                        <button
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold flex-1">بحث</button>
+                    </div>
+                </div>
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px] flex items-center justify-center">
+                    <div
+                        class="bg-orange-50 text-orange-600 p-4 rounded-lg flex items-center gap-2 border border-orange-200">
+                        <i class="fas fa-exclamation-circle text-xl"></i>
+                        <span>لا يوجد إشعارات دائنة.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.1 POS Sessions -->
+        <section id="pos-sessions" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-fit flex flex-col">
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">الجلسات</h3>
+                    <button
+                        class="bg-emerald-600 text-white px-4 py-2 rounded-lg hover:bg-emerald-700 transition flex items-center gap-2 text-sm font-bold shadow">
+                        <i class="fas fa-plus"></i> جلسة جديدة
+                    </button>
+                </div>
+                <div class="p-4 bg-slate-50 border-b grid grid-cols-1 md:grid-cols-4 gap-4 items-end">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">جهاز</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي جهاز</option>
+                            <option value="main">Main POS Device</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">وردية</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي وردية</option>
+                            <option value="morning">Morning Shift</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">الحالة</label>
+                        <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                            <option value="">أي حالة</option>
+                            <option value="open">مفتوحة</option>
+                            <option value="closed">مغلقة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">رقم الجلسة</label>
+                        <input type="text" class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                    </div>
+                </div>
+                <div class="p-4 border-b bg-slate-50 flex justify-end gap-2">
+                    <button
+                        class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">بحث
+                        متقدم <i class="fas fa-sliders-h"></i></button>
+                    <button
+                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition text-sm font-bold">بحث</button>
+                    <button
+                        class="bg-white border text-slate-500 px-4 py-2 rounded-lg hover:bg-slate-50 transition text-sm">إلغاء
+                        الفلتر</button>
+                </div>
+
+                <!-- Table -->
+                <div class="overflow-x-auto flex-1 bg-white min-h-[300px]">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-50 text-slate-600 font-bold border-b text-xs">
+                            <tr>
+                                <th class="p-3 w-10 text-center"><input type="checkbox"></th>
+                                <th class="p-3">رقم الجلسة</th>
+                                <th class="p-3">الجلسة/موظف الخزنة</th>
+                                <th class="p-3">فتح/إغلاق</th>
+                                <th class="p-3">المبيعات</th>
+                                <th class="p-3 text-center">الحالة</th>
+                                <th class="p-3 text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-slate-700">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-3 text-center"><input type="checkbox"></td>
+                                <td class="p-3 font-mono dir-ltr text-right">Main POS Device/2026/02/06/1</td>
+                                <td class="p-3">
+                                    <div class="font-bold text-slate-800">Main POS Shift</div>
+                                    <div class="text-xs text-blue-600 font-bold">Web Max #1</div>
+                                </td>
+                                <td class="p-3 dir-ltr text-right text-xs font-mono">05:26 06/02/2026</td>
+                                <td class="p-3 font-bold">0.00 ج.م</td>
+                                <td class="p-3 text-center"><span
+                                        class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs font-bold">مفتوحة</span>
+                                </td>
+                                <td class="p-3 text-center"><button
+                                        class="bg-slate-100 p-2 rounded hover:bg-slate-200 text-slate-600"><i
+                                            class="fas fa-ellipsis-h"></i></button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="p-3 border-t bg-slate-50 flex justify-between items-center text-xs text-slate-500">
+                    <div class="flex items-center gap-2">
+                        <span>صفحة 1 من 1</span>
+                        <div class="flex gap-1">
+                            <button
+                                class="w-6 h-6 flex items-center justify-center border rounded bg-white disabled:opacity-50"
+                                disabled><i class="fas fa-chevron-right"></i></button>
+                            <button
+                                class="w-6 h-6 flex items-center justify-center border rounded bg-white disabled:opacity-50"
+                                disabled><i class="fas fa-chevron-left"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.2 POS Reports -->
+        <section id="pos-reports" class="section-content hidden">
+            <div class="flex items-center gap-3 border-b pb-4 mb-6 bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-bold text-lg text-slate-800">تقرير نقاط البيع</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Right Column: Sales Movements -->
+                <div class="space-y-4">
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-tags"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">إجمالي مبيعات التصنيفات</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-red-100 text-red-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-box-open"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">إجمالي مبيعات المنتجات</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-user-clock"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">مبيعات الوردية</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-green-100 text-green-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-dollar-sign"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">حركة الورديات تفصيلي</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                </div>
+
+                <!-- Left Column: Profits -->
+                <div class="space-y-4">
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">ربحية الورديات</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-chart-pie"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">ربحية التصنيفات</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                    <div
+                        class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div
+                                class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center text-xl">
+                                <i class="fas fa-cubes"></i>
+                            </div>
+                            <span class="font-bold text-slate-700">ربحية المنتجات</span>
+                        </div>
+                        <button class="text-slate-400 hover:text-blue-600 flex items-center gap-1 text-sm"><i
+                                class="far fa-eye"></i> عرض</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4.3 POS Settings -->
+        <section id="pos-settings" class="section-content hidden">
+            <div class="flex items-center gap-3 border-b pb-4 mb-6 bg-white p-4 rounded-xl shadow-sm">
+                <h3 class="font-bold text-lg text-slate-800">إعدادات نقاط البيع</h3>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1 -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group">
+                    <i
+                        class="fas fa-cash-register text-5xl text-slate-700 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-lg text-slate-800">اجهزة نقاط البيع</h3>
+                </div>
+                <!-- Card 2 -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group">
+                    <i class="far fa-clock text-5xl text-slate-700 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-lg text-slate-800">ورديات نقاط البيع</h3>
+                </div>
+                <!-- Card 3 -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group">
+                    <i class="fas fa-cogs text-5xl text-slate-700 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-lg text-slate-800">عام</h3>
+                </div>
+                <!-- Card 4 (App) -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-blue-200 flex flex-col items-center justify-center hover:shadow-md transition cursor-pointer group relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-blue-600 text-white text-xs px-2 py-1 rounded-bl">New</div>
+                    <i
+                        class="fas fa-download text-5xl text-blue-600 mb-4 group-hover:scale-110 transition-transform"></i>
+                    <h3 class="font-bold text-lg text-slate-800 text-center">تطبيق سطح المكتب ( يعمل بانترنت او بدون)
+                    </h3>
                 </div>
             </div>
         </section>
