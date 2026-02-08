@@ -485,16 +485,36 @@
                 data-target="salaries">
                 <i class="fas fa-money-check-alt w-8 text-center text-lg"></i> الرواتب والأجور
             </button>
-            <button onclick="showSection('journal')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="journal">
-                <i class="fas fa-book w-8 text-center text-lg"></i> القيود اليومية
-            </button>
-            <button onclick="showSection('accounts_tree')"
-                class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
-                data-target="accounts_tree">
-                <i class="fas fa-sitemap w-8 text-center text-lg"></i> شجرة الحسابات
-            </button>
+            <!-- Accounting Module -->
+            <div>
+                <button onclick="toggleSubmenu('acc-submenu')"
+                    class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center justify-between text-slate-300">
+                    <div class="flex items-center gap-2">
+                        <i class="fas fa-calculator w-8 text-center text-lg"></i>
+                        <span>المحاسبة العامة</span>
+                    </div>
+                    <i class="fas fa-chevron-down text-xs transition-transform duration-200" id="acc-submenu-arrow"></i>
+                </button>
+                <div id="acc-submenu" class="hidden flex-col gap-1 pr-6 mt-1 border-r-2 border-slate-700 mr-4">
+                    <button onclick="showSection('journal')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">القيود
+                        اليومية</button>
+                    <button onclick="showSection('add_journal_entry')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">أضف
+                        قيد</button>
+                    <button onclick="showSection('accounts_tree')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">دليل
+                        الحسابات</button>
+                    <button onclick="showSection('cost_centers')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">مراكز
+                        التكلفة</button>
+                    <button onclick="showSection('assets')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">الأصول</button>
+                    <button onclick="showSection('acc_settings')"
+                        class="w-full text-right p-2 text-sm text-slate-400 hover:text-white hover:bg-slate-800 rounded transition">إعدادات
+                        الحسابات العامة</button>
+                </div>
+            </div>
             <button onclick="showSection('salaries')"
                 class="nav-btn w-full text-right p-3 rounded-lg hover:bg-slate-800 transition flex items-center text-slate-300"
                 data-target="salaries">
@@ -912,45 +932,125 @@
         </section>
 
         <!-- 5. Journal (Entries) -->
-        <section id="journal" class="section-content">
-            <div class="bg-white p-6 rounded-xl shadow-sm mb-6">
-                <h3 class="font-bold text-lg text-slate-800 mb-4">قيد يومية يدوي</h3>
-                <div class="grid grid-cols-1 md:grid-cols-4 gap-3 mb-3">
-                    <div class="md:col-span-3">
-                        <input type="text" id="manual-desc" placeholder="شرح القيد (البيان)"
-                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500">
+        <!-- 6. Journal Entries -->
+        <section id="journal" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col">
+                <!-- Top Toolbar -->
+                <div class="p-4 border-b flex justify-between items-center bg-blue-50/50 rounded-t-xl">
+                    <div class="flex gap-2">
+                        <button onclick="showSection('add_journal_entry')"
+                            class="bg-emerald-500 text-white px-4 py-2 rounded shadow hover:bg-emerald-600 font-bold text-sm transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> أضف قيد
+                        </button>
+                        <button
+                            class="bg-blue-500 text-white px-4 py-2 rounded shadow hover:bg-blue-600 font-bold text-sm transition flex items-center gap-2">
+                            <i class="fas fa-history"></i> سجل التعديلات
+                        </button>
+                        <button
+                            class="bg-slate-100 text-slate-600 border px-4 py-2 rounded shadow-sm hover:bg-slate-200 font-bold text-sm transition flex items-center gap-2">
+                            <i class="fas fa-cloud-upload-alt"></i> استيراد
+                        </button>
                     </div>
-                    <div>
-                        <input type="date" id="manual-date"
-                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500">
+                    <div class="flex gap-2">
+                        <button class="bg-white border text-slate-500 px-3 py-2 rounded shadow-sm hover:bg-slate-50"><i
+                                class="fas fa-print"></i></button>
+                        <button class="bg-white border text-slate-500 px-3 py-2 rounded shadow-sm hover:bg-slate-50"><i
+                                class="fas fa-cog"></i></button>
                     </div>
                 </div>
 
-                <div class="bg-slate-50 p-4 rounded-lg border border-slate-200 mb-4">
-                    <div class="grid grid-cols-12 gap-2 text-xs font-bold text-slate-500 mb-2 px-2">
-                        <div class="col-span-6">الحساب</div>
-                        <div class="col-span-2">مدين</div>
-                        <div class="col-span-2">دائن</div>
-                        <div class="col-span-2"></div>
+                <!-- Filters -->
+                <div class="p-4 bg-slate-50 border-b space-y-4">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-slate-700 text-sm"><i class="fas fa-filter text-blue-500 me-2"></i>بحث
+                            متقدم</h4>
+                        <button onclick="document.getElementById('journal-filters').classList.toggle('hidden')"
+                            class="text-xs text-blue-600 hover:text-blue-800">إظهار/إخفاء الفلاتر</button>
                     </div>
-                    <div id="journal-lines" class="space-y-2"></div>
-                    <button onclick="addJournalLineRow()"
-                        class="mt-4 text-xs bg-blue-50 text-blue-600 px-3 py-1.5 rounded-full hover:bg-blue-100 font-bold transition flex items-center gap-1 w-fit"><i
-                            class="fas fa-plus"></i> طرف جديد</button>
+                    <div id="journal-filters" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">من تاريخ</label>
+                            <input type="date"
+                                class="w-full p-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">إلى تاريخ</label>
+                            <input type="date"
+                                class="w-full p-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">رقم القيد</label>
+                            <input type="text" placeholder="بحث برقم القيد"
+                                class="w-full p-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        </div>
+                        <div class="md:col-span-2">
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الوصف / البيان</label>
+                            <input type="text" placeholder="بحث بجزء من وصف القيد"
+                                class="w-full p-2 border rounded-lg text-sm outline-none focus:border-blue-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الحساب</label>
+                            <select id="journal-filter-acc"
+                                class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                                <option value="">أي حساب</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">حالة القيد</label>
+                            <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                                <option value="">الكل</option>
+                                <option value="posted">مرحل</option>
+                                <option value="draft">مسودة</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">المصدر</label>
+                            <select class="w-full p-2 border rounded-lg text-sm outline-none bg-white">
+                                <option value="">أي</option>
+                                <option value="manual">يدوي</option>
+                                <option value="invoice">فاتورة مبيعات</option>
+                                <option value="bill">فاتورة مشتريات</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-3 flex justify-end gap-2 mt-2">
+                            <button
+                                class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 font-bold text-sm shadow">بحث</button>
+                            <button
+                                class="bg-white border text-slate-500 px-4 py-2 rounded hover:bg-slate-50 font-bold text-sm shadow-sm">إلغاء
+                                الفلتر</button>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="flex justify-between items-center bg-slate-100 p-3 rounded-lg border border-slate-200">
-                    <div class="flex gap-4 text-sm font-mono font-bold">
-                        <span class="text-emerald-600">مدين: <span id="total-dr">0.00</span></span>
-                        <span class="text-slate-300">|</span>
-                        <span class="text-red-600">دائن: <span id="total-cr">0.00</span></span>
-                        <span id="unbalanced-msg"
-                            class="text-red-500 bg-red-50 px-2 rounded text-xs hidden flex items-center gap-1"><i
-                                class="fas fa-exclamation-circle"></i> غير متزن</span>
+                <!-- Table -->
+                <div class="overflow-auto flex-1 bg-white">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-slate-700 sticky top-0 border-b shadow-sm">
+                            <tr>
+                                <th class="p-3 w-16 text-center">#</th>
+                                <th class="p-3 w-32">رقم القيد</th>
+                                <th class="p-3 w-32">التاريخ</th>
+                                <th class="p-3">البيان / الوصف</th>
+                                <th class="p-3 w-32">المصدر</th>
+                                <th class="p-3 w-32 text-center">الحالة</th>
+                                <th class="p-3 w-32">الإجمالي</th>
+                                <th class="p-3 w-24 text-center">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="journal-list" class="divide-y divide-slate-100">
+                            <!-- Initial Placeholder -->
+                            <tr>
+                                <td colspan="8" class="p-8 text-center text-slate-400">جاري تحميل القيود...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- Pagination -->
+                <div class="p-3 border-t bg-slate-50 flex justify-between items-center text-xs text-slate-500">
+                    <div class="flex items-center gap-2">
+                        <span>الصفحة 1 من 1</span>
                     </div>
-                    <button onclick="saveManualJournal()"
-                        class="bg-slate-800 text-white px-6 py-2 rounded-lg text-sm hover:bg-slate-700 font-bold shadow">ترحيل
-                        القيد</button>
+                    <span>عدد السجلات: 0</span>
                 </div>
             </div>
         </section>
@@ -2860,35 +2960,583 @@
 
 
 
-        <!-- 6. Accounts Tree -->
-        <section id="accounts_tree" class="section-content">
-            <div class="bg-white p-6 rounded-xl shadow-sm h-full flex flex-col">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-lg text-slate-800">الدليل المحاسبي</h3>
-                    <div class="flex gap-2">
-                        <input type="text" placeholder="بحث..."
-                            class="p-1.5 border rounded text-xs w-32 focus:border-blue-500 outline-none"
-                            onkeyup="filterAccounts(this.value)">
-                        <button onclick="alert('لإضافة حساب، يرجى التواصل مع الدعم الفني')"
-                            class="bg-slate-100 text-slate-600 px-3 py-1.5 rounded-lg text-xs hover:bg-slate-200"><i
-                                class="fas fa-lock"></i></button>
+        <!-- 6. Chart of Accounts (Tree View) -->
+        <section id="accounts_tree" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col">
+                <!-- Header -->
+                <div class="p-4 border-b flex justify-between items-center bg-white rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
+                        <i class="fas fa-sitemap text-blue-600"></i>
+                        دليل الحسابات
+                    </h3>
+                    <!-- Search Bar -->
+                    <div class="flex-1 max-w-lg mx-8 relative">
+                        <input type="text" id="acc-search" placeholder="بحث باسم أو كود الحساب..."
+                            class="w-full pl-10 pr-4 py-2 border rounded-lg text-sm outline-none focus:border-blue-500 bg-slate-50 focus:bg-white transition"
+                            onkeyup="handleAccountSearch(this.value)">
+                        <i class="fas fa-search absolute left-3 top-2.5 text-slate-400"></i>
+                    </div>
+                    <!-- Actions -->
+                    <div>
+                        <button onclick="openAddAccountModal('')"
+                            class="text-blue-600 hover:text-blue-800 font-bold text-sm flex items-center gap-1 transition">
+                            <i class="fas fa-plus-circle text-lg"></i>
+                            أضف حساب رئيسي
+                        </button>
                     </div>
                 </div>
-                <div class="overflow-y-auto flex-1 border rounded-lg bg-white">
-                    <table class="w-full text-sm border-collapse">
-                        <thead class="bg-slate-800 text-white sticky top-0 z-10">
+
+                <!-- Content (Tree & List) -->
+                <div class="flex-1 flex overflow-hidden">
+                    <!-- Tree Sidebar (Right) -->
+                    <div class="w-80 border-l bg-slate-50 flex flex-col">
+                        <div
+                            class="p-4 border-b bg-slate-100 font-bold text-slate-700 text-sm flex justify-between items-center">
+                            <span>شجرة الحسابات</span>
+                            <button onclick="renderAccountsTree()"
+                                class="text-slate-400 hover:text-blue-600 transition">
+                                <i class="fas fa-sync-alt text-xs"></i>
+                            </button>
+                        </div>
+                        <div id="accounts-tree-container" class="overflow-y-auto flex-1 p-2 space-y-1">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Details Area (Left) -->
+                    <div class="flex-1 bg-white flex flex-col">
+                        <!-- Path Header -->
+                        <div id="account-details-header"
+                            class="p-4 border-b bg-slate-50 flex justify-between items-center">
+                            <h4 class="font-bold text-slate-800 flex items-center gap-2">
+                                <span class="text-slate-400" id="acc-path-parent">الدليل /</span>
+                                <span class="text-blue-600" id="acc-path-current">الكل</span>
+                                <span id="acc-current-code"
+                                    class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded-full font-mono hidden"></span>
+                            </h4>
+                            <button id="add-sub-acc-btn" onclick="openAddAccountModal(currentSelectedAccountCode)"
+                                class="text-blue-600 hover:bg-blue-50 hover:text-blue-800 px-3 py-1 rounded text-sm transition font-bold flex items-center gap-1">
+                                <i class="fas fa-plus-circle"></i>
+                                أضف حساب فرعي
+                            </button>
+                        </div>
+
+                        <!-- List Content -->
+                        <div id="account-details-content" class="overflow-y-auto flex-1 p-4">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Accounting Module Extra Sections -->
+        <section id="add_journal_entry" class="section-content hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-white p-4 rounded-t-xl border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                    <button onclick="showSection('journal')" class="text-slate-500 hover:text-slate-700 transition">
+                        <i class="fas fa-arrow-right text-lg"></i>
+                    </button>
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800">القيود اليومية <span
+                                class="text-slate-400 mx-1">/</span> <span class="text-blue-600">إضافة</span></h3>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 font-bold shadow-sm transition">حفظ</button>
+                    <button
+                        class="bg-emerald-50 text-emerald-700 border border-emerald-200 px-4 py-2 rounded-lg hover:bg-emerald-100 font-bold transition"><i
+                            class="fas fa-save"></i></button>
+                    <button onclick="showSection('journal')"
+                        class="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-bold transition">إلغاء</button>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-b-xl shadow-sm border border-t-0 border-slate-200 h-full overflow-y-auto">
+                <!-- Top Form -->
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="lg:col-span-2 space-y-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الوصف</label>
+                            <textarea class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 h-24"
+                                placeholder="وصف القيد..."></textarea>
+                        </div>
+                        <div
+                            class="border-2 border-dashed border-slate-300 rounded-lg p-6 flex flex-col items-center justify-center text-slate-400 hover:border-blue-400 hover:text-blue-500 transition cursor-pointer bg-slate-50">
+                            <i class="fas fa-cloud-upload-alt text-3xl mb-2"></i>
+                            <span class="text-sm">افلت الملف هنا أو اختر من جهازك</span>
+                        </div>
+                    </div>
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-xl border">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">التاريخ</label>
+                            <input type="date" value="2026-02-08"
+                                class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">العملة</label>
+                            <select class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                <option>EGP جنيه مصري</option>
+                                <option>SAR ريال سعودي</option>
+                                <option>USD دولار أمريكي</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">رقم القيد</label>
+                            <input type="text" value="000001" disabled
+                                class="w-full p-2 border rounded-lg outline-none bg-slate-100 text-slate-500 font-mono text-center">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Lines Table -->
+                <div class="bg-white border rounded-lg overflow-hidden">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-blue-50 text-slate-700 font-bold">
                             <tr>
-                                <th class="p-3 text-right w-32 font-mono">الكود</th>
-                                <th class="p-3 text-right">اسم الحساب</th>
-                                <th class="p-3 text-right w-24">النوع</th>
-                                <th class="p-3 text-right w-32">الرصيد</th>
+                                <th class="p-3 w-10 text-center"></th>
+                                <th class="p-3">اسم الحساب <span class="text-red-500">*</span></th>
+                                <th class="p-3 w-48">الوصف</th>
+                                <th class="p-3 w-48">مركز التكلفة</th>
+                                <th class="p-3 w-24">الضرائب</th>
+                                <th class="p-3 w-32">مدين <span class="text-red-500">*</span></th>
+                                <th class="p-3 w-32">دائن <span class="text-red-500">*</span></th>
                             </tr>
                         </thead>
-                        <tbody id="coa-body" class="divide-y divide-slate-100"></tbody>
+                        <tbody id="journal-entry-lines" class="divide-y divide-slate-100">
+                            <!-- Rows generated by JS -->
+                            <tr class="hover:bg-slate-50 transition group">
+                                <td class="p-2 text-center"><button
+                                        class="text-slate-300 hover:text-red-500 transition opacity-0 group-hover:opacity-100"><i
+                                            class="fas fa-minus-circle"></i></button></td>
+                                <td class="p-2"><input type="text" placeholder="الحساب الافتراضي"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2"><input type="text" placeholder="الوصف"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2"><input type="text" placeholder="مركز التكلفة"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2 text-center text-slate-400">-</td>
+                                <td class="p-2"><input type="number" value="0"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 text-left font-mono"
+                                        step="0.01"></td>
+                                <td class="p-2"><input type="number" value="0"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 text-left font-mono"
+                                        step="0.01"></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition group">
+                                <td class="p-2 text-center"><button
+                                        class="text-slate-300 hover:text-red-500 transition opacity-0 group-hover:opacity-100"><i
+                                            class="fas fa-minus-circle"></i></button></td>
+                                <td class="p-2"><input type="text" placeholder="الحساب الافتراضي"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2"><input type="text" placeholder="الوصف"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2"><input type="text" placeholder="مركز التكلفة"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 placeholder-slate-400">
+                                </td>
+                                <td class="p-2 text-center text-slate-400">-</td>
+                                <td class="p-2"><input type="number" value="0"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 text-left font-mono"
+                                        step="0.01"></td>
+                                <td class="p-2"><input type="number" value="0"
+                                        class="w-full bg-transparent outline-none border-b border-transparent focus:border-blue-500 text-left font-mono"
+                                        step="0.01"></td>
+                            </tr>
+                        </tbody>
+                        <tfoot class="bg-slate-50 font-bold text-slate-700">
+                            <tr>
+                                <td colspan="5" class="p-3 text-left">
+                                    <button class="text-blue-600 hover:text-blue-800 text-xs flex items-center gap-1"><i
+                                            class="fas fa-plus-circle"></i> إضافة</button>
+                                </td>
+                                <td class="p-3 text-left font-mono">0.00</td>
+                                <td class="p-3 text-left font-mono">0.00</td>
+                            </tr>
+                            <tr class="bg-blue-50/50">
+                                <td colspan="5" class="p-3 text-left text-slate-500">الإجمالي</td>
+                                <td class="p-3 text-left font-mono text-slate-800">0.00</td>
+                                <td class="p-3 text-left font-mono text-slate-800">0.00</td>
+                            </tr>
+                        </tfoot>
                     </table>
                 </div>
             </div>
         </section>
+
+        <section id="cost_centers" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col">
+                <!-- Header -->
+                <div class="p-4 border-b flex justify-between items-center bg-slate-50 rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800"><i
+                            class="fas fa-project-diagram text-slate-400 me-2"></i>مراكز التكلفة</h3>
+                    <div class="flex gap-2">
+                        <input type="text" placeholder="بحث باسم أو كود المركز..."
+                            class="w-64 p-2 border rounded-lg text-sm outline-none focus:border-blue-500 bg-white shadow-sm">
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 font-bold text-sm shadow flex items-center gap-2">
+                            <i class="fas fa-plus"></i> إضافة مركز
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Content -->
+                <div class="overflow-auto flex-1 bg-white">
+                    <table class="w-full text-sm text-right">
+                        <thead class="bg-slate-100 text-slate-700 sticky top-0 border-b shadow-sm">
+                            <tr>
+                                <th class="p-3 w-32 font-mono">CODE</th>
+                                <th class="p-3 text-right">اسم المركز</th>
+                                <th class="p-3 text-right">المركز الرئيسي</th>
+                                <th class="p-3 text-right w-32">الميزانية التقديرية</th>
+                                <th class="p-3 text-center w-24">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cc-list" class="divide-y divide-slate-100">
+                            <!-- Example Data -->
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-3 font-mono text-slate-600">100</td>
+                                <td class="p-3 font-bold text-slate-700">الإدارة العامة</td>
+                                <td class="p-3 text-slate-500">-</td>
+                                <td class="p-3 font-mono">1,000,000</td>
+                                <td class="p-3 text-center">
+                                    <button class="text-blue-500 hover:text-blue-700 mx-1"><i
+                                            class="fas fa-edit"></i></button>
+                                    <button class="text-red-500 hover:text-red-700 mx-1"><i
+                                            class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-3 font-mono text-slate-600">101</td>
+                                <td class="p-3 font-bold text-slate-700 mr-4 border-r-2 border-slate-300 pr-2">الموارد
+                                    البشرية</td>
+                                <td class="p-3 text-slate-500">100 - الإدارة العامة</td>
+                                <td class="p-3 font-mono">250,000</td>
+                                <td class="p-3 text-center">
+                                    <button class="text-blue-500 hover:text-blue-700 mx-1"><i
+                                            class="fas fa-edit"></i></button>
+                                    <button class="text-red-500 hover:text-red-700 mx-1"><i
+                                            class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="p-3 font-mono text-slate-600">200</td>
+                                <td class="p-3 font-bold text-slate-700">المبيعات والتسويق</td>
+                                <td class="p-3 text-slate-500">-</td>
+                                <td class="p-3 font-mono">500,000</td>
+                                <td class="p-3 text-center">
+                                    <button class="text-blue-500 hover:text-blue-700 mx-1"><i
+                                            class="fas fa-edit"></i></button>
+                                    <button class="text-red-500 hover:text-red-700 mx-1"><i
+                                            class="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <section id="assets" class="section-content hidden">
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 h-full flex flex-col">
+                <!-- Header -->
+                <div class="p-4 border-b flex justify-between items-center bg-white rounded-t-xl">
+                    <h3 class="font-bold text-lg text-slate-800">أصل</h3>
+                    <div class="flex gap-2">
+                        <button class="bg-white border text-slate-500 px-3 py-2 rounded shadow-sm hover:bg-slate-50"><i
+                                class="fas fa-cloud-upload-alt"></i></button>
+                        <button onclick="showSection('add_asset')"
+                            class="bg-emerald-500 text-white px-4 py-2 rounded shadow hover:bg-emerald-600 font-bold text-sm transition flex items-center gap-2">
+                            <i class="fas fa-plus"></i> أضف أصل
+                        </button>
+                        <button class="bg-white border text-slate-500 px-3 py-2 rounded shadow-sm hover:bg-slate-50"><i
+                                class="fas fa-cog"></i></button>
+                    </div>
+                </div>
+
+                <!-- Empty State Content -->
+                <div class="flex-1 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="relative">
+                            <i class="fas fa-list-ul text-6xl text-slate-300"></i>
+                            <div class="absolute -bottom-2 -right-2 bg-slate-200 rounded-full p-1"><i
+                                    class="fas fa-exclamation-triangle text-slate-400"></i></div>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-600 mt-4">لم يتم إضافة أي سجلات بعد</h3>
+                        <button onclick="showSection('add_asset')"
+                            class="text-blue-500 hover:text-blue-700 text-sm font-bold flex items-center gap-1 transition">
+                            <i class="fas fa-plus"></i> أضف أصل
+                        </button>
+                        <button onclick="history.back()"
+                            class="text-slate-400 hover:text-slate-600 text-xs mt-2 flex items-center gap-1 transition">
+                            <i class="fas fa-arrow-right"></i> الانتقال إلى الصفحة السابقة
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6.b Add Asset Form -->
+        <section id="add_asset" class="section-content hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center bg-white p-4 rounded-t-xl border-b border-slate-200">
+                <div class="flex items-center gap-2">
+                    <button onclick="showSection('assets')" class="text-slate-500 hover:text-slate-700 transition">
+                        <i class="fas fa-arrow-right text-lg"></i>
+                    </button>
+                    <div>
+                        <h3 class="font-bold text-lg text-slate-800">الأصول <span class="text-slate-400 mx-1">/</span>
+                            <span class="text-blue-600">إضافة</span>
+                        </h3>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button
+                        class="bg-emerald-600 text-white px-6 py-2 rounded-lg hover:bg-emerald-700 font-bold shadow-sm transition">حفظ</button>
+                    <button onclick="showSection('assets')"
+                        class="bg-slate-100 text-slate-600 px-4 py-2 rounded-lg hover:bg-slate-200 font-bold transition">إلغاء</button>
+                </div>
+            </div>
+
+            <div
+                class="bg-slate-50 p-6 rounded-b-xl shadow-sm border border-t-0 border-slate-200 h-full overflow-y-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <!-- Right Column: Asset Details -->
+                    <div class="bg-white p-6 rounded-xl shadow-sm border space-y-4">
+                        <h4 class="font-bold text-slate-700 border-b pb-2 mb-4">تفاصيل الأصل</h4>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">الكود <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text" value="000001"
+                                    class="w-full p-2 border rounded-lg outline-none bg-slate-50 text-center font-mono"
+                                    disabled>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">الاسم <span
+                                        class="text-red-500">*</span></label>
+                                <input type="text"
+                                    class="w-full p-2 border rounded-lg outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">تاريخ الشراء <span
+                                        class="text-red-500">*</span></label>
+                                <input type="date" value="2026-02-08"
+                                    class="w-full p-2 border rounded-lg outline-none focus:border-blue-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">تاريخ بداية الخدمة <span
+                                        class="text-red-500">*</span></label>
+                                <input type="date"
+                                    class="w-full p-2 border rounded-lg outline-none focus:border-blue-500">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الحساب الرئيسي <span
+                                    class="text-red-500">*</span></label>
+                            <select class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                <option>اختر الحساب...</option>
+                                <option>الأصول الثابتة</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">المكان</label>
+                                <select
+                                    class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                    <option>الفرع الرئيسي</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-bold text-slate-500 mb-1">موظف</label>
+                                <select
+                                    class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                    <option>اختر موظف...</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الوصف</label>
+                            <textarea
+                                class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 h-20"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Left Column: Pricing & Depreciation -->
+                    <div class="space-y-6">
+                        <!-- Pricing -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border space-y-4">
+                            <h4 class="font-bold text-slate-700 border-b pb-2 mb-4">تفاصيل التسعير</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">قيمة الشراء <span
+                                            class="text-red-500">*</span></label>
+                                    <div class="flex">
+                                        <input type="number"
+                                            class="w-full p-2 border rounded-r-lg outline-none focus:border-blue-500">
+                                        <div
+                                            class="bg-slate-100 border border-l-0 rounded-l-lg px-3 py-2 text-xs font-bold text-slate-500 flex items-center">
+                                            EGP</div>
+                                    </div>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">حساب النقدية <span
+                                            class="text-red-500">*</span></label>
+                                    <select
+                                        class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                        <option>اختر الحساب</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4 col-span-2">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">الضريبة 1</label>
+                                        <select
+                                            class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                            <option>اختر الضريبة</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">الضريبة 2</label>
+                                        <select
+                                            class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                            <option>اختر الضريبة</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Depreciation -->
+                        <div class="bg-white p-6 rounded-xl shadow-sm border space-y-4">
+                            <h4 class="font-bold text-slate-700 border-b pb-2 mb-4">إهلاك الأصل</h4>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">طريقة الإهلاك <span
+                                            class="text-red-500">*</span></label>
+                                    <select
+                                        class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                        <option>من فضلك اختر</option>
+                                        <option>قسط ثابت</option>
+                                        <option>قسط متناقص</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">قيمة الخردة</label>
+                                    <div class="flex">
+                                        <input type="number"
+                                            class="w-full p-2 border rounded-r-lg outline-none focus:border-blue-500">
+                                        <div
+                                            class="bg-slate-100 border border-l-0 rounded-l-lg px-3 py-2 text-xs font-bold text-slate-500 flex items-center">
+                                            EGP</div>
+                                    </div>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">حساب مجمع إهلاك
+                                        الأصول</label>
+                                    <select
+                                        class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                        <option>اختر الحساب</option>
+                                    </select>
+                                </div>
+                                <div class="col-span-2">
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">حساب مصروف إهلاك
+                                        الأصول</label>
+                                    <select
+                                        class="w-full p-2 border rounded-lg outline-none focus:border-blue-500 bg-white">
+                                        <option>اختر الحساب</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="acc_settings" class="section-content hidden">
+            <!-- Header -->
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-bold text-2xl text-slate-800">إعدادات الحسابات العامة</h3>
+                <button onclick="history.back()" class="text-slate-500 hover:text-slate-700 transition"><i
+                        class="fas fa-arrow-left"></i></button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Card 1: General -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-cog text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">عام</span>
+                </div>
+
+                <!-- Card 2: Fiscal Periods -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-calendar-alt text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">الفترات المالية</span>
+                </div>
+
+                <!-- Card 3: Directing Accounts -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-sitemap text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">توجيه الحسابات</span>
+                </div>
+
+                <!-- Card 4: Closed Period -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-lock text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">فترة مغلقة</span>
+                </div>
+
+                <!-- Card 5: Custom Fields for Assets -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-columns text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">الحقول المخصصة للأصول</span>
+                </div>
+
+                <!-- Card 6: Custom Fields for Entries -->
+                <div
+                    class="bg-white p-8 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer flex flex-col items-center justify-center gap-4 group">
+                    <div
+                        class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition">
+                        <i class="fas fa-stream text-3xl text-blue-600"></i>
+                    </div>
+                    <span class="text-lg font-bold text-slate-700">الحقول المخصصة للقيود</span>
+                </div>
+            </div>
+        </section>
+
 
         <!-- 7. Inventory -->
         <section id="inventory" class="section-content">
@@ -3277,6 +3925,81 @@
             </div>
         </section>
 
+        <!-- Add Account Modal -->
+        <div id="add-account-modal" class="modal">
+            <div class="modal-content p-0 max-w-xl overflow-hidden rounded-2xl">
+                <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+                    <h3 class="font-bold text-lg flex items-center gap-2">
+                        <i class="fas fa-plus-circle"></i>
+                        <span id="acc-modal-title">أضف حساب جديد</span>
+                    </h3>
+                    <button onclick="closeModal('add-account-modal')" class="text-white/60 hover:text-white transition">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form onsubmit="saveAccount(event)" class="p-6 space-y-4">
+                    <input type="hidden" id="acc-old-code">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">نوع الحساب</label>
+                            <select id="acc-type" required
+                                class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
+                                <option value="asset">أصول</option>
+                                <option value="liability">خصوم (التزامات)</option>
+                                <option value="equity">حقوق ملكية</option>
+                                <option value="revenue">إيرادات</option>
+                                <option value="expense">مصروفات</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">الحساب الرئيسي (الأب)</label>
+                            <select id="acc-parent"
+                                class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
+                                <option value="">[حساب رئيسي]</option>
+                                <!-- Populated by JS -->
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">كود الحساب</label>
+                            <input type="text" id="acc-code" required placeholder="مثال: 1101"
+                                class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 font-mono">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-slate-500 mb-1">اسم الحساب</label>
+                            <input type="text" id="acc-name" required placeholder="اسم الحساب..."
+                                class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 mb-1">الوصف / ملاحظات</label>
+                        <textarea id="acc-notes" placeholder="وصف إضافي للحساب..."
+                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 h-20 resize-none"></textarea>
+                    </div>
+
+                    <div class="flex items-center gap-2 py-2">
+                        <input type="checkbox" id="acc-is-group" class="w-4 h-4 accent-blue-600">
+                        <label for="acc-is-group" class="text-sm font-bold text-slate-700">هذا الحساب هو مجموعة (يحتوي
+                            على حسابات فرعية)</label>
+                    </div>
+
+                    <div class="flex gap-2 pt-4 border-t">
+                        <button type="submit"
+                            class="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg">
+                            <i class="fas fa-save ml-1"></i> حفظ البيانات
+                        </button>
+                        <button type="button" onclick="closeModal('add-account-modal')"
+                            class="px-6 py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg font-bold transition">
+                            إلغاء
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         </div>
     </main>
 
@@ -3307,25 +4030,69 @@
             ],
             currentUser: 1,
             chartOfAccounts: [
+                // Assets (الأصول)
                 { code: '1', name: 'الأصول', type: 'asset', level: 1, balance: 0, isGroup: true },
                 { code: '11', name: 'أصول متداولة', type: 'asset', level: 2, parent: '1', balance: 0, isGroup: true },
-                { code: '1101', name: 'الخزينة الرئيسية', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '1102', name: 'البنك ', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '1105', name: 'إنستا باي', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '1106', name: 'المحافظ الإلكترونية', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '1103', name: 'العملاء', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '1104', name: 'المخزون', type: 'asset', level: 3, parent: '11', balance: 0 },
-                { code: '2', name: 'الالتزامات', type: 'liability', level: 1, balance: 0, isGroup: true },
-                { code: '2101', name: 'الموردين (الدائنون)', type: 'liability', level: 3, parent: '2', balance: 0 },
-                { code: '2102', name: 'ضريبة القيمة المضافة', type: 'liability', level: 3, parent: '2', balance: 0 },
+                { code: '1101', name: 'الخزينة الرئيسية', type: 'asset', level: 3, parent: '11', balance: 50000 },
+                { code: '1102', name: 'البنك الأهلي', type: 'asset', level: 3, parent: '11', balance: 120000 },
+                { code: '1103', name: 'بنك الراجحي', type: 'asset', level: 3, parent: '11', balance: 85000 },
+                { code: '1104', name: 'إنستا باي', type: 'asset', level: 3, parent: '11', balance: 15000 },
+                { code: '1105', name: 'المحافظ الإلكترونية', type: 'asset', level: 3, parent: '11', balance: 8000 },
+                { code: '1106', name: 'العملاء', type: 'asset', level: 3, parent: '11', balance: 45000, isGroup: true },
+                { code: '110601', name: 'عميل - شركة النور', type: 'asset', level: 4, parent: '1106', balance: 25000 },
+                { code: '110602', name: 'عميل - مؤسسة الفجر', type: 'asset', level: 4, parent: '1106', balance: 20000 },
+                { code: '1107', name: 'المخزون', type: 'asset', level: 3, parent: '11', balance: 95000 },
+                { code: '12', name: 'أصول ثابتة', type: 'asset', level: 2, parent: '1', balance: 0, isGroup: true },
+                { code: '1201', name: 'الأراضي', type: 'asset', level: 3, parent: '12', balance: 500000 },
+                { code: '1202', name: 'المباني', type: 'asset', level: 3, parent: '12', balance: 800000 },
+                { code: '1203', name: 'السيارات', type: 'asset', level: 3, parent: '12', balance: 150000 },
+                { code: '1204', name: 'الأثاث والمعدات', type: 'asset', level: 3, parent: '12', balance: 75000 },
+                { code: '1205', name: 'أجهزة الكمبيوتر', type: 'asset', level: 3, parent: '12', balance: 35000 },
+
+                // Liabilities (الخصوم)
+                { code: '2', name: 'الخصوم', type: 'liability', level: 1, balance: 0, isGroup: true },
+                { code: '21', name: 'خصوم متداولة', type: 'liability', level: 2, parent: '2', balance: 0, isGroup: true },
+                { code: '2101', name: 'الموردين', type: 'liability', level: 3, parent: '21', balance: 65000, isGroup: true },
+                { code: '210101', name: 'مورد - شركة التقنية', type: 'liability', level: 4, parent: '2101', balance: 35000 },
+                { code: '210102', name: 'مورد - مؤسسة الإمداد', type: 'liability', level: 4, parent: '2101', balance: 30000 },
+                { code: '2102', name: 'ضريبة القيمة المضافة', type: 'liability', level: 3, parent: '21', balance: 12000 },
+                { code: '2103', name: 'رواتب مستحقة', type: 'liability', level: 3, parent: '21', balance: 45000 },
+                { code: '2104', name: 'قروض قصيرة الأجل', type: 'liability', level: 3, parent: '21', balance: 80000 },
+                { code: '22', name: 'خصوم طويلة الأجل', type: 'liability', level: 2, parent: '2', balance: 0, isGroup: true },
+                { code: '2201', name: 'قروض بنكية', type: 'liability', level: 3, parent: '22', balance: 250000 },
+                { code: '2202', name: 'سندات مستحقة', type: 'liability', level: 3, parent: '22', balance: 100000 },
+
+                // Equity (حقوق الملكية)
                 { code: '3', name: 'حقوق الملكية', type: 'equity', level: 1, balance: 0, isGroup: true },
-                { code: '3101', name: 'رأس المال', type: 'equity', level: 3, parent: '3', balance: 0 },
+                { code: '3101', name: 'رأس المال', type: 'equity', level: 2, parent: '3', balance: 1000000 },
+                { code: '3102', name: 'الأرباح المحتجزة', type: 'equity', level: 2, parent: '3', balance: 150000 },
+                { code: '3103', name: 'احتياطي نظامي', type: 'equity', level: 2, parent: '3', balance: 50000 },
+
+                // Revenue (الإيرادات)
                 { code: '4', name: 'الإيرادات', type: 'revenue', level: 1, balance: 0, isGroup: true },
-                { code: '4101', name: 'إيرادات المبيعات', type: 'revenue', level: 3, parent: '4', balance: 0 },
+                { code: '4101', name: 'إيرادات المبيعات', type: 'revenue', level: 2, parent: '4', balance: 450000, isGroup: true },
+                { code: '410101', name: 'مبيعات محلية', type: 'revenue', level: 3, parent: '4101', balance: 350000 },
+                { code: '410102', name: 'مبيعات تصدير', type: 'revenue', level: 3, parent: '4101', balance: 100000 },
+                { code: '4102', name: 'إيرادات الخدمات', type: 'revenue', level: 2, parent: '4', balance: 85000 },
+                { code: '4103', name: 'إيرادات أخرى', type: 'revenue', level: 2, parent: '4', balance: 15000 },
+
+                // Expenses (المصروفات)
                 { code: '5', name: 'المصروفات', type: 'expense', level: 1, balance: 0, isGroup: true },
-                { code: '5101', name: 'تكلفة المبيعات', type: 'expense', level: 3, parent: '5', balance: 0 },
-                { code: '5201', name: 'مصروفات تشغيلية', type: 'expense', level: 3, parent: '5', balance: 0 },
-                { code: '5202', name: 'الرواتب والأجور', type: 'expense', level: 3, parent: '5', balance: 0 }
+                { code: '51', name: 'تكلفة المبيعات', type: 'expense', level: 2, parent: '5', balance: 0, isGroup: true },
+                { code: '5101', name: 'تكلفة البضاعة المباعة', type: 'expense', level: 3, parent: '51', balance: 280000 },
+                { code: '5102', name: 'مصاريف شحن', type: 'expense', level: 3, parent: '51', balance: 12000 },
+                { code: '52', name: 'مصروفات تشغيلية', type: 'expense', level: 2, parent: '5', balance: 0, isGroup: true },
+                { code: '5201', name: 'الرواتب والأجور', type: 'expense', level: 3, parent: '52', balance: 95000 },
+                { code: '5202', name: 'الإيجارات', type: 'expense', level: 3, parent: '52', balance: 24000 },
+                { code: '5203', name: 'الكهرباء والماء', type: 'expense', level: 3, parent: '52', balance: 8000 },
+                { code: '5204', name: 'الاتصالات والإنترنت', type: 'expense', level: 3, parent: '52', balance: 4500 },
+                { code: '5205', name: 'الصيانة', type: 'expense', level: 3, parent: '52', balance: 6000 },
+                { code: '5206', name: 'القرطاسية', type: 'expense', level: 3, parent: '52', balance: 2500 },
+                { code: '5207', name: 'الدعاية والإعلان', type: 'expense', level: 3, parent: '52', balance: 15000 },
+                { code: '53', name: 'مصروفات إدارية', type: 'expense', level: 2, parent: '5', balance: 0, isGroup: true },
+                { code: '5301', name: 'مصاريف سفر', type: 'expense', level: 3, parent: '53', balance: 8000 },
+                { code: '5302', name: 'استشارات قانونية', type: 'expense', level: 3, parent: '53', balance: 12000 },
+                { code: '5303', name: 'رسوم حكومية', type: 'expense', level: 3, parent: '53', balance: 5000 }
             ],
             journal: [],
             products: [{ id: 1, name: 'منتج تجريبي', price: 100, cost: 80, stock: 10 }],
@@ -3623,6 +4390,289 @@
                 const text = row.innerText.toLowerCase();
                 row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
             });
+        }
+
+        // --- Chart of Accounts Logic ---
+        let currentSelectedAccountCode = '';
+
+        function renderAccountsTree() {
+            const container = document.getElementById('accounts-tree-container');
+            if (!container) return;
+
+            // Sort accounts by code
+            const sortedAccounts = [...db.chartOfAccounts].sort((a, b) => a.code.localeCompare(b.code));
+
+            function buildTreeHTML(parentCode = undefined, level = 1) {
+                const children = sortedAccounts.filter(a => a.parent === parentCode);
+                if (children.length === 0) return '';
+
+                let html = `<div class="space-y-1 ${level > 1 ? 'mr-4 border-r pr-2 mt-1' : ''}">`;
+                children.forEach(acc => {
+                    const hasChildren = sortedAccounts.some(a => a.parent === acc.code);
+                    const isSelected = currentSelectedAccountCode === acc.code;
+
+                    html += `
+                        <div class="group">
+                            <div onclick="selectAccount('${acc.code}')" 
+                                class="flex items-center gap-2 p-2 rounded cursor-pointer transition ${isSelected ? 'bg-blue-50 border border-blue-200 text-blue-800' : 'hover:bg-white hover:shadow-sm border border-transparent text-slate-700'}">
+                                <i class="fas ${acc.isGroup ? (isSelected ? 'fa-folder-open' : 'fa-folder') : 'fa-file-invoice-dollar'} ${isSelected ? 'text-blue-600' : 'text-blue-400'}"></i>
+                                <div class="flex-1 flex justify-between items-center text-sm">
+                                    <span class="${acc.isGroup ? 'font-bold' : ''}">${acc.name}</span>
+                                    <span class="text-[10px] ${isSelected ? 'text-blue-400' : 'text-slate-400'} font-mono">${acc.code}</span>
+                                </div>
+                            </div>
+                            ${buildTreeHTML(acc.code, level + 1)}
+                        </div>
+                    `;
+                });
+                html += '</div>';
+                return html;
+            }
+
+            container.innerHTML = buildTreeHTML() || '<p class="text-center text-slate-400 py-4 text-xs">لا يوجد حسابات مضافة</p>';
+        }
+
+        function selectAccount(code) {
+            currentSelectedAccountCode = code;
+            renderAccountsTree();
+            renderAccountDetails(code);
+
+            // Update breadcrumbs
+            const acc = db.chartOfAccounts.find(a => a.code === code);
+            const pathParent = document.getElementById('acc-path-parent');
+            const pathCurrent = document.getElementById('acc-path-current');
+            const currentCodeSpan = document.getElementById('acc-current-code');
+            const addBtn = document.getElementById('add-sub-acc-btn');
+
+            if (acc) {
+                pathParent.innerText = (acc.parent ? db.chartOfAccounts.find(p => p.code === acc.parent)?.name + ' / ' : 'الدليل / ');
+                pathCurrent.innerText = acc.name;
+                currentCodeSpan.innerText = '#' + acc.code;
+                currentCodeSpan.classList.remove('hidden');
+
+                // Only allow adding sub-accounts to group accounts
+                if (acc.isGroup) {
+                    addBtn.innerHTML = '<i class="fas fa-plus-circle"></i> أضف حساب فرعي';
+                    addBtn.classList.remove('hidden');
+                } else {
+                    addBtn.classList.add('hidden');
+                }
+            } else {
+                pathParent.innerText = 'الدليل / ';
+                pathCurrent.innerText = 'الكل';
+                currentCodeSpan.classList.add('hidden');
+                addBtn.innerHTML = '<i class="fas fa-plus-circle"></i> أضف حساب فرعي';
+            }
+        }
+
+        function renderAccountDetails(parentCode) {
+            const container = document.getElementById('account-details-content');
+            if (!container) return;
+
+            const accounts = parentCode
+                ? db.chartOfAccounts.filter(a => a.parent === parentCode)
+                : db.chartOfAccounts.filter(a => !a.parent);
+
+            if (accounts.length === 0) {
+                container.innerHTML = `
+                    <div class="h-full flex flex-col items-center justify-center text-slate-400 min-h-[300px]">
+                        <i class="fas fa-folder-open text-6xl mb-4 text-slate-200"></i>
+                        <p class="text-lg font-bold text-slate-600">هذا الحساب فارغ</p>
+                        <p class="text-sm mb-4">لا توجد حسابات فرعية مضافة تحت هذا التصنيف</p>
+                        <button onclick="openAddAccountModal('${parentCode}')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 shadow-sm transition font-bold text-sm">
+                            <i class="fas fa-plus"></i> أضف حساب جديد
+                        </button>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600">
+                        <tr>
+                            <th class="p-3 border-b">الكود</th>
+                            <th class="p-3 border-b">اسم الحساب</th>
+                            <th class="p-3 border-b">النوع</th>
+                            <th class="p-3 border-b text-left">الرصيد</th>
+                            <th class="p-3 border-b w-24">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">
+            `;
+
+            accounts.forEach(acc => {
+                const typeMap = { asset: 'أصل', liability: 'خصم', equity: 'حقوق ملكية', revenue: 'إيراد', expense: 'مصروف' };
+                html += `
+                    <tr class="hover:bg-slate-50 transition group">
+                        <td class="p-3 font-mono text-xs text-blue-600">${acc.code}</td>
+                        <td class="p-3 font-bold text-slate-700">${acc.name} ${acc.isGroup ? '<i class="fas fa-folder text-amber-400 text-[10px] mr-1"></i>' : ''}</td>
+                        <td class="p-3 text-xs text-slate-500">${typeMap[acc.type] || acc.type}</td>
+                        <td class="p-3 font-mono text-left ${acc.balance < 0 ? 'text-red-600' : 'text-emerald-600'}">${acc.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td class="p-3 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="editAccount('${acc.code}')" class="text-slate-400 hover:text-blue-600 transition"><i class="fas fa-edit"></i></button>
+                            <button onclick="deleteAccount('${acc.code}')" class="text-slate-400 hover:text-red-600 transition"><i class="fas fa-trash"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+
+            html += `</tbody></table>`;
+            container.innerHTML = html;
+        }
+
+        function openAddAccountModal(parentCode = '') {
+            const modal = document.getElementById('add-account-modal');
+            const parentSelect = document.getElementById('acc-parent');
+            const title = document.getElementById('acc-modal-title');
+
+            // Populate parent select
+            parentSelect.innerHTML = '<option value="">[حساب رئيسي]</option>' +
+                db.chartOfAccounts.filter(a => a.isGroup).map(a => `<option value="${a.code}">${a.code} - ${a.name}</option>`).join('');
+
+            // Reset form
+            document.getElementById('acc-old-code').value = '';
+            document.getElementById('acc-code').value = '';
+            document.getElementById('acc-name').value = '';
+            document.getElementById('acc-notes').value = '';
+            document.getElementById('acc-is-group').checked = false;
+
+            if (parentCode) {
+                const parent = db.chartOfAccounts.find(a => a.code === parentCode);
+                document.getElementById('acc-parent').value = parentCode;
+                document.getElementById('acc-type').value = parent ? parent.type : 'asset';
+                title.innerText = 'أضف حساب فرعي';
+            } else {
+                document.getElementById('acc-parent').value = '';
+                title.innerText = 'أضف حساب رئيسي جديد';
+            }
+
+            modal.classList.add('active');
+        }
+
+        function saveAccount(e) {
+            e.preventDefault();
+            const oldCode = document.getElementById('acc-old-code').value;
+            const code = document.getElementById('acc-code').value;
+            const name = document.getElementById('acc-name').value;
+            const type = document.getElementById('acc-type').value;
+            const parent = document.getElementById('acc-parent').value;
+            const isGroup = document.getElementById('acc-is-group').checked;
+            const notes = document.getElementById('acc-notes').value;
+
+            // Check for duplicate code
+            const existingIdx = db.chartOfAccounts.findIndex(a => a.code === code && a.code !== oldCode);
+            if (existingIdx >= 0) {
+                alert('كود الحساب موجود بالفعل! الرجاء اختيار كود آخر.');
+                return;
+            }
+
+            const targetIdx = db.chartOfAccounts.findIndex(a => a.code === (oldCode || code));
+
+            const accountData = {
+                code, name, type, parent: parent || undefined, isGroup, notes,
+                balance: targetIdx >= 0 ? db.chartOfAccounts[targetIdx].balance : 0,
+                level: parent ? (db.chartOfAccounts.find(a => a.code === parent)?.level || 0) + 1 : 1
+            };
+
+            if (oldCode && targetIdx >= 0) {
+                // Editing existing account
+                db.chartOfAccounts[targetIdx] = accountData;
+                showToast('تم تعديل الحساب بنجاح');
+            } else {
+                // Adding new account
+                db.chartOfAccounts.push(accountData);
+                showToast('تم إضافة الحساب بنجاح');
+            }
+
+            save(); // Save to Firestore
+            closeModal('add-account-modal');
+            renderAccountsTree();
+            if (currentSelectedAccountCode === parent || currentSelectedAccountCode === oldCode) {
+                selectAccount(parent || code);
+            }
+        }
+
+        function editAccount(code) {
+            const acc = db.chartOfAccounts.find(a => a.code === code);
+            if (!acc) return;
+
+            openAddAccountModal(acc.parent);
+            document.getElementById('acc-modal-title').innerText = 'تعديل حساب: ' + acc.name;
+            document.getElementById('acc-old-code').value = acc.code;
+            document.getElementById('acc-code').value = acc.code;
+            document.getElementById('acc-name').value = acc.name;
+            document.getElementById('acc-type').value = acc.type;
+            document.getElementById('acc-is-group').checked = acc.isGroup;
+            document.getElementById('acc-notes').value = acc.notes || '';
+        }
+
+        function deleteAccount(code) {
+            if (db.chartOfAccounts.some(a => a.parent === code)) {
+                alert('لا يمكن حذف هذا الحساب لاحتوائه على حسابات فرعية');
+                return;
+            }
+            if (confirm('هل أنت متأكد من حذف هذا الحساب؟')) {
+                db.chartOfAccounts = db.chartOfAccounts.filter(a => a.code !== code);
+                save();
+                renderAccountsTree();
+                renderAccountDetails(currentSelectedAccountCode);
+                showToast('تم حذف الحساب');
+            }
+        }
+
+        function handleAccountSearch(val) {
+            const container = document.getElementById('account-details-content');
+            if (!val) {
+                renderAccountDetails(currentSelectedAccountCode);
+                return;
+            }
+
+            const results = db.chartOfAccounts.filter(a =>
+                a.name.includes(val) || a.code.includes(val)
+            );
+
+            if (results.length === 0) {
+                container.innerHTML = '<div class="p-8 text-center text-slate-400">لا توجد نتائج بحث مطابقة</div>';
+                return;
+            }
+
+            renderAccountDetailsSearchResults(results);
+        }
+
+        function renderAccountDetailsSearchResults(accounts) {
+            const container = document.getElementById('account-details-content');
+            const typeMap = { asset: 'أصل', liability: 'خصم', equity: 'حقوق ملكية', revenue: 'إيراد', expense: 'مصروف' };
+
+            let html = `<div class="mb-4 text-xs text-blue-600 font-bold">نتائج البحث: ${accounts.length} حساب</div>
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600">
+                        <tr>
+                            <th class="p-3 border-b">الكود</th>
+                            <th class="p-3 border-b">اسم الحساب</th>
+                            <th class="p-3 border-b">النوع</th>
+                            <th class="p-3 border-b text-left">الرصيد</th>
+                            <th class="p-3 border-b w-24">إجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100">`;
+
+            accounts.forEach(acc => {
+                html += `
+                    <tr class="hover:bg-slate-50 transition group">
+                        <td class="p-3 font-mono text-xs text-blue-600">${acc.code}</td>
+                        <td class="p-3 font-bold text-slate-700">${acc.name}</td>
+                        <td class="p-3 text-xs text-slate-500">${typeMap[acc.type] || acc.type}</td>
+                        <td class="p-3 font-mono text-left ${acc.balance < 0 ? 'text-red-600' : 'text-emerald-600'}">${acc.balance.toLocaleString('en-US', { minimumFractionDigits: 2 })}</td>
+                        <td class="p-3 flex gap-2 justify-end opacity-0 group-hover:opacity-100 transition">
+                            <button onclick="editAccount('${acc.code}')" class="text-slate-400 hover:text-blue-600 transition"><i class="fas fa-edit"></i></button>
+                        </td>
+                    </tr>
+                `;
+            });
+            html += `</tbody></table>`;
+            container.innerHTML = html;
         }
 
         // --- 5. Invoice Modal & View ---
@@ -4517,12 +5567,31 @@
                 if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
                 if (arrow) arrow.style.transform = 'rotate(180deg)';
             }
+            if (id === 'journal' || id === 'accounts_tree' || id === 'acc_settings' || id === 'check_cycle' || id === 'add_journal_entry' || id === 'cost_centers' || id === 'assets') {
+                const sub = document.getElementById('acc-submenu');
+                const arrow = document.getElementById('acc-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+
+                if (id === 'accounts_tree' || id === 'check_cycle') {
+                    renderAccountsTree();
+                    selectAccount(currentSelectedAccountCode || '');
+                }
+            }
 
             // Inits
             if (id === 'inv-permissions') renderPermissions();
             if (id === 'inv-warehouses') renderWarehouses();
             if (id === 'inv-prices') renderPriceLists();
             if (id === 'custom-layout') renderCustomLayout(); // Future proofing
+
+            // Accounting Submenu logic
+            if (['journal', 'add_journal_entry', 'accounts_tree', 'cost_centers', 'assets', 'acc_settings', 'check_cycle'].includes(id)) {
+                const sub = document.getElementById('acc-submenu');
+                const arrow = document.getElementById('acc-submenu-arrow');
+                if (sub && sub.classList.contains('hidden')) { sub.classList.remove('hidden'); sub.style.display = 'flex'; }
+                if (arrow) arrow.style.transform = 'rotate(180deg)';
+            }
         }
         function showModal(id) {
             document.getElementById(id).classList.add('active');
