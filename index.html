@@ -4373,174 +4373,1818 @@
 
             <!-- New Module Sections -->
 
-            <!-- Manufacturing Section -->
-            <section id="manufacturing" class="section-content hidden">
+            <!-- 1. Manufacturing Sections -->
+            <section id="mfg-plans" class="section-content hidden">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-industry text-blue-600 me-2"></i>التصنيع</h2>
-                    <p class="text-slate-500">إدارة عمليات التصنيع ومراحل الإنتاج.</p>
+                            class="fas fa-clipboard-list text-blue-600 me-2"></i>خطط الإنتاج</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="mfg-materials" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-boxes text-blue-600 me-2"></i>قوائم مواد الإنتاج (BOM)</h2>
+                        <button onclick="openModal('add-bom-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> أضف قائمة
+                        </button>
+                    </div>
+                    <div class="p-6" id="bom-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-boxes text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد قوائم مواد</h3>
+                            <p class="text-slate-500 mb-6">قوائم المواد تحدد المكونات والكميات اللازمة لإنتاج منتج ما
+                            </p>
+                            <button onclick="openModal('add-bom-modal')"
+                                class="text-blue-600 hover:underline text-sm font-bold">
+                                <i class="fas fa-plus me-1"></i> أضف قائمة مواد جديدة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="mfg-orders" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-industry text-blue-600 me-2"></i>أوامر الإنتاج (Production Orders)</h2>
+                        <button onclick="openModal('add-order-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> أمر إنتاج جديد
+                        </button>
+                    </div>
+                    <div class="p-6" id="orders-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-industry text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد أوامر إنتاج</h3>
+                            <p class="text-slate-500 mb-6">أوامر الإنتاج تتابع عملية تصنيع المنتجات من المواد الخام</p>
+                            <button onclick="openModal('add-order-modal')"
+                                class="text-blue-600 hover:underline text-sm font-bold">
+                                <i class="fas fa-plus me-1"></i> إنشاء أمر إنتاج
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="mfg-costs" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-calculator text-blue-600 me-2"></i>التكاليف غير المباشرة (Indirect Costs)
+                        </h2>
+                        <button onclick="openModal('add-cost-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> أضف تكلفة
+                        </button>
+                    </div>
+                    <div class="p-6" id="costs-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-calculator text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد تكاليف إضافية</h3>
+                            <p class="text-slate-500 mb-6">تسجيل التكاليف غير المباشرة مثل الكهرباء، الإيجار، والصيانة
+                                وتوزيعها على الإنتاج</p>
+                            <button onclick="openModal('add-cost-modal')"
+                                class="text-blue-600 hover:underline text-sm font-bold">
+                                <i class="fas fa-plus me-1"></i> أضف تكلفة جديدة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="mfg-stations" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i class="fas fa-cogs text-blue-600 me-2"></i>محطات
+                            العمل (Work Stations)</h2>
+                        <button onclick="openModal('add-station-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> أضف محطة
+                        </button>
+                    </div>
+                    <div class="p-6" id="stations-grid">
+                        <!-- Empty State or Grid -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-industry text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد محطات عمل</h3>
+                            <p class="text-slate-500 mb-6">قم بتعريف محطات العمل والتكاليف المرتبطة بها لإدارة عمليات
+                                التصنيع</p>
+                            <button onclick="openModal('add-station-modal')"
+                                class="text-blue-600 hover:underline text-sm font-bold">
+                                <i class="fas fa-plus me-1"></i> أضف محطة عمل جديدة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="mfg-settings" class="section-content hidden">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">إعدادات التصنيع</h2>
+                        <button onclick="showSection('mfg-plans')"
+                            class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                            <i class="fas fa-arrow-right me-1"></i> رجوع
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- General Settings -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-cog"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">الإعدادات العامة</h3>
+                            <p class="text-slate-500 text-xs">تعيين الإعدادات الأساسية لنظام التصنيع</p>
+                        </div>
+
+                        <!-- Production Paths -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-project-diagram"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">مسارات الإنتاج</h3>
+                            <p class="text-slate-500 text-xs">إدارة مراحل ومسارات عمليات التصنيع</p>
+                        </div>
+
+                        <!-- Manual Statuses (Orders) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-tools"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">الحالات اليدوية لطلبات التصنيع</h3>
+                            <p class="text-slate-500 text-xs">تخصيص حالات العمل لطلبات التصنيع</p>
+                        </div>
+
+                        <!-- Manual Statuses (Plans) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-clipboard-check"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">الحالات اليدوية لخطط الإنتاج</h3>
+                            <p class="text-slate-500 text-xs">تخصيص حالات العمل لخطط الإنتاج</p>
+                        </div>
+
+                        <!-- Additional Fields (Orders) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">الحقول الإضافية لطلب التصنيع</h3>
+                            <p class="text-slate-500 text-xs">إضافة حقول مخصصة لطلبات التصنيع</p>
+                        </div>
+
+                        <!-- Additional Fields (Plans) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-plus-square"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">الحقول الإضافية لخطة الإنتاج</h3>
+                            <p class="text-slate-500 text-xs">إضافة حقول مخصصة لخطط الإنتاج</p>
+                        </div>
+
+                        <!-- Connected Forms (Orders) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">النماذج ذات الصلة بطلب التصنيع</h3>
+                            <p class="text-slate-500 text-xs">إدارة النماذج المرتبطة بطلبات التصنيع</p>
+                        </div>
+
+                        <!-- Connected Forms (Plans) -->
+                        <div
+                            class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-md transition cursor-pointer group text-center">
+                            <div
+                                class="w-16 h-16 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-3xl mx-auto mb-4 group-hover:scale-110 transition">
+                                <i class="fas fa-link"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-800 mb-2">النماذج ذات الصلة بخطة الإنتاج</h3>
+                            <p class="text-slate-500 text-xs">إدارة النماذج المرتبطة بخطط الإنتاج</p>
+                        </div>
+
+                    </div>
                 </div>
             </section>
 
-            <!-- Bookings Section -->
-            <section id="bookings" class="section-content hidden">
+            <!-- 2. Bookings Sections -->
+            <section id="book-list" class="section-content hidden">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-calendar-check text-blue-600 me-2"></i>الحجوزات</h2>
-                    <p class="text-slate-500">نظام إدارة الحجوزات والمواعيد.</p>
+                            class="fas fa-list text-blue-600 me-2"></i>إدارة الحجوزات</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="book-add" class="section-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
+                            class="fas fa-plus-circle text-blue-600 me-2"></i>إضافة حجز</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="book-settings" class="section-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">إعدادات الحجوزات</h2>
+                        <button onclick="showSection('book-list')"
+                            class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                            <i class="fas fa-arrow-right me-1"></i> رجوع
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100">
+                            <h4 class="font-bold text-slate-800 mb-2">تكوين الموارد والخدمات</h4>
+                            <p class="text-slate-500 text-sm">حدد الأصول أو الخدمات القابلة للحجز</p>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="flex items-center justify-between p-4 border rounded-lg bg-slate-50">
+                                <div>
+                                    <h5 class="font-bold text-slate-800">السماح بالحجوزات المتداخلة</h5>
+                                    <p class="text-xs text-slate-500">عند التفعيل، يمكن حجز نفس المورد في نفس الوقت من
+                                        قبل عملاء مختلفين</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer">
+                                    <div
+                                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+                            <div class="flex items-center justify-between p-4 border rounded-lg bg-slate-50">
+                                <div>
+                                    <h5 class="font-bold text-slate-800">إشعارات البريد الإلكتروني</h5>
+                                    <p class="text-xs text-slate-500">إرسال تأكيد الحجز تلقائياً للعميل عند إنشاء حجز
+                                        جديد</p>
+                                </div>
+                                <label class="relative inline-flex items-center cursor-pointer">
+                                    <input type="checkbox" class="sr-only peer" checked>
+                                    <div
+                                        class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end">
+                            <button onclick="showToast('تم حفظ الإعدادات')"
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ
+                                التغييرات</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Installments Section -->
-            <section id="installments" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-money-check-alt text-blue-600 me-2"></i>إدارة الأقساط</h2>
-                    <p class="text-slate-500">متابعة الأقساط والتحصيلات.</p>
+            <!-- 3. Installments Sections -->
+            <!-- 3. Installments Sections -->
+            <section id="inst-agreements" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-file-contract text-blue-600 me-2"></i>اتفاقيات التقسيط (Agreements)</h2>
+                        <button onclick="openModal('add-agreement-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> اتفاقية جديدة
+                        </button>
+                    </div>
+                    <div class="p-6" id="agreements-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-handshake text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد اتفاقيات تقسيط</h3>
+                            <p class="text-slate-500 mb-6">أنشئ اتفاقيات تقسيط للعملاء لتتبع الدفعات المستحقة</p>
+                            <button onclick="openModal('add-agreement-modal')"
+                                class="text-blue-600 hover:underline text-sm font-bold">
+                                <i class="fas fa-plus me-1"></i> إضافة اتفاقية جديدة
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="inst-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-money-bill-wave text-blue-600 me-2"></i>تحصيل الأقساط (Installments Due)
+                        </h2>
+                        <div class="flex gap-2">
+                            <input type="month" class="p-2 border rounded text-xs">
+                            <button
+                                class="px-3 py-1 bg-white border rounded text-slate-600 text-xs hover:bg-slate-50">تصفية</button>
+                        </div>
+                    </div>
+                    <div class="p-6" id="installments-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-calendar-check text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد أقساط مستحقة قريباً</h3>
+                            <p class="text-slate-500 mb-6">ستظهر هنا الأقساط المستحقة الدفع بناءً على الاتفاقيات النشطة
+                            </p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Commissions Section -->
-            <section id="commissions" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-bullseye text-blue-600 me-2"></i>المستهدف والعمولات</h2>
-                    <p class="text-slate-500">تتبع المبيعات المستهدفة وحساب العمولات.</p>
+            <!-- 4. Commissions Sections -->
+            <section id="comm-rules" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-gavel text-blue-600 me-2"></i>قواعد العمولات (Commission Rules)</h2>
+                        <button onclick="openModal('add-rule-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> قاعدة جديدة
+                        </button>
+                    </div>
+                    <div class="p-6" id="comm-rules-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-scale-balanced text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد قواعد عمولات</h3>
+                            <p class="text-slate-500 mb-6">حدد نسب العمولات بناءً على المبيعات المستهدفة لكل موظف أو قسم
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="comm-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-hand-holding-usd text-blue-600 me-2"></i>عمولات المبيعات (Commissions)
+                        </h2>
+                        <button
+                            class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                            <i class="fas fa-calculator me-1"></i> احتساب العمولات
+                        </button>
+                    </div>
+                    <div class="p-6" id="comm-list-container">
+                        <div class="text-center py-10">
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">سجل العمولات فارغ</h3>
+                            <p class="text-slate-500">سيتم إدراج العمولات المحتسبة هنا</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="comm-periods" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-clock text-blue-600 me-2"></i>فترات المبيعات (Sales Periods)</h2>
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> فترة جديدة
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-500 text-center py-10">تحديد الفترات الزمنية (ربع سنوي، شهري) لاحتساب الهدف
+                        </p>
+                    </div>
                 </div>
             </section>
 
-            <!-- Work Orders Section -->
-            <section id="work_orders" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-tools text-blue-600 me-2"></i>أوامر الشغل</h2>
-                    <p class="text-slate-500">إدارة أوامر الشغل ومتابعة التنفيذ.</p>
+            <!-- 5. Work Orders Sections -->
+            <!-- 5. Work Orders Sections -->
+            <section id="work-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-clipboard-list text-blue-600 me-2"></i>أوامر الشغل (Work Orders)</h2>
+                        <div class="flex gap-2">
+                            <button onclick="showSection('work-add')"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                                <i class="fas fa-plus me-1"></i> أمر شغل جديد
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6" id="work-orders-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-tools text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد أوامر شغل</h3>
+                            <p class="text-slate-500 mb-6">قم بإنشاء أوامر شغل لتتبع مهام الصيانة والتركيب والإنتاج</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Employees Section -->
-            <section id="employees" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-user-tie text-blue-600 me-2"></i>الموظفين</h2>
-                    <p class="text-slate-500">قاعدة بيانات الموظفين وملفاتهم.</p>
+            <section id="work-add" class="section-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">إضافة أمر شغل جديد</h2>
+                        <button onclick="showSection('work-list')"
+                            class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                            <i class="fas fa-arrow-right me-1"></i> رجوع للقائمة
+                        </button>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-6 border-b border-slate-100 bg-slate-50">
+                            <h4 class="font-bold text-slate-800">تفاصيل الأمر</h4>
+                        </div>
+                        <div class="p-6 space-y-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">عنوان الأمر <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                        placeholder="مثال: صيانة مككيفات الفرع الرئيسي">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">العميل</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="">اختر العميل</option>
+                                        <option value="1">محمد أحمد</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">نوع الأمر</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="maintenance">صيانة</option>
+                                        <option value="installation">تركيب</option>
+                                        <option value="general">عام</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">الأولوية</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="high">عالية</option>
+                                        <option value="medium" selected>متوسطة</option>
+                                        <option value="low">منخفضة</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">تاريخ البدء</label>
+                                    <input type="date"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">تاريخ الاستحقاق</label>
+                                    <input type="date"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">الوصف والتعليمات</label>
+                                <textarea
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition h-32"></textarea>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                            <button onclick="showSection('work-list')"
+                                class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                            <button onclick="saveWorkOrder()"
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ
+                                الأمر</button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Org Structure Section -->
-            <section id="org_structure" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-sitemap text-blue-600 me-2"></i>الهيكل التنظيمي</h2>
-                    <p class="text-slate-500">عرض وإدارة الهيكل التنظيمي للشركة.</p>
+            <section id="work-settings" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-cogs text-blue-600 me-2"></i>إعدادات أوامر الشغل</h2>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-500">إعدادات أنواع الأوامر وحالات العمل (قيد التطوير)</p>
+                    </div>
                 </div>
             </section>
 
-            <!-- Attendance Section -->
-            <section id="attendance" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-clock text-blue-600 me-2"></i>الحضور والانصراف</h2>
-                    <p class="text-slate-500">سجل الحضور والانصراف للموظفين.</p>
+            <!-- 6. Employees Sections -->
+            <section id="emp-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-users text-blue-600 me-2"></i>الموظفين (Employees)</h2>
+                        <button onclick="openModal('add-employee-modal')"
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-user-plus me-1"></i> إضافة موظف
+                        </button>
+                    </div>
+                    <div class="p-6" id="employees-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-id-card text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا يوجد موظفين مسجلين</h3>
+                            <p class="text-slate-500 mb-6">قم بإضافة بيانات الموظفين لإدارة الحضور والرواتب</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="emp-roles" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-user-tag text-blue-600 me-2"></i>الأدوار والصلاحيات (Roles)</h2>
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> دور جديد
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-white border rounded-xl p-4 hover:shadow-md transition">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold">
+                                        A</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">Admin</h4>
+                                        <p class="text-xs text-slate-500">مدير النظام (صلاحيات كاملة)</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-end border-t pt-3 mt-2">
+                                    <span class="text-xs text-slate-400">1 مستخدم</span>
+                                    <button class="text-blue-600 text-xs hover:underline">تعديل</button>
+                                </div>
+                            </div>
+                            <div class="bg-white border rounded-xl p-4 hover:shadow-md transition">
+                                <div class="flex items-center gap-3 mb-3">
+                                    <div
+                                        class="w-10 h-10 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                                        S</div>
+                                    <div>
+                                        <h4 class="font-bold text-slate-800">Sales</h4>
+                                        <p class="text-xs text-slate-500">مبيعات (فواتير وعملاء)</p>
+                                    </div>
+                                </div>
+                                <div class="flex justify-between items-end border-t pt-3 mt-2">
+                                    <span class="text-xs text-slate-400">3 مستخدمين</span>
+                                    <button class="text-blue-600 text-xs hover:underline">تعديل</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="emp-shifts" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-clock text-blue-600 me-2"></i>ورديات العمل (Shifts)</h2>
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> وردية جديدة
+                        </button>
+                    </div>
+                    <div class="p-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="flex items-center justify-between p-4 border rounded-xl bg-slate-50">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 text-sm">الوردية الصباحية</h5>
+                                    <p class="text-xs text-slate-500 mt-1">08:00 ص - 04:00 م</p>
+                                </div>
+                                <span
+                                    class="bg-green-100 text-green-700 text-[10px] px-2 py-1 rounded font-bold">افتراضي</span>
+                            </div>
+                            <div class="flex items-center justify-between p-4 border rounded-xl bg-white">
+                                <div>
+                                    <h5 class="font-bold text-slate-800 text-sm">الوردية المسائية</h5>
+                                    <p class="text-xs text-slate-500 mt-1">04:00 م - 12:00 ص</p>
+                                </div>
+                                <button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <section id="emp-settings" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-cogs text-blue-600 me-2"></i>إعدادات الموظفين</h2>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-500">إعدادات عامة للموظفين (قيد التطوير)</p>
+                    </div>
                 </div>
             </section>
 
-            <!-- Payroll Section -->
-            <section id="payroll" class="section-content hidden">
+            <!-- 7. Org Structure Sections -->
+            <section id="org-titles" class="section-content hidden">
                 <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                     <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-file-invoice-dollar text-blue-600 me-2"></i>الرواتب (Payroll)</h2>
-                    <p class="text-slate-500">كشوف المرتبات والبدلات والاستقطاعات.</p>
+                            class="fas fa-id-badge text-blue-600 me-2"></i>المسميات الوظيفية</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="org-depts" class="section-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
+                            class="fas fa-building text-blue-600 me-2"></i>الأقسام</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="org-levels" class="section-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
+                            class="fas fa-layer-group text-blue-600 me-2"></i>المستويات الوظيفية</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
+                </div>
+            </section>
+            <section id="org-types" class="section-content hidden">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
+                            class="fas fa-briefcase text-blue-600 me-2"></i>أنواع الوظائف</h2>
+                    <p class="text-slate-500">جاري العمل على هذه الصفحة...</p>
                 </div>
             </section>
 
-            <!-- Branches Section -->
-            <section id="branches" class="section-content hidden">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <h2 class="text-2xl font-bold text-slate-800 mb-4"><i
-                            class="fas fa-building text-blue-600 me-2"></i>الفروع</h2>
-                    <p class="text-slate-500">إدارة فروع الشركة وبياناتها.</p>
+            <!-- 8. Attendance Sections -->
+            <section id="att-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-calendar-alt text-blue-600 me-2"></i>سجلات الحضور اليومية (Daily Logs)
+                        </h2>
+                        <div class="flex gap-2">
+                            <input type="date" class="p-2 border rounded text-xs bg-white"
+                                value="${new Date().toISOString().split('T')[0]}">
+                            <button
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm text-sm">
+                                <i class="fas fa-filter me-1"></i> تصفية
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6" id="attendance-list-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-user-clock text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد سجلات حضور اليوم</h3>
+                            <p class="text-slate-500 mb-6">سيظهر هنا سجل حضور وانصراف الموظفين لهذا اليوم</p>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            <!-- Add Account Modal -->
-            <div id="add-account-modal" class="modal">
-                <div class="modal-content p-0 max-w-xl overflow-hidden rounded-2xl">
-                    <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
-                        <h3 class="font-bold text-lg flex items-center gap-2">
-                            <i class="fas fa-plus-circle"></i>
-                            <span id="acc-modal-title">أضف حساب جديد</span>
-                        </h3>
-                        <button onclick="closeModal('add-account-modal')"
-                            class="text-white/60 hover:text-white transition">
+            <section id="att-sheet" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i class="fas fa-table text-blue-600 me-2"></i>جدول
+                            الحضور الشهري (Timesheet)</h2>
+                        <div class="flex gap-2">
+                            <input type="month" class="p-2 border rounded text-xs bg-white"
+                                value="${new Date().toISOString().slice(0, 7)}">
+                            <button
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm text-sm">
+                                <i class="fas fa-download me-1"></i> تصدير
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6 overflow-x-auto">
+                        <table class="w-full text-sm text-right border-collapse">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                                <tr>
+                                    <th class="p-3 border">الموظف</th>
+                                    <th class="p-3 border text-center">1</th>
+                                    <th class="p-3 border text-center">2</th>
+                                    <th class="p-3 border text-center">3</th>
+                                    <th class="p-3 border text-center">4</th>
+                                    <th class="p-3 border text-center">5</th>
+                                    <th class="p-3 border text-center">...</th>
+                                    <th class="p-3 border text-center">30</th>
+                                    <th class="p-3 border text-center">إجمالي ساعات</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="hover:bg-slate-50">
+                                    <td class="p-3 border font-bold text-slate-700">أحمد محمد</td>
+                                    <td class="p-2 border text-center"><span class="text-green-600 font-bold">✓</span>
+                                    </td>
+                                    <td class="p-2 border text-center"><span class="text-green-600 font-bold">✓</span>
+                                    </td>
+                                    <td class="p-2 border text-center"><span class="text-red-500 font-bold">✗</span>
+                                    </td>
+                                    <td class="p-2 border text-center"><span class="text-green-600 font-bold">✓</span>
+                                    </td>
+                                    <td class="p-2 border text-center"><span class="text-orange-500 font-bold">L</span>
+                                    </td>
+                                    <td class="p-2 border text-center text-slate-400">...</td>
+                                    <td class="p-2 border text-center"><span class="text-green-600 font-bold">✓</span>
+                                    </td>
+                                    <td class="p-3 border text-center font-bold">168</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="att-settings" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-cog text-blue-600 me-2"></i>إعدادات الحضور</h2>
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm text-sm">
+                            <i class="fas fa-save me-1"></i> حفظ الإعدادات
+                        </button>
+                    </div>
+                    <div class="p-6 max-w-2xl space-y-4">
+                        <div class="flex items-center justify-between p-4 border rounded-lg">
+                            <div>
+                                <h5 class="font-bold text-slate-800">وقت الحضور الرسمي</h5>
+                                <p class="text-xs text-slate-500">الوقت المحتسب للتأخير</p>
+                            </div>
+                            <input type="time" class="p-2 border rounded" value="09:00">
+                        </div>
+                        <div class="flex items-center justify-between p-4 border rounded-lg">
+                            <div>
+                                <h5 class="font-bold text-slate-800">وقت الانصراف الرسمي</h5>
+                                <p class="text-xs text-slate-500">الوقت المحتسب للإضافي</p>
+                            </div>
+                            <input type="time" class="p-2 border rounded" value="17:00">
+                        </div>
+                        <div class="flex items-center justify-between p-4 border rounded-lg bg-slate-50">
+                            <div>
+                                <h5 class="font-bold text-slate-800">سماحية التأخير (دقائق)</h5>
+                                <p class="text-xs text-slate-500">عدد الدقائق المسموح بها قبل احتساب التأخير</p>
+                            </div>
+                            <input type="number" class="p-2 border rounded w-20" value="15">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Payroll Sections -->
+            <section id="pay-contracts" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-file-contract text-blue-600 me-2"></i>عقود الموظفين (Contracts)</h2>
+                        <button
+                            class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                            <i class="fas fa-plus me-1"></i> عقد جديد
+                        </button>
+                    </div>
+                    <div class="p-6" id="contracts-list-container">
+                        <table class="w-full text-sm text-right">
+                            <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                                <tr>
+                                    <th class="p-3">الموظف</th>
+                                    <th class="p-3">نوع العقد</th>
+                                    <th class="p-3">تاريخ البدء</th>
+                                    <th class="p-3">تاريخ الانتهاء</th>
+                                    <th class="p-3">الراتب الأساسي</th>
+                                    <th class="p-3">الحالة</th>
+                                    <th class="p-3 w-10"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b last:border-0 hover:bg-slate-50">
+                                    <td class="p-3 font-bold text-slate-700">أحمد محمد</td>
+                                    <td class="p-3">دوام كامل</td>
+                                    <td class="p-3 text-slate-500">2023-01-01</td>
+                                    <td class="p-3 text-slate-500">-</td>
+                                    <td class="p-3 font-mono">5000.00</td>
+                                    <td class="p-3"><span
+                                            class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">ساري</span>
+                                    </td>
+                                    <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i
+                                                class="fas fa-edit"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pay-process" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-money-check-alt text-blue-600 me-2"></i>مسير الرواتب (Payroll Generation)
+                        </h2>
+                        <div class="flex gap-2">
+                            <input type="month" class="p-2 border rounded text-xs bg-white"
+                                value="${new Date().toISOString().slice(0, 7)}" id="payroll-month">
+                            <button onclick="generatePayroll()"
+                                class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition shadow-sm text-sm">
+                                <i class="fas fa-cogs me-1"></i> إصدار المسير
+                            </button>
+                        </div>
+                    </div>
+                    <div class="p-6" id="payroll-container">
+                        <!-- Empty State -->
+                        <div class="text-center py-10">
+                            <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                                <i class="fas fa-money-bill-wave text-4xl text-slate-300"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-700 mb-2">لم يتم إصدار مسير رواتب لهذا الشهر</h3>
+                            <p class="text-slate-500 mb-6">اضغط على زر "إصدار المسير" لحساب الرواتب بناءً على الحضور
+                                والعقود</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="pay-settings" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-cog text-blue-600 me-2"></i>إعدادات الرواتب</h2>
+                    </div>
+                    <div class="p-6">
+                        <p class="text-slate-500">إعدادات البدلات والاستقطاعات والتأمينات (قيد التطوير)</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Branches Sections -->
+
+            <!-- Branch List -->
+            <section id="br-list" class="section-content hidden">
+                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h2 class="text-xl font-bold text-slate-800"><i
+                                class="fas fa-store text-blue-600 me-2"></i>إدارة الفروع</h2>
+                        <div class="flex gap-2">
+                            <button onclick="showSection('br-settings')"
+                                class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                                <i class="fas fa-cog me-1"></i> إعدادات
+                            </button>
+                            <button onclick="openModal('add-branch-modal')"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                                <i class="fas fa-plus me-1"></i> فرع جديد
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="p-6">
+                        <div id="branches-container" class="space-y-3">
+                            <!-- Main Branch Card -->
+                            <div
+                                class="flex items-center justify-between p-4 border rounded-lg hover:shadow-md transition bg-white group">
+                                <div class="flex items-center gap-4">
+                                    <div
+                                        class="w-12 h-12 bg-blue-100 text-blue-600 rounded-lg flex items-center justify-center text-xl">
+                                        <i class="fas fa-building"></i>
+                                    </div>
+                                    <div>
+                                        <div class="flex items-center gap-2">
+                                            <h3 class="font-bold text-lg text-slate-800">الفرع الرئيسي</h3>
+                                            <span
+                                                class="bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full">رئيسي</span>
+                                            <span
+                                                class="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded-full">نشط</span>
+                                        </div>
+                                        <p class="text-slate-500 text-sm">Main Branch</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
+                                    <button
+                                        class="w-8 h-8 rounded-full bg-slate-50 hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition flex items-center justify-center">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button
+                                        class="w-8 h-8 rounded-full bg-slate-50 hover:bg-red-50 text-slate-400 hover:text-red-600 transition flex items-center justify-center">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Branch Settings -->
+            <section id="br-settings" class="section-content hidden">
+                <div class="max-w-4xl mx-auto">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 class="text-2xl font-bold text-slate-800">إعدادات الفروع</h2>
+                        <div class="flex gap-2">
+                            <button onclick="saveBranchSettings()"
+                                class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition shadow-sm">
+                                <i class="fas fa-save me-1"></i> حفظ
+                            </button>
+                            <button onclick="showSection('br-list')"
+                                class="bg-white text-slate-600 border border-slate-300 px-4 py-2 rounded-lg hover:bg-slate-50 transition">
+                                <i class="fas fa-arrow-right me-1"></i> رجوع
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                        <div class="p-8 space-y-8">
+
+                            <!-- Main Header Info -->
+                            <div class="text-center mb-8 border-b pb-8">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">إعدادات الفروع</h3>
+                                <p class="text-slate-500 max-w-lg mx-auto">حدد الفرع الرئيسي واضبط إعدادات مشاركة
+                                    البيانات والسجلات المالية بين الفروع.</p>
+                            </div>
+
+                            <!-- Main Branch Select -->
+                            <div class="max-w-xl mx-auto mb-10">
+                                <label class="block text-sm font-bold text-slate-700 mb-2">الفرع الرئيسي</label>
+                                <select
+                                    class="w-full p-3 border rounded-lg bg-slate-50 outline-none focus:border-blue-500 transition cursor-pointer">
+                                    <option value="main">Main Branch</option>
+                                    <!-- Dynamic branches -->
+                                </select>
+                                <p class="text-xs text-slate-400 mt-2">اختر الفرع الرئيسي ليكون المرجع الأساسي لإدارة
+                                    البيانات والسجلات المالية عبر جميع الفروع.</p>
+                            </div>
+
+                            <!-- Data Sharing Toggles -->
+                            <div class="max-w-3xl mx-auto space-y-6">
+                                <h4 class="font-bold text-slate-700 border-b pb-2 mb-4">مشاركة البيانات بين الفروع</h4>
+
+                                <div class="flex items-start justify-between p-4 border rounded-lg bg-slate-50">
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-slate-800 mb-1">العملاء</h5>
+                                        <p class="text-xs text-slate-500 leading-relaxed">اسمح لجميع الفروع بالوصول إلى
+                                            بيانات العملاء لتفادي التكرار وتسهيل التعامل مع نفس العميل من أي فرع. عند
+                                            التعطيل، يحتفظ كل فرع ببيانات عملائه بشكل مستقل.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer ms-4">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div
+                                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-start justify-between p-4 border rounded-lg bg-slate-50">
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-slate-800 mb-1">المنتجات</h5>
+                                        <p class="text-xs text-slate-500 leading-relaxed">اسمح بمشاركة بيانات المنتجات
+                                            والخدمات بين جميع الفروع لضمان توحيد الأسعار والأوصاف. عند التعطيل، يحتاج كل
+                                            فرع إلى إضافة منتجاته بشكل منفصل.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer ms-4">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div
+                                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-start justify-between p-4 border rounded-lg bg-slate-50">
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-slate-800 mb-1">الموردين</h5>
+                                        <p class="text-xs text-slate-500 leading-relaxed">اسمح بمشاركة قائمة الموردين
+                                            بين الفروع لتوحيد التعاملات وتسهيل إنشاء طلبات الشراء.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer ms-4">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div
+                                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-start justify-between p-4 border rounded-lg bg-slate-50">
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-slate-800 mb-1">مراكز التكلفة</h5>
+                                        <p class="text-xs text-slate-500 leading-relaxed">فعل لربط مراكز التكلفة بين
+                                            الفروع ومتابعة النفقات والإيرادات لكل مركز.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer ms-4">
+                                        <input type="checkbox" class="sr-only peer" checked>
+                                        <div
+                                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-green-500">
+                                        </div>
+                                    </label>
+                                </div>
+
+                                <div class="flex items-start justify-between p-4 border rounded-lg bg-slate-50">
+                                    <div class="flex-1">
+                                        <h5 class="font-bold text-slate-800 mb-1">تخصيص الحسابات على مستوى الفروع</h5>
+                                        <p class="text-xs text-slate-500 leading-relaxed">فعل هذا الخيار لتخصيص كل حساب
+                                            على مستوى الفروع لتسجيل المعاملات المالية.</p>
+                                    </div>
+                                    <label class="relative inline-flex items-center cursor-pointer ms-4">
+                                        <input type="checkbox" class="sr-only peer">
+                                        <div
+                                            class="w-11 h-6 bg-slate-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600">
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="br-add" class="section-content hidden">
+                <!-- Placeholder for Add Branch if needed, or use Modal -->
+            </section>
+
+
+            <!-- Add Branch Modal -->
+            <div id="add-branch-modal" class="modal">
+                <div class="modal-content p-0 max-w-lg overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 text-lg">أضف فرع جديد</h3>
+                        <button onclick="closeModal('add-branch-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <form onsubmit="saveAccount(event)" class="p-6 space-y-4">
-                        <input type="hidden" id="acc-old-code">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 mb-1">نوع الحساب</label>
-                                <select id="acc-type" required
-                                    class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
-                                    <option value="asset">أصول</option>
-                                    <option value="liability">خصوم (التزامات)</option>
-                                    <option value="equity">حقوق ملكية</option>
-                                    <option value="revenue">إيرادات</option>
-                                    <option value="expense">مصروفات</option>
-                                </select>
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 mb-1">الحساب الرئيسي (الأب)</label>
-                                <select id="acc-parent"
-                                    class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
-                                    <option value="">[حساب رئيسي]</option>
-                                    <!-- Populated by JS -->
-                                </select>
-                            </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">اسم الفرع <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="مثال: فرع الرياض">
                         </div>
-
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 mb-1">كود الحساب</label>
-                                <input type="text" id="acc-code" required placeholder="مثال: 1101"
-                                    class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 font-mono">
-                            </div>
-                            <div>
-                                <label class="block text-xs font-bold text-slate-500 mb-1">اسم الحساب</label>
-                                <input type="text" id="acc-name" required placeholder="اسم الحساب..."
-                                    class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500">
-                            </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">كود الفرع</label>
+                            <input type="text"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="مثال: BR-002">
                         </div>
-
-                        <div>
-                            <label class="block text-xs font-bold text-slate-500 mb-1">الوصف / ملاحظات</label>
-                            <textarea id="acc-notes" placeholder="وصف إضافي للحساب..."
-                                class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 h-20 resize-none"></textarea>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">العنوان</label>
+                            <input type="text"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="العنوان بالتفصيل">
                         </div>
-
-                        <div class="flex items-center gap-2 py-2">
-                            <input type="checkbox" id="acc-is-group" class="w-4 h-4 accent-blue-600">
-                            <label for="acc-is-group" class="text-sm font-bold text-slate-700">هذا الحساب هو مجموعة
-                                (يحتوي
-                                على حسابات فرعية)</label>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">رقم الهاتف</label>
+                            <input type="tel"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition text-left"
+                                dir="ltr" placeholder="+966...">
                         </div>
-
-                        <div class="flex gap-2 pt-4 border-t">
-                            <button type="submit"
-                                class="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg">
-                                <i class="fas fa-save ml-1"></i> حفظ البيانات
-                            </button>
-                            <button type="button" onclick="closeModal('add-account-modal')"
-                                class="px-6 py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg font-bold transition">
-                                إلغاء
-                            </button>
-                        </div>
-                    </form>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-branch-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم إضافة الفرع بنجاح'); closeModal('add-branch-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
                 </div>
             </div>
 
-        </div>
+            <!-- Add Production Plan Modal -->
+            <div id="add-plan-modal" class="modal">
+                <div class="modal-content p-0 max-w-4xl overflow-hidden rounded-2xl">
+                    <div class="bg-white p-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <div class="flex items-center gap-2">
+                            <a href="#" onclick="closeModal('add-plan-modal')"
+                                class="text-slate-400 hover:text-slate-600 transition"><i
+                                    class="fas fa-arrow-right"></i></a>
+                            <h3 class="font-bold text-slate-800 text-lg">أضف خطة إنتاج</h3>
+                        </div>
+                        <div class="flex gap-2">
+                            <span class="bg-slate-200 text-slate-600 px-3 py-1 rounded text-xs">حفظ كمسودة</span>
+                            <button onclick="closeModal('add-plan-modal')"
+                                class="text-slate-400 hover:text-slate-600 transition"><i
+                                    class="fas fa-times"></i></button>
+                        </div>
+                    </div>
+                    <div class="p-6 h-[70vh] overflow-y-auto">
+
+                        <!-- Plan Info -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm mb-6">
+                            <h4 class="font-bold text-slate-700 mb-4 text-sm border-b pb-2">معلومات خطة الإنتاج</h4>
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-4">
+                                <div class="col-span-1 lg:col-span-2 space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">الاسم <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text"
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">الكود <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" value="000001"
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm text-center">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">التاريخ من</label>
+                                    <input type="date"
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">التاريخ إلى</label>
+                                    <input type="date"
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">الموظفين</label>
+                                    <select
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                        <option value="">اختر الموظفين</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">التحميل (العميل)</label>
+                                    <select
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                        <option value="">اختر عميل</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">نوع المصدر</label>
+                                    <select
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                        <option value="">اختر المصدر</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">معرف المصدر</label>
+                                    <select
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm">
+                                        <option value=""></option>
+                                    </select>
+                                </div>
+                                <div class="col-span-full space-y-1">
+                                    <label class="block text-xs font-bold text-slate-600">الوصف</label>
+                                    <textarea
+                                        class="w-full p-2 bg-slate-50 border border-slate-200 rounded outline-none focus:border-blue-500 transition text-sm h-16"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Products Table -->
+                        <div class="bg-white p-6 rounded-xl border border-slate-100 shadow-sm">
+                            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                                <h4 class="font-bold text-slate-700 text-sm">المنتجات (1)</h4>
+                                <button class="text-slate-400 hover:text-slate-600"><i
+                                        class="fas fa-expand"></i></button>
+                            </div>
+                            <table class="w-full text-sm text-right">
+                                <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                                    <tr>
+                                        <th class="p-3">المنتجات</th>
+                                        <th class="p-3">الكمية</th>
+                                        <th class="p-3">قائمة المواد</th>
+                                        <th class="p-3 w-10"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b">
+                                        <td class="p-2"><select class="w-full p-1.5 bg-white border rounded">
+                                                <option>اختر منتج</option>
+                                            </select></td>
+                                        <td class="p-2"><input type="number"
+                                                class="w-full p-1.5 bg-white border rounded"></td>
+                                        <td class="p-2"><select class="w-full p-1.5 bg-white border rounded">
+                                                <option>الخامة الافتراضية</option>
+                                            </select></td>
+                                        <td class="p-2 text-center text-red-500 cursor-pointer hover:bg-red-50 rounded">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button
+                                class="mt-4 w-full py-2 border-2 border-dashed border-slate-200 text-slate-500 font-bold rounded hover:bg-slate-50 transition">
+                                <i class="fas fa-plus me-1"></i> إضافة
+                            </button>
+                        </div>
+
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-start gap-2">
+                        <button onclick="showToast('تم حفظ خطة الإنتاج بنجاح'); closeModal('add-plan-modal')"
+                            class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition shadow-sm">حفظ</button>
+                        <button onclick="closeModal('add-plan-modal')"
+                            class="bg-red-50 text-red-600 px-6 py-2 rounded-lg hover:bg-red-100 transition">إلغاء</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add BOM Modal -->
+            <div id="add-bom-modal" class="modal">
+                <div class="modal-content p-0 max-w-2xl overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800 text-lg">أضف قائمة مواد (BOM)</h3>
+                        <button onclick="closeModal('add-bom-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">المنتج النهائي <span
+                                    class="text-red-500">*</span></label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="">اختر المنتج</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">اسم القائمة / الإصدار</label>
+                            <input type="text"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="مثال: الإصدار القياسي 1.0">
+                        </div>
+
+                        <!-- Materials Table -->
+                        <div class="bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
+                            <div
+                                class="p-3 bg-slate-50 border-b border-slate-100 font-bold text-slate-700 text-sm flex justify-between">
+                                <span>المواد الخام والمكونات</span>
+                                <button class="text-blue-600 text-xs hover:underline"><i class="fas fa-plus me-1"></i>
+                                    إضافة سطر</button>
+                            </div>
+                            <table class="w-full text-sm text-right">
+                                <thead class="bg-white text-slate-500 text-xs border-b">
+                                    <tr>
+                                        <th class="p-3">المادة الخام</th>
+                                        <th class="p-3 w-24">الكمية</th>
+                                        <th class="p-3 w-24">التكلفة</th>
+                                        <th class="p-3 w-10"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b last:border-0 hover:bg-slate-50">
+                                        <td class="p-2"><select class="w-full p-1 border rounded text-xs">
+                                                <option>مادة خام 1</option>
+                                            </select></td>
+                                        <td class="p-2"><input type="number"
+                                                class="w-full p-1 border rounded text-center text-xs" value="1"></td>
+                                        <td class="p-2 text-slate-500 text-xs font-mono">0.00</td>
+                                        <td class="p-2 text-center text-red-400 cursor-pointer"><i
+                                                class="fas fa-times"></i></td>
+                                    </tr>
+                                    <tr class="border-b last:border-0 hover:bg-slate-50">
+                                        <td class="p-2"><select class="w-full p-1 border rounded text-xs">
+                                                <option>مادة خام 2</option>
+                                            </select></td>
+                                        <td class="p-2"><input type="number"
+                                                class="w-full p-1 border rounded text-center text-xs" value="5"></td>
+                                        <td class="p-2 text-slate-500 text-xs font-mono">0.00</td>
+                                        <td class="p-2 text-center text-red-400 cursor-pointer"><i
+                                                class="fas fa-times"></i></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex justify-between items-center pt-2">
+                            <span class="font-bold text-slate-700">إجمالي التكلفة التقديرية:</span>
+                            <span class="font-mono text-lg text-emerald-600 font-bold">0.00 ر.س</span>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-bom-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم حفظ قائمة المواد'); closeModal('add-bom-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Production Order Modal -->
+            <div id="add-order-modal" class="modal">
+                <div class="modal-content p-0 max-w-lg overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800 text-lg">أمر إنتاج جديد</h3>
+                        <button onclick="closeModal('add-order-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">المنتج <span
+                                    class="text-red-500">*</span></label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="">اختر المنتج</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">رقم الأمر</label>
+                                <input type="text"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                    value="PO-2026-001">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">تاريخ البدء</label>
+                                <input type="date"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">الكمية المطلوبة</label>
+                            <input type="number"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="0">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">خط الإنتاج / المحطة</label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="">اختر..</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">ملاحظات</label>
+                            <textarea
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition h-20"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-order-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم إنشاء أمر الإنتاج'); closeModal('add-order-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Indirect Cost Modal -->
+            <div id="add-cost-modal" class="modal">
+                <div class="modal-content p-0 max-w-md overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 text-lg">أضف تكلفة غير مباشرة</h3>
+                        <button onclick="closeModal('add-cost-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">نوع التكلفة <span
+                                    class="text-red-500">*</span></label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="electricity">كهرباء / طاقة</option>
+                                <option value="rent">إيجار</option>
+                                <option value="maintenance">صيانة</option>
+                                <option value="labor">عمالة إضافية</option>
+                                <option value="other">أخرى</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">المبلغ</label>
+                            <input type="number"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="0.00">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">الفترة / التاريخ</label>
+                            <input type="date"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">الوصف</label>
+                            <textarea
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition h-20"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-cost-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم حفظ التكلفة'); closeModal('add-cost-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
+                </div>
+            </div>
+            <div id="add-station-modal" class="modal">
+                <div class="modal-content p-0 max-w-md overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center">
+                        <h3 class="font-bold text-slate-800 text-lg">أضف محطة عمل</h3>
+                        <button onclick="closeModal('add-station-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">اسم المحطة <span
+                                    class="text-red-500">*</span></label>
+                            <input type="text"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="مثال: خط التجميع 1">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">النوع</label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="machine">آلة / معدة</option>
+                                <option value="human">عامل / يدوي</option>
+                                <option value="assembly">خط تجميع</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">تكلفة التشغيل (بالساعة)</label>
+                            <input type="number"
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                placeholder="0.00">
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">الوصف</label>
+                            <textarea
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition h-20"
+                                placeholder="وصف قدرات المحطة..."></textarea>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-station-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم إضافة محطة العمل'); closeModal('add-station-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Booking Modal -->
+            <div id="add-booking-modal" class="modal">
+                <div class="modal-content p-0 max-w-lg overflow-hidden rounded-2xl">
+                    <div class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                        <h3 class="font-bold text-slate-800 text-lg">إضافة حجز جديد</h3>
+                        <button onclick="closeModal('add-booking-modal')"
+                            class="text-slate-400 hover:text-slate-600 transition">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="p-6 space-y-4">
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">العميل <span
+                                    class="text-red-500">*</span></label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="">اختر العميل</option>
+                                <option value="1">عميل نقدي</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">المورد / الخدمة <span
+                                    class="text-red-500">*</span></label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="">اختر المورد</option>
+                                <option value="room1">غرفة اجتماعات 1</option>
+                                <option value="car1">سيارة تويوتا كامري</option>
+                                <option value="service1">خدمة استشارية</option>
+                            </select>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">تاريخ البدء</label>
+                                <input type="datetime-local"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">تاريخ الانتهاء</label>
+                                <input type="datetime-local"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                            </div>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">الحالة</label>
+                            <select
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                <option value="confirmed">مؤكد</option>
+                                <option value="pending">قيد الانتظار</option>
+                                <option value="cancelled">ملغي</option>
+                            </select>
+                        </div>
+                        <div class="space-y-1">
+                            <label class="block text-sm font-bold text-slate-700">ملاحظات</label>
+                            <textarea
+                                class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition h-20"></textarea>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                        <button onclick="closeModal('add-booking-modal')"
+                            class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                        <button onclick="showToast('تم إضافة الحجز بنجاح'); closeModal('add-booking-modal')"
+                            class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                    </div>
+                </div>
+
+                <!-- Add Agreement Modal -->
+                <div id="add-agreement-modal" class="modal">
+                    <div class="modal-content p-0 max-w-lg overflow-hidden rounded-2xl">
+                        <div
+                            class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                            <h3 class="font-bold text-slate-800 text-lg">اتفاقية تقسيط جديدة</h3>
+                            <button onclick="closeModal('add-agreement-modal')"
+                                class="text-slate-400 hover:text-slate-600 transition">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <div class="p-6 space-y-4">
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">العميل <span
+                                        class="text-red-500">*</span></label>
+                                <select
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    <option value="">اختر العميل</option>
+                                    <option value="1">محمد أحمد</option>
+                                    <option value="2">شركة النور</option>
+                                </select>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">المبلغ الإجمالي</label>
+                                    <input type="number" id="ag-amount"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                        placeholder="0.00">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">الدفعة المقدمة</label>
+                                    <input type="number" id="ag-downpayment"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                        placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">عدد الأقساط</label>
+                                    <input type="number" id="ag-count"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                        value="12">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">التكرار</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="monthly">شهري</option>
+                                        <option value="weekly">أسبوعي</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="space-y-1">
+                                <label class="block text-sm font-bold text-slate-700">تاريخ بداية الأقساط</label>
+                                <input type="date"
+                                    class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                            </div>
+                            <div class="bg-blue-50 p-3 rounded-lg flex justify-between items-center text-sm">
+                                <span class="font-bold text-blue-800">قيمة القسط التقريبي:</span>
+                                <span class="font-mono font-bold text-blue-600 text-lg">0.00 ر.س</span>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                            <button onclick="closeModal('add-agreement-modal')"
+                                class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                            <button onclick="showToast('تم حفظ الاتفاقية'); closeModal('add-agreement-modal')"
+                                class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                        </div>
+                    </div>
+
+
+                    <!-- Add Commission Rule Modal -->
+                    <div id="add-rule-modal" class="modal">
+                        <div class="modal-content p-0 max-w-lg overflow-hidden rounded-2xl">
+                            <div
+                                class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                                <h3 class="font-bold text-slate-800 text-lg">قاعدة عمولة جديدة</h3>
+                                <button onclick="closeModal('add-rule-modal')"
+                                    class="text-slate-400 hover:text-slate-600 transition">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">اسم القاعدة <span
+                                            class="text-red-500">*</span></label>
+                                    <input type="text" id="rule-name"
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                        placeholder="مثال: عمولة مبيعات الربع الأول">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">تطبق على</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="all">جميع الموظفين</option>
+                                        <option value="dept">قسم المبيعات</option>
+                                        <option value="custom">موظف محدد</option>
+                                    </select>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">المبلغ المستهدف
+                                            (Target)</label>
+                                        <input type="number"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                            placeholder="50000">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">نسبة العمولة (%)</label>
+                                        <input type="number"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                            placeholder="5">
+                                    </div>
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="block text-sm font-bold text-slate-700">الفترة</label>
+                                    <select
+                                        class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                        <option value="monthly">شهرية</option>
+                                        <option value="quarterly">ربع سنوية (3 أشهر)</option>
+                                        <option value="yearly">سنوية</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2">
+                                <button onclick="closeModal('add-rule-modal')"
+                                    class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                                <button onclick="showToast('تم حفظ القاعدة'); closeModal('add-rule-modal')"
+                                    class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add Employee Modal -->
+                    <div id="add-employee-modal" class="modal">
+                        <div class="modal-content p-0 max-w-2xl overflow-hidden rounded-2xl">
+                            <div
+                                class="bg-white p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                                <h3 class="font-bold text-slate-800 text-lg">إضافة موظف جديد</h3>
+                                <button onclick="closeModal('add-employee-modal')"
+                                    class="text-slate-400 hover:text-slate-600 transition">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <form onsubmit="saveEmployee(event)" class="p-6 space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">الاسم الأول <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" id="emp-first-name" required
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">اسم العائلة <span
+                                                class="text-red-500">*</span></label>
+                                        <input type="text" id="emp-last-name" required
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">البريد الإلكتروني</label>
+                                        <input type="email" id="emp-email"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">رقم الهاتف</label>
+                                        <input type="tel" id="emp-phone"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">المسمى الوظيفي</label>
+                                        <input type="text" id="emp-title"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                            placeholder="مثال: محاسب">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">القسم</label>
+                                        <select id="emp-dept"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                            <option value="sales">المبيعات</option>
+                                            <option value="hr">الموارد البشرية</option>
+                                            <option value="finance">المالية</option>
+                                            <option value="it">تقنية المعلومات</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">تاريخ التعيين</label>
+                                        <input type="date" id="emp-date"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <label class="block text-sm font-bold text-slate-700">الراتب الأساسي</label>
+                                        <input type="number" id="emp-salary"
+                                            class="w-full p-2.5 bg-slate-50 border border-slate-200 rounded-lg outline-none focus:border-blue-500 transition"
+                                            placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div
+                                    class="p-4 bg-slate-50 border-t border-slate-100 flex justify-end gap-2 -mx-6 -mb-6 mt-4">
+                                    <button type="button" onclick="closeModal('add-employee-modal')"
+                                        class="px-4 py-2 text-slate-600 hover:bg-white hover:text-slate-800 rounded-lg transition">إلغاء</button>
+                                    <button type="submit"
+                                        class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">حفظ
+                                        Mوظف</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div id="add-account-modal" class="modal">
+                        <div class="modal-content p-0 max-w-xl overflow-hidden rounded-2xl">
+                            <div class="bg-blue-600 p-4 text-white flex justify-between items-center">
+                                <h3 class="font-bold text-lg flex items-center gap-2">
+                                    <i class="fas fa-plus-circle"></i>
+                                    <span id="acc-modal-title">أضف حساب جديد</span>
+                                </h3>
+                                <button onclick="closeModal('add-account-modal')"
+                                    class="text-white/60 hover:text-white transition">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <form onsubmit="saveAccount(event)" class="p-6 space-y-4">
+                                <input type="hidden" id="acc-old-code">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">نوع الحساب</label>
+                                        <select id="acc-type" required
+                                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
+                                            <option value="asset">أصول</option>
+                                            <option value="liability">خصوم (التزامات)</option>
+                                            <option value="equity">حقوق ملكية</option>
+                                            <option value="revenue">إيرادات</option>
+                                            <option value="expense">مصروفات</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">الحساب الرئيسي
+                                            (الأب)</label>
+                                        <select id="acc-parent"
+                                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 bg-slate-50">
+                                            <option value="">[حساب رئيسي]</option>
+                                            <!-- Populated by JS -->
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">كود الحساب</label>
+                                        <input type="text" id="acc-code" required placeholder="مثال: 1101"
+                                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 font-mono">
+                                    </div>
+                                    <div>
+                                        <label class="block text-xs font-bold text-slate-500 mb-1">اسم الحساب</label>
+                                        <input type="text" id="acc-name" required placeholder="اسم الحساب..."
+                                            class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500">
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <label class="block text-xs font-bold text-slate-500 mb-1">الوصف / ملاحظات</label>
+                                    <textarea id="acc-notes" placeholder="وصف إضافي للحساب..."
+                                        class="w-full p-2.5 border rounded-lg outline-none focus:border-blue-500 h-20 resize-none"></textarea>
+                                </div>
+
+                                <div class="flex items-center gap-2 py-2">
+                                    <input type="checkbox" id="acc-is-group" class="w-4 h-4 accent-blue-600">
+                                    <label for="acc-is-group" class="text-sm font-bold text-slate-700">هذا الحساب هو
+                                        مجموعة
+                                        (يحتوي
+                                        على حسابات فرعية)</label>
+                                </div>
+
+                                <div class="flex gap-2 pt-4 border-t">
+                                    <button type="submit"
+                                        class="flex-1 bg-blue-600 text-white py-2.5 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg">
+                                        <i class="fas fa-save ml-1"></i> حفظ البيانات
+                                    </button>
+                                    <button type="button" onclick="closeModal('add-account-modal')"
+                                        class="px-6 py-2.5 text-slate-500 hover:bg-slate-100 rounded-lg font-bold transition">
+                                        إلغاء
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
     </main>
 
     <script>
@@ -7000,6 +8644,538 @@
             showToast('تم إضافة المستودع');
         }
 
+        // --- 13. Branches Logic ---
+        function saveBranchSettings() {
+            // Simplified save logic
+            const mainBranch = document.querySelector('#br-settings select').value;
+            // Collect toggles...
+            showToast('تم حفظ إعدادات الفروع بنجاح');
+            // In a real app, this would save to DB
+        }
+
+        // --- 14. Manufacturing Logic ---
+        function renderProductionPlans() {
+            const list = document.getElementById('mfg-plans');
+            if (!list || !list.querySelector('.bg-white')) return;
+
+            // For now, inject the empty state into the card body if it's empty
+            // Actually, let's target the container inside #mfg-plans
+            const container = list.querySelector('.bg-white');
+            container.innerHTML = `
+                <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                    <h2 class="text-xl font-bold text-slate-800"><i class="fas fa-clipboard-list text-blue-600 me-2"></i>خطط الإنتاج</h2>
+                    <button onclick="openModal('add-plan-modal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition shadow-sm">
+                        <i class="fas fa-plus me-1"></i> أضف خطة إنتاج
+                    </button>
+                </div>
+                <div class="p-10 text-center">
+                    <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                        <i class="fas fa-clipboard-list text-4xl text-slate-300"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-700 mb-2">لم يتم إضافة أي سجلات بعد</h3>
+                    <p class="text-slate-500 mb-6">يمكنك البدء بإضافة خطة إنتاج جديدة</p>
+                    <div class="flex flex-col items-center gap-2">
+                        <button onclick="openModal('add-plan-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> أضف خطة إنتاج
+                        </button>
+                        <a href="#" class="text-blue-600 hover:underline text-sm"><i class="fas fa-arrow-left me-1"></i> الانتقال إلى الصفحة السابقة</a>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderBOMs() {
+            const container = document.getElementById('bom-list-container');
+            if (!container) return;
+            if (!db.boms) db.boms = [];
+
+            if (db.boms.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-boxes text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد قوائم مواد</h3>
+                        <p class="text-slate-500 mb-6">قوائم المواد تحدد المكونات والكميات اللازمة لإنتاج منتج ما</p>
+                        <button onclick="openModal('add-bom-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> أضف قائمة مواد جديدة
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">الاسم / الإصدار</th>
+                            <th class="p-3">المنتج النهائي</th>
+                            <th class="p-3">عدد المواد</th>
+                            <th class="p-3">التكلفة</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.boms.map(b => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-700">${b.name}</td>
+                            <td class="p-3">${b.product || '-'}</td>
+                            <td class="p-3 font-mono">5</td>
+                            <td class="p-3 font-mono text-emerald-600 font-bold">150.00</td>
+                            <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">نشط</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveBOM() {
+            // Simplified save
+            if (!db.boms) db.boms = [];
+            db.boms.push({ id: Date.now(), name: 'BOM-' + Date.now(), product: 'Product A' });
+            renderBOMs();
+            showToast('تم حفظ قائمة المواد');
+            closeModal('add-bom-modal');
+        }
+
+        function renderStations() {
+            const container = document.getElementById('stations-grid');
+            if (!container) return;
+            if (!db.stations) db.stations = [];
+
+            if (db.stations.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-industry text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد محطات عمل</h3>
+                        <p class="text-slate-500 mb-6">قم بتعريف محطات العمل والتكاليف المرتبطة بها لإدارة عمليات التصنيع</p>
+                        <button onclick="openModal('add-station-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> أضف محطة عمل جديدة
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${db.stations.map(s => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition group">
+                        <div class="flex justify-between items-start mb-3">
+                            <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center text-lg">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                             <button class="text-slate-300 hover:text-red-500 opacity-0 group-hover:opacity-100 transition"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-1">${s.name}</h4>
+                        <p class="text-xs text-slate-500 mb-3">${s.desc || 'لا يوجد وصف'}</p>
+                        <div class="flex items-center justify-between text-xs pt-3 border-t border-slate-50">
+                            <span class="text-slate-500">التكلفة / ساعة</span>
+                            <span class="font-mono font-bold text-slate-700">${s.cost || 0} ر.س</span>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function saveStation() {
+            if (!db.stations) db.stations = [];
+            const nameInput = document.querySelector('#add-station-modal input[type="text"]');
+            const name = nameInput ? nameInput.value : 'Station ' + Date.now();
+
+            db.stations.push({ id: Date.now(), name: name, cost: 50 });
+            renderStations();
+            showToast('تم إضافة محطة العمل');
+            closeModal('add-station-modal');
+        }
+
+
+        function renderMfgOrders() {
+            const container = document.getElementById('orders-list-container');
+            if (!container) return;
+            if (!db.mfgOrders) db.mfgOrders = [];
+
+            if (db.mfgOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-industry text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد أوامر إنتاج</h3>
+                        <p class="text-slate-500 mb-6">أوامر الإنتاج تتابع عملية تصنيع المنتجات من المواد الخام</p>
+                        <button onclick="openModal('add-order-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إنشاء أمر إنتاج
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">رقم الأمر</th>
+                            <th class="p-3">المنتج</th>
+                            <th class="p-3">الكمية</th>
+                            <th class="p-3">تاريخ البدء</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.mfgOrders.map(o => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-mono font-bold text-blue-600">${o.ref}</td>
+                            <td class="p-3 font-bold text-slate-700">${o.product}</td>
+                            <td class="p-3 font-mono text-center">${o.qty}</td>
+                            <td class="p-3 text-slate-500 text-xs">${o.date}</td>
+                            <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold">قيد التنفيذ</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveMfgOrder() {
+            if (!db.mfgOrders) db.mfgOrders = [];
+            db.mfgOrders.push({ id: Date.now(), ref: 'PO-2026-001', product: 'Product X', qty: 100, date: new Date().toISOString().split('T')[0] });
+            renderMfgOrders();
+            showToast('تم إنشاء أمر الإنتاج');
+            closeModal('add-order-modal');
+        }
+
+        function renderMfgCosts() {
+            const container = document.getElementById('costs-list-container');
+            if (!container) return;
+            if (!db.mfgCosts) db.mfgCosts = [];
+
+            if (db.mfgCosts.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-calculator text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد تكاليف إضافية</h3>
+                        <p class="text-slate-500 mb-6">تسجيل التكاليف غير المباشرة مثل الكهرباء، الإيجار، والصيانة وتوزيعها على الإنتاج</p>
+                        <button onclick="openModal('add-cost-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> أضف تكلفة جديدة
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">نوع التكلفة</th>
+                            <th class="p-3">المبلغ</th>
+                            <th class="p-3">التاريخ</th>
+                            <th class="p-3">الوصف</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.mfgCosts.map(c => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-700">${c.type}</td>
+                            <td class="p-3 font-mono font-bold text-red-600">${c.amount} ر.س</td>
+                            <td class="p-3 text-slate-500 text-xs">${c.date}</td>
+                            <td class="p-3 text-slate-500 text-xs truncate max-w-[200px]">${c.desc || '-'}</td>
+                             <td class="p-3"><button class="text-slate-400 hover:text-red-600"><i class="fas fa-trash-alt"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveMfgCost() {
+            if (!db.mfgCosts) db.mfgCosts = [];
+            db.mfgCosts.push({ id: Date.now(), type: 'كهرباء', amount: 500.00, date: new Date().toISOString().split('T')[0], desc: 'فاتورة شهر فبراير' });
+            renderMfgCosts();
+            showToast('تم حفظ التكلفة');
+            closeModal('add-cost-modal');
+        }
+
+
+
+        // 12.6 Installments Module
+        function renderAgreements() {
+            const container = document.getElementById('agreements-list-container');
+            if (!container) return;
+            if (!db.agreements) db.agreements = [];
+
+            if (db.agreements.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-handshake text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد اتفاقيات تقسيط</h3>
+                        <p class="text-slate-500 mb-6">أنشئ اتفاقيات تقسيط للعملاء لتتبع الدفعات المستحقة</p>
+                        <button onclick="openModal('add-agreement-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إضافة اتفاقية جديدة
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">رقم الاتفاقية</th>
+                            <th class="p-3">العميل</th>
+                            <th class="p-3">المبلغ الإجمالي</th>
+                            <th class="p-3">المتبقي</th>
+                            <th class="p-3">القسط القادم</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.agreements.map(a => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-mono font-bold text-blue-600">#${a.id.toString().slice(-4)}</td>
+                            <td class="p-3 font-bold text-slate-700">${a.customer}</td>
+                            <td class="p-3 font-mono">${a.amount}</td>
+                            <td class="p-3 font-mono text-red-600 font-bold">${a.remaining}</td>
+                            <td class="p-3 text-xs">${a.nextDue}</td>
+                            <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">نشط</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveAgreement() {
+            if (!db.agreements) db.agreements = [];
+            const amount = document.getElementById('ag-amount').value || 10000;
+            db.agreements.push({
+                id: Date.now(),
+                customer: 'محمد أحمد',
+                amount: amount,
+                remaining: amount - (document.getElementById('ag-downpayment').value || 0),
+                nextDue: new Date(Date.now() + 2592000000).toLocaleDateString('ar-EG'), // +30 days
+                status: 'active'
+            });
+            renderAgreements();
+            showToast('تم حفظ اتفاقية التقسيط');
+            closeModal('add-agreement-modal');
+        }
+
+
+        // 12.7 Commissions Module
+        function renderCommissionRules() {
+            const container = document.getElementById('comm-rules-container');
+            if (!container) return;
+            if (!db.commRules) db.commRules = [];
+
+            if (db.commRules.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-scale-balanced text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد قواعد عمولات</h3>
+                        <p class="text-slate-500 mb-6">حدد نسب العمولات بناءً على المبيعات المستهدفة لكل موظف أو قسم</p>
+                         <button onclick="openModal('add-rule-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إضافة قاعدة جديدة
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    ${db.commRules.map(r => `
+                    <div class="bg-white p-4 rounded-xl border border-slate-200 hover:shadow-md transition">
+                        <div class="flex justify-between items-start mb-2">
+                            <h4 class="font-bold text-slate-800">${r.name}</h4>
+                            <span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold">${r.period}</span>
+                        </div>
+                        <div class="space-y-2 text-sm text-slate-500">
+                            <div class="flex justify-between">
+                                <span>الهدف (Target):</span>
+                                <span class="font-mono font-bold text-slate-700">${r.target}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>النسبة:</span>
+                                <span class="font-mono font-bold text-emerald-600">${r.rate}%</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>النطاق:</span>
+                                <span>${r.scope}</span>
+                            </div>
+                        </div>
+                    </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function saveCommissionRule() {
+            if (!db.commRules) db.commRules = [];
+            const name = document.getElementById('rule-name').value || 'New Rule';
+            db.commRules.push({
+                id: Date.now(),
+                name: name,
+                target: 50000,
+                rate: 5,
+                period: 'ربع سنوي',
+                scope: 'قسم المبيعات'
+            });
+            renderCommissionRules();
+            showToast('تم حفظ قاعدة العمولة');
+            closeModal('add-rule-modal');
+        }
+
+
+
+        // 12.8 Work Orders Module
+        function renderWorkOrders() {
+            const container = document.getElementById('work-orders-container');
+            if (!container) return;
+            if (!db.workOrders) db.workOrders = [];
+
+            if (db.workOrders.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-tools text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد أوامر شغل</h3>
+                        <p class="text-slate-500 mb-6">قم بإنشاء أوامر شغل لتتبع مهام الصيانة والتركيب والإنتاج</p>
+                        <button onclick="showSection('work-add')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إنشاء أمر شغل
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">رقم الأمر</th>
+                            <th class="p-3">العنوان</th>
+                            <th class="p-3">العميل</th>
+                            <th class="p-3">النوع</th>
+                            <th class="p-3">الأولوية</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.workOrders.map(w => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-mono font-bold text-blue-600">WO-${w.id.toString().slice(-4)}</td>
+                            <td class="p-3 font-bold text-slate-700">${w.title}</td>
+                            <td class="p-3 text-slate-600">${w.customer || '-'}</td>
+                             <td class="p-3"><span class="bg-slate-100 text-slate-700 px-2 py-1 rounded text-[10px] font-bold">${w.type}</span></td>
+                            <td class="p-3">
+                                <span class="${w.priority === 'high' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'} px-2 py-1 rounded text-[10px] font-bold">
+                                    ${w.priority === 'high' ? 'عالية' : 'متوسطة'}
+                                </span>
+                            </td>
+                            <td class="p-3"><span class="bg-yellow-100 text-yellow-700 px-2 py-1 rounded text-[10px] font-bold">قيد التنفيذ</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveWorkOrder() {
+            if (!db.workOrders) db.workOrders = [];
+            db.workOrders.push({
+                id: Date.now(),
+                title: document.querySelector('#work-add input[type="text"]').value || 'New Work Order',
+                customer: 'محمد أحمد',
+                type: 'صيانة',
+                priority: 'medium',
+                status: 'pending'
+            });
+            renderWorkOrders();
+            showToast('تم إنشاء أمر الشغل');
+            showSection('work-list');
+        }
+
+
+        // 12.5 Bookings Module
+        function renderBookings() {
+            const container = document.getElementById('bookings-list-container');
+            if (!container) return;
+            if (!db.bookings) db.bookings = [];
+
+            if (db.bookings.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-calendar-day text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد حجوزات حالياً</h3>
+                        <p class="text-slate-500 mb-6">يمكنك إدارة حجوزات الموارد والمواعيد من هنا</p>
+                        <button onclick="openModal('add-booking-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إضافة حجز جديد
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">رقم الحجز</th>
+                            <th class="p-3">العميل</th>
+                            <th class="p-3">المورد / الخدمة</th>
+                            <th class="p-3">التاريخ</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.bookings.map(b => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-mono font-bold text-blue-600">#${b.id.toString().slice(-4)}</td>
+                            <td class="p-3 font-bold text-slate-700">${b.customer}</td>
+                            <td class="p-3 text-slate-600">${b.resource}</td>
+                            <td class="p-3 text-slate-500 text-xs">${b.start}</td>
+                            <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold">${b.status}</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveBooking() {
+            if (!db.bookings) db.bookings = [];
+            db.bookings.push({
+                id: Date.now(),
+                customer: 'عميل نقدي',
+                resource: 'غرفة اجتماعات 1',
+                start: new Date().toLocaleString('ar-EG'),
+                status: 'مؤكد'
+            });
+            renderBookings();
+            showToast('تم إضافة الحجز بنجاح');
+            closeModal('add-booking-modal');
+        }
+
         // 12.2 Price Lists
         function renderPriceLists() {
             const container = document.getElementById('pricelists-container');
@@ -7172,6 +9348,196 @@
                 document.getElementById('stocktaking-modal').classList.remove('active');
                 showToast('تمت تسوية الجرد بنجاح');
             }
+        }
+
+
+        // 13. Employees Module
+        function renderEmployees() {
+            const container = document.getElementById('employees-list-container');
+            if (!container) return;
+            if (!db.employees) db.employees = [];
+
+            if (db.employees.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-id-card text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا يوجد موظفين مسجلين</h3>
+                        <p class="text-slate-500 mb-6">قم بإضافة بيانات الموظفين لإدارة الحضور والرواتب</p>
+                        <button onclick="openModal('add-employee-modal')" class="text-blue-600 hover:underline text-sm font-bold">
+                            <i class="fas fa-plus me-1"></i> إضافة موظف جديد
+                        </button>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">الموظف</th>
+                            <th class="p-3">القسم</th>
+                            <th class="p-3">المسمى الوظيفي</th>
+                            <th class="p-3">تاريخ التعيين</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${db.employees.map(e => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-700">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center font-bold text-xs">${e.firstName[0]}</div>
+                                    <span>${e.firstName} ${e.lastName}</span>
+                                </div>
+                            </td>
+                            <td class="p-3 text-slate-600">${e.dept}</td>
+                            <td class="p-3 text-slate-600">${e.title}</td>
+                            <td class="p-3 text-slate-500 text-xs">${e.startDate}</td>
+                            <td class="p-3"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-[10px] font-bold">نشط</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        function saveEmployee(e) {
+            e.preventDefault();
+            if (!db.employees) db.employees = [];
+            db.employees.push({
+                id: Date.now(),
+                firstName: document.getElementById('emp-first-name').value,
+                lastName: document.getElementById('emp-last-name').value,
+                email: document.getElementById('emp-email').value,
+                phone: document.getElementById('emp-phone').value,
+                title: document.getElementById('emp-title').value,
+                dept: document.getElementById('emp-dept').options[document.getElementById('emp-dept').selectedIndex].text,
+                startDate: document.getElementById('emp-date').value,
+                salary: document.getElementById('emp-salary').value,
+                status: 'active'
+            });
+            renderEmployees();
+            showToast('تم حفظ بيانات الموظف');
+            closeModal('add-employee-modal');
+            e.target.reset();
+        }
+
+
+        // 14. Attendance Module
+        function renderAttendance() {
+            const container = document.getElementById('attendance-list-container');
+            if (!container) return;
+            // Mock data for demonstration
+            const todayLogs = [
+                { name: 'أحمد محمد', timeIn: '08:55 ص', timeOut: '-', status: 'present' },
+                { name: 'سارة علي', timeIn: '09:10 ص', timeOut: '-', status: 'late' }
+            ];
+
+            if (todayLogs.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10">
+                        <div class="inline-block p-4 rounded-full bg-slate-50 mb-4">
+                            <i class="fas fa-user-clock text-4xl text-slate-300"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-slate-700 mb-2">لا توجد سجلات حضور اليوم</h3>
+                        <p class="text-slate-500 mb-6">سيظهر هنا سجل حضور وانصراف الموظفين لهذا اليوم</p>
+                    </div>`;
+                return;
+            }
+
+            container.innerHTML = `
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">الموظف</th>
+                            <th class="p-3">وقت الحضور</th>
+                            <th class="p-3">وقت الانصراف</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${todayLogs.map(log => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-700">${log.name}</td>
+                            <td class="p-3 font-mono text-emerald-600">${log.timeIn}</td>
+                            <td class="p-3 font-mono text-slate-400">${log.timeOut}</td>
+                            <td class="p-3">
+                                <span class="${log.status === 'present' ? 'bg-green-100 text-green-700' : 'bg-orange-100 text-orange-700'} px-2 py-1 rounded text-[10px] font-bold">
+                                    ${log.status === 'present' ? 'حاضر' : 'تأخير'}
+                                </span>
+                            </td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-edit"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+
+        // 15. Payroll Module
+        function generatePayroll() {
+            const container = document.getElementById('payroll-container');
+            const month = document.getElementById('payroll-month').value;
+            if (!container) return;
+
+            // Mock calculation
+            const payrollData = [
+                { id: 1, name: 'أحمد محمد', basic: 5000, allowances: 500, deductions: 200, net: 5300 },
+                { id: 2, name: 'سارة علي', basic: 6000, allowances: 800, deductions: 150, net: 6650 },
+            ];
+
+            container.innerHTML = `
+                <div class="mb-4 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-700">مسير رواتب شهر (${month})</h3>
+                    <div class="flex gap-2">
+                        <button class="text-blue-600 text-xs font-bold hover:underline"><i class="fas fa-print me-1"></i> طباعة</button>
+                        <button class="text-green-600 text-xs font-bold hover:underline"><i class="fas fa-file-excel me-1"></i> تصدير Excel</button>
+                    </div>
+                </div>
+                <table class="w-full text-sm text-right">
+                    <thead class="bg-slate-50 text-slate-600 font-bold border-b">
+                        <tr>
+                            <th class="p-3">الموظف</th>
+                            <th class="p-3">الراتب الأساسي</th>
+                            <th class="p-3 text-green-600">بدلات (+)</th>
+                            <th class="p-3 text-red-600">استقطاعات (-)</th>
+                            <th class="p-3">الصافي</th>
+                            <th class="p-3">الحالة</th>
+                            <th class="p-3 w-10"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${payrollData.map(p => `
+                        <tr class="border-b last:border-0 hover:bg-slate-50">
+                            <td class="p-3 font-bold text-slate-700">${p.name}</td>
+                            <td class="p-3 font-mono text-slate-600">${p.basic.toLocaleString()}</td>
+                            <td class="p-3 font-mono text-green-600">${p.allowances.toLocaleString()}</td>
+                            <td class="p-3 font-mono text-red-600">${p.deductions.toLocaleString()}</td>
+                            <td class="p-3 font-mono font-bold text-blue-800 text-lg">${p.net.toLocaleString()}</td>
+                            <td class="p-3"><span class="bg-blue-100 text-blue-700 px-2 py-1 rounded text-[10px] font-bold">تم الإصدار</span></td>
+                            <td class="p-3"><button class="text-slate-400 hover:text-blue-600"><i class="fas fa-eye"></i></button></td>
+                        </tr>
+                        `).join('')}
+                    </tbody>
+                    <tfoot class="bg-slate-50 font-bold text-slate-800">
+                         <tr>
+                            <td class="p-3">الإجمالي</td>
+                            <td class="p-3 font-mono">${payrollData.reduce((a, b) => a + b.basic, 0).toLocaleString()}</td>
+                            <td class="p-3 font-mono text-green-700">${payrollData.reduce((a, b) => a + b.allowances, 0).toLocaleString()}</td>
+                            <td class="p-3 font-mono text-red-700">${payrollData.reduce((a, b) => a + b.deductions, 0).toLocaleString()}</td>
+                            <td class="p-3 font-mono text-blue-900">${payrollData.reduce((a, b) => a + b.net, 0).toLocaleString()}</td>
+                            <td colspan="2"></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            `;
+            showToast('تم إصدار مسير الرواتب بنجاح');
         }
 
         // Initial Load
