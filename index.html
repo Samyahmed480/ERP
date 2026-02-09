@@ -6105,6 +6105,18 @@
                 toggleSubmenu('pur-submenu', true);
             }
 
+            // New Modules Submenus
+            if (id.startsWith('mfg-')) toggleSubmenu('mfg-submenu', true);
+            if (id.startsWith('book-')) toggleSubmenu('book-submenu', true);
+            if (id.startsWith('inst-')) toggleSubmenu('inst-submenu', true);
+            if (id.startsWith('comm-')) toggleSubmenu('comm-submenu', true);
+            if (id.startsWith('work-')) toggleSubmenu('work-submenu', true);
+            if (id.startsWith('emp-')) toggleSubmenu('emp-submenu', true);
+            if (id.startsWith('org-')) toggleSubmenu('org-submenu', true);
+            if (id.startsWith('att-')) toggleSubmenu('att-submenu', true);
+            if (id.startsWith('pay-')) toggleSubmenu('pay-submenu', true);
+            if (id.startsWith('br-')) toggleSubmenu('br-submenu', true);
+
             // Unified Accounting Submenu
             const accItems = ['journal', 'add_journal_entry', 'accounts_tree', 'cost_centers', 'assets', 'acc_settings', 'check_cycle', 'expenses', 'add_expense', 'receipt_vouchers', 'add_receipt_voucher', 'bank_accounts', 'fin_settings', 'salaries', 'reports'];
             if (accItems.includes(id)) {
